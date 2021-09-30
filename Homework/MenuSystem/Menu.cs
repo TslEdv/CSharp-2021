@@ -108,7 +108,6 @@ namespace MenuSystem
                 input = Convert.ToString(wanted?.RunMethod == null ? input : wanted.RunMethod());
                 _currentValue = Convert.ToDouble(input);
             } while (!_specialShortCuts.Contains(input));
-
             if (input == _return.ShortCut.ToUpper()) return _currentValue;
             if (input == _exit.ShortCut.ToUpper()) System.Environment.Exit(0);
             return null;

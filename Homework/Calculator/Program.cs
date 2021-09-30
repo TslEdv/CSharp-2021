@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using MenuSystem;
 
 namespace Calculator
@@ -33,7 +34,8 @@ namespace Calculator
                 new MenuItem("-", "Subtraction", Substraction),
                 new MenuItem("*", "Multiplication", Multiplication),
                 new MenuItem("/", "Division", Division),
-                new MenuItem("^", "X to the power of Y", XpowerY),
+                new MenuItem("X^", "X to the power of Y", XpowerY),
+                new MenuItem("^", "Current value to the power of Y", CVpowerY),
                 new MenuItem("C", "Clear Current Value", Clear),
             });
             var value = binMenu.RunMenu();
@@ -60,7 +62,7 @@ namespace Calculator
             Console.Write($"{_currentValue} + ");
             var number = Console.ReadLine()?.Trim();
             double.TryParse(number, out var value);
-            _currentValue = _currentValue + value;
+            _currentValue += value;
             Console.WriteLine($"= {_currentValue}");
             return _currentValue;
         }
@@ -98,10 +100,18 @@ namespace Calculator
         private static double XpowerY()
         {
             Console.Write("Input X: ");
-            var X = double.Parse((Console.ReadLine()?.Trim()));
+            double.TryParse((Console.ReadLine()?.Trim()), out var x);
             Console.Write("Input Y: ");
-            var Y = double.Parse((Console.ReadLine()?.Trim()));
-            Console.WriteLine($"{X}^{Y} = {Math.Pow(X, Y)}");
+            double.TryParse((Console.ReadLine()?.Trim()), out var y);
+            Console.WriteLine($"{x}^{y} = {Math.Pow(x, y)}");
+            return _currentValue;
+        }
+        private static double CVpowerY()
+        {
+            Console.Write("Input Y: ");
+            double.TryParse((Console.ReadLine()?.Trim()), out var y);
+            Console.WriteLine($"{_currentValue}^{y} = {Math.Pow(_currentValue, y)}");
+            _currentValue = Math.Pow(_currentValue, y);
             return _currentValue;
         }
         private static double Negation()
