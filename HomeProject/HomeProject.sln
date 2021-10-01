@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleShipsConsoleApp", "BattleShipsConsoleApp\BattleShipsConsoleApp.csproj", "{DBD0D9F9-0E5E-4BA8-A4F9-025D7BCB273A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuSystem", "MenuSystem\MenuSystem.csproj", "{5551D289-0F7A-49FE-A8A6-6D3A3DF703E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleShipBrain", "BattleShipBrain\BattleShipBrain.csproj", "{2C6B78B5-153B-44EE-91F4-A8FFDF3F1B0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleShipConsoleUI", "BattleShipConsoleUI\BattleShipConsoleUI.csproj", "{66A03C95-023F-4C58-B4D8-91CCEF736B29}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBD0D9F9-0E5E-4BA8-A4F9-025D7BCB273A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBD0D9F9-0E5E-4BA8-A4F9-025D7BCB273A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBD0D9F9-0E5E-4BA8-A4F9-025D7BCB273A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBD0D9F9-0E5E-4BA8-A4F9-025D7BCB273A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5551D289-0F7A-49FE-A8A6-6D3A3DF703E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5551D289-0F7A-49FE-A8A6-6D3A3DF703E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5551D289-0F7A-49FE-A8A6-6D3A3DF703E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5551D289-0F7A-49FE-A8A6-6D3A3DF703E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C6B78B5-153B-44EE-91F4-A8FFDF3F1B0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C6B78B5-153B-44EE-91F4-A8FFDF3F1B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C6B78B5-153B-44EE-91F4-A8FFDF3F1B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C6B78B5-153B-44EE-91F4-A8FFDF3F1B0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66A03C95-023F-4C58-B4D8-91CCEF736B29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66A03C95-023F-4C58-B4D8-91CCEF736B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66A03C95-023F-4C58-B4D8-91CCEF736B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66A03C95-023F-4C58-B4D8-91CCEF736B29}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
