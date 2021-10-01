@@ -1,0 +1,71 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Threading;
+using BattleShipBrain;
+using BattleShipConsoleUI;
+using MenuSystem;
+
+namespace BattleShipsConsoleApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Clear();
+            var mainMenu = new Menu("Battleships Game", EMenuDepth.Main);
+            mainMenu.AddMenuItems(new List<MenuItem>()
+            {
+                new MenuItem("1", "Test Game", runGame),
+            });
+            mainMenu.RunMenu();
+        }
+
+        public static string runGame()
+        {
+            var brain = new BsBrain(10, 5);
+            Console.WriteLine("First player board:");
+            BsConsoleUi.DrawBoard(brain.GetBoard(0));
+            Console.WriteLine("Second player second:");
+            BsConsoleUi.DrawBoard(brain.GetBoard(1));
+            var done = false;
+            while(done != true)
+            {
+                Console.Write("Start Game? (Y/N):");
+                var answer = Console.ReadLine()?.ToUpper().Trim();
+                switch (answer)
+                {
+                    case "Y":
+                        done = true;
+                        break;
+                    case "N":
+                        Console.WriteLine("Thank you for playing!");
+                        return "";
+                }
+            }
+
+            while (true)
+            {
+                Console.Clear();
+                BsConsoleUi.DrawBoard(brain.GetBoard(0));
+                var FF1 = brain.Player1Move();
+                if (FF1 == "FF")
+                {
+                    System.Environment.Exit(0);
+                }
+                BsConsoleUi.DrawBoard(brain.GetBoard(0));
+                Thread.Sleep(5000);
+                Console.Clear();
+                BsConsoleUi.DrawBoard(brain.GetBoard(1));
+                var FF2 = brain.Player2Move();
+                if (FF2 == "FF")
+                {
+                    System.Environment.Exit(0);
+                }
+                BsConsoleUi.DrawBoard(brain.GetBoard(1));
+                Thread.Sleep(5000);
+                Console.Clear();
+            }
+        }
+    }
+}
