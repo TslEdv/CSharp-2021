@@ -60,6 +60,7 @@ namespace MenuSystem
 
         private void PrintMenu()
         {
+            Console.Clear();
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("~~~~~~~~ " + _menuTitle + " ~~~~~~~~");
             Console.ForegroundColor = ConsoleColor.Cyan;

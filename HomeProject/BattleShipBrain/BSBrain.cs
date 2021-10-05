@@ -80,7 +80,7 @@ namespace BattleShipBrain
                     break;
                 case (false,true):
                     Console.WriteLine("You Missed!");
-                    break;
+                    return "MISS";
             }
             return "";
         }
@@ -111,9 +111,8 @@ namespace BattleShipBrain
                     break;
                 case (false,true):
                     Console.WriteLine("You Missed!");
-                    break;
+                    return "MISS";
             }
-
             return "";
         }
     }

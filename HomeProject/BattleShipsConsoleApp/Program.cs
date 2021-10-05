@@ -17,6 +17,7 @@ namespace BattleShipsConsoleApp
             mainMenu.AddMenuItems(new List<MenuItem>()
             {
                 new MenuItem("1", "Test Game", runGame),
+                new MenuItem("2", "Test", null),
             });
             mainMenu.RunMenu();
         }
@@ -40,6 +41,7 @@ namespace BattleShipsConsoleApp
                         break;
                     case "N":
                         Console.WriteLine("Thank you for playing!");
+                        Console.WriteLine();
                         return "";
                 }
             }
@@ -48,19 +50,33 @@ namespace BattleShipsConsoleApp
             {
                 Console.Clear();
                 BsConsoleUi.DrawBoard(brain.GetBoard(0));
-                var FF1 = brain.Player1Move();
-                if (FF1 == "FF")
+                while (true)
                 {
-                    System.Environment.Exit(0);
+                    var FF1 = brain.Player1Move();
+                    if (FF1 == "FF")
+                    {
+                        System.Environment.Exit(0);
+                    }
+                    if (FF1 == "MISS")
+                    {
+                        break;
+                    }
                 }
                 BsConsoleUi.DrawBoard(brain.GetBoard(0));
                 Thread.Sleep(5000);
                 Console.Clear();
                 BsConsoleUi.DrawBoard(brain.GetBoard(1));
-                var FF2 = brain.Player2Move();
-                if (FF2 == "FF")
+                while (true)
                 {
-                    System.Environment.Exit(0);
+                    var FF2 = brain.Player2Move();
+                    if (FF2 == "FF")
+                    {
+                        System.Environment.Exit(0);
+                    }
+                    if (FF2 == "MISS")
+                    {
+                        break;
+                    }
                 }
                 BsConsoleUi.DrawBoard(brain.GetBoard(1));
                 Thread.Sleep(5000);
