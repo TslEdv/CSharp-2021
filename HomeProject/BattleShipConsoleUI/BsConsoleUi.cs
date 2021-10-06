@@ -5,6 +5,50 @@ namespace BattleShipConsoleUI
 {
     public static class BsConsoleUi
     {
+        public static string Player1Move(BsBrain brain)
+        {
+            int x, y;
+            Console.WriteLine("To Forfeit, enter 999 into X-coordinate");
+            Console.Write("Player 1, choose X-coordinate:");
+            if (!int.TryParse(Console.ReadLine()?.ToUpper().Trim(), out x))
+            {
+                x = 0;
+            }
+            if (x == 999)
+            {
+                Console.WriteLine("Player 1 has forfeited, Player 2 wins!");
+                return "FF";
+            }
+            Console.Write("Player 1, choose Y-coordinate:");
+            if (!int.TryParse(Console.ReadLine()?.ToUpper().Trim(), out y))
+            {
+                y = 0;
+            }
+            
+            return brain.Player1Move(x,y);
+        }
+        public static string Player2Move(BsBrain brain)
+        {
+            int x, y;
+            Console.WriteLine("To Forfeit, enter 999 into X-coordinate");
+            Console.Write("Player 2, choose X-coordinate:");
+            if (!int.TryParse(Console.ReadLine()?.ToUpper().Trim(), out x))
+            {
+                x = 0;
+            }
+            if (x == 999)
+            {
+                Console.WriteLine("Player 2 has forfeited, Player 1 wins!");
+                return "FF";
+            }
+            Console.Write("Player 2, choose Y-coordinate:");
+            if (!int.TryParse(Console.ReadLine()?.ToUpper().Trim(), out y))
+            {
+                y = 0;
+            }
+            
+            return brain.Player2Move(x,y);
+        }
         public static void DrawBoard(BoardSquareState[,] board)
         {
             Console.Write($"      ");

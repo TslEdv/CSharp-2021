@@ -53,64 +53,26 @@ namespace BattleShipBrain
             return res;
         }
 
-        public string Player1Move()
+        public string Player1Move(int x, int y)
         {
-            int x, y;
-            Console.WriteLine("To Forfeit, enter 999 into X-coordinate");
-            Console.Write("Player 1, choose X-coordinate:");
-            if (!int.TryParse(Console.ReadLine()?.ToUpper().Trim(), out x))
-            {
-                x = 0;
-            }
-            if (x == 999)
-            {
-                Console.WriteLine("Player 1 has forfeited, Player 2 wins!");
-                return "FF";
-            }
-            Console.Write("Player 1, choose Y-coordinate:");
-            if (!int.TryParse(Console.ReadLine()?.ToUpper().Trim(), out y))
-            {
-                y = 0;
-            }
             _boardA[x, y].Bombing();
             switch (_boardA[x,y].IsShip,_boardA[x,y].IsBomb)
             {
                 case (true,true):
-                    Console.WriteLine("You Hit!");
                     break;
                 case (false,true):
-                    Console.WriteLine("You Missed!");
                     return "MISS";
             }
             return "";
         }
-        public string Player2Move()
+        public string Player2Move(int x, int y)
         {
-            int x, y;
-            Console.WriteLine("To Forfeit, enter 999 into X-coordinate");
-            Console.Write("Player 2, choose X-coordinate:");
-            if (!int.TryParse(Console.ReadLine()?.ToUpper().Trim(), out x))
-            {
-                x = 0;
-            }
-            if (x == 999)
-            {
-                Console.WriteLine("Player 2 has forfeited, Player 1 wins!");
-                return "FF";
-            }
-            Console.Write("Player 2, choose Y-coordinate:");
-            if (!int.TryParse(Console.ReadLine()?.ToUpper().Trim(), out y))
-            {
-                y = 0;
-            }
             _boardB[x, y].Bombing();
             switch (_boardB[x,y].IsShip,_boardB[x,y].IsBomb)
             {
                 case (true,true):
-                    Console.WriteLine("You Hit!");
                     break;
                 case (false,true):
-                    Console.WriteLine("You Missed!");
                     return "MISS";
             }
             return "";

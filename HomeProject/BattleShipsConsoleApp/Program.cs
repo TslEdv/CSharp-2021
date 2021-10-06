@@ -53,15 +53,17 @@ namespace BattleShipsConsoleApp
                 BsConsoleUi.DrawBoard(brain.GetBoard(0));
                 while (true)
                 {
-                    var FF1 = brain.Player1Move();
+                    var FF1 = BsConsoleUi.Player1Move(brain);
                     if (FF1 == "FF")
                     {
                         System.Environment.Exit(0);
                     }
                     if (FF1 == "MISS")
                     {
+                        Console.WriteLine("You Missed!");
                         break;
                     }
+                    Console.WriteLine("You Hit!");
                 }
                 BsConsoleUi.DrawBoard(brain.GetBoard(0));
                 Thread.Sleep(5000);
@@ -69,15 +71,17 @@ namespace BattleShipsConsoleApp
                 BsConsoleUi.DrawBoard(brain.GetBoard(1));
                 while (true)
                 {
-                    var FF2 = brain.Player2Move();
+                    var FF2 = BsConsoleUi.Player2Move(brain);
                     if (FF2 == "FF")
                     {
                         System.Environment.Exit(0);
                     }
                     if (FF2 == "MISS")
                     {
+                        Console.WriteLine("You Missed!");
                         break;
                     }
+                    Console.WriteLine("You Hit!");
                 }
                 BsConsoleUi.DrawBoard(brain.GetBoard(1));
                 Thread.Sleep(5000);
