@@ -13,11 +13,11 @@ namespace BattleShipsConsoleApp
         static void Main(string[] args)
         {
             Console.Clear();
-            var mainMenu = new Menu("Battleships Game", EMenuDepth.Main);
+            var mainMenu = new Menu("<c=RED>Battle</c><c=BLUE>ships</c><c=GREEN> Game</c>", EMenuDepth.Main);
             mainMenu.AddMenuItems(new List<MenuItem>()
             {
-                new MenuItem("1", "Test Game", runGame),
-                new MenuItem("2", "Test", null),
+                new MenuItem("1", "<c=BLUE>Test</c> BattleShip <c=RED>Game</c>", runGame),
+                new MenuItem("2", "<c=CYAN>Test</c>", null),
             });
             mainMenu.RunMenu();
         }
@@ -27,7 +27,7 @@ namespace BattleShipsConsoleApp
             var brain = new BsBrain(10, 5);
             Console.WriteLine("First player board:");
             BsConsoleUi.DrawBoard(brain.GetBoard(0));
-            Console.WriteLine("Second player second:");
+            Console.WriteLine("Second player board:");
             BsConsoleUi.DrawBoard(brain.GetBoard(1));
             var done = false;
             while(done != true)
@@ -42,6 +42,7 @@ namespace BattleShipsConsoleApp
                     case "N":
                         Console.WriteLine("Thank you for playing!");
                         Console.WriteLine();
+                        Thread.Sleep(2000);
                         return "";
                 }
             }

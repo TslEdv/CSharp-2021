@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace MenuSystem
 {
@@ -58,19 +59,55 @@ namespace MenuSystem
             }
         }
 
+        private static void GetTextAndColor(string strSource)
+        {
+            const string strStart = "<c=";
+            const string strEnd = "</c>";
+            var sentence = strSource;
+            int end;
+            if (sentence.Contains(strStart) && sentence.Contains(strEnd))
+            {
+                end = sentence.IndexOf(strStart, 0, StringComparison.Ordinal);
+                Console.Write(sentence.Substring(0, end ));
+            }
+            while(sentence.Contains(strStart) && sentence.Contains(strEnd))
+            {
+                var start = sentence.IndexOf(strStart, 0, StringComparison.Ordinal) + strStart.Length;
+                end = sentence.IndexOf(">", start, StringComparison.Ordinal);
+                var color = sentence.Substring(start, end - start);
+                Console.ForegroundColor = (ConsoleColor) Enum.Parse(typeof(ConsoleColor), color, true);
+                start = sentence.IndexOf(strStart, 0, StringComparison.Ordinal) + strStart.Length + color.Length + 1;
+                end = sentence.IndexOf(strEnd, start, StringComparison.Ordinal);
+                Console.Write(sentence.Substring(start, end - start));
+                start = end+4;
+                if (sentence[start..].Contains(strStart))
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    end = sentence.IndexOf(strStart, start, StringComparison.Ordinal);
+                    Console.Write(sentence.Substring(start, end - start));
+                }
+                end = sentence.IndexOf(strEnd, sentence.IndexOf(strStart, 0, StringComparison.Ordinal) + strStart.Length + color.Length + 1, StringComparison.Ordinal);
+                sentence = sentence[(end+4)..];
+            }
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(sentence);
+        }
         private void PrintMenu()
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine("~~~~~~~~ " + _menuTitle + " ~~~~~~~~");
+            Console.Write("~~~~~~~~ ");
+            GetTextAndColor(_menuTitle);
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine(" ~~~~~~~~");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("=====================================");
             Console.ForegroundColor = ConsoleColor.Yellow;
             foreach (var item in _menuItems)
             {
-                Console.WriteLine(item);
+                GetTextAndColor(item.ToString());
+                Console.WriteLine();
             }
-
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("=====================================");
             Console.ForegroundColor = ConsoleColor.White;

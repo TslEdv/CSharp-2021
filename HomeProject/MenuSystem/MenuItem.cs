@@ -21,7 +21,7 @@ namespace MenuSystem
             RunMethod = runMethod;
         }
 
-        public string ShortCut { get; private set; }
+        public string ShortCut { get; set; }
         public string ButtonName { get; private set; }
         public Func<string> RunMethod { get; private set; }
 
