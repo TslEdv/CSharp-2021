@@ -11,8 +11,8 @@ namespace MenuSystem
         private readonly List<MenuItem> _menuItems = new List<MenuItem>();
         private HashSet<string> _shortCuts = new HashSet<string>();
         private readonly HashSet<string> _specialShortCuts = new HashSet<string>();
-        private readonly MenuItem _return = new MenuItem("R", "Return", null);
-        private readonly MenuItem _exit = new MenuItem("X", "Exit", null);
+        private readonly MenuItem _return = new MenuItem("R", "Return", null!);
+        private readonly MenuItem _exit = new MenuItem("X", "Exit", null!);
         private readonly EMenuDepth _menuDepth;
 
         public Menu(string title, EMenuDepth depth)
@@ -129,19 +129,25 @@ namespace MenuSystem
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        public double? RunMenu()
+        public string? RunMenu(string filename, string savefilename)
         {
+            var runDone = false;
             var input = "";
             do
             {
                 PrintMenu();
                 input = Console.ReadLine()?.Trim().ToUpper();
-                if (!_shortCuts.Contains(input)) continue;
-                var wanted = _menuItems.FirstOrDefault(item => item.ShortCut.ToUpper() == input);
-                input = wanted?.RunMethod == null ? input : wanted.RunMethod();
-            } while (!_specialShortCuts.Contains(input));
+                var isInputValid = _shortCuts.Contains(input);
+                if (isInputValid)
+                {
+                    var item = _menuItems.FirstOrDefault(t => t.ShortCut.ToUpper() == input);
+                    input = item?.RunMethod == null ? input : item.RunMethod(filename, savefilename);
+                }
+                runDone = _specialShortCuts.Contains(input);
+            } while (!runDone);
+            if (input == _return.ShortCut.ToUpper()) return "";
             if (input == _exit.ShortCut.ToUpper()) System.Environment.Exit(0);
-            return null;
+            return input ?? "";
         }
     }
 }

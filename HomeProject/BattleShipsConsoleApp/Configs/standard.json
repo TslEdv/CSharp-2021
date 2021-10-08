@@ -1,0 +1,13 @@
+{
+  "BoardSizeX": 3,
+  "BoardSizeY": 3,
+  "ShipConfigs": [
+    {
+      "Name": "maiden",
+      "Quantity": 1,
+      "ShipSizeY": 1,
+      "ShipSizeX": 1
+    }
+  ],
+  "EShipTouchRule": 0
+}

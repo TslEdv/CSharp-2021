@@ -5,10 +5,20 @@ namespace BattleShipConsoleUI
 {
     public static class BsConsoleUi
     {
+        public static string Move(BsBrain brain)
+        {
+            return brain.Move() switch
+            {
+                0 => Player1Move(brain),
+                1 => Player2Move(brain),
+                _ => ""
+            };
+        }
         public static string Player1Move(BsBrain brain)
         {
             int x, y;
             Console.WriteLine("To Forfeit, enter 999 into X-coordinate");
+            Console.WriteLine("To Save Game, enter 888 into X-coordinate");
             Console.Write("Player 1, choose X-coordinate:");
             if (!int.TryParse(Console.ReadLine()?.ToUpper().Trim(), out x))
             {
@@ -18,6 +28,11 @@ namespace BattleShipConsoleUI
             {
                 Console.WriteLine("Player 1 has forfeited, Player 2 wins!");
                 return "FF";
+            }
+            if (x == 888)
+            {
+                Console.WriteLine("Saving the game...");
+                return "SAVE";
             }
             Console.Write("Player 1, choose Y-coordinate:");
             if (!int.TryParse(Console.ReadLine()?.ToUpper().Trim(), out y))
@@ -31,6 +46,7 @@ namespace BattleShipConsoleUI
         {
             int x, y;
             Console.WriteLine("To Forfeit, enter 999 into X-coordinate");
+            Console.WriteLine("To Save Game, enter 888 into X-coordinate");
             Console.Write("Player 2, choose X-coordinate:");
             if (!int.TryParse(Console.ReadLine()?.ToUpper().Trim(), out x))
             {
@@ -40,6 +56,11 @@ namespace BattleShipConsoleUI
             {
                 Console.WriteLine("Player 2 has forfeited, Player 1 wins!");
                 return "FF";
+            }
+            if (x == 888)
+            {
+                Console.WriteLine("Saving the game...");
+                return "SAVE";
             }
             Console.Write("Player 2, choose Y-coordinate:");
             if (!int.TryParse(Console.ReadLine()?.ToUpper().Trim(), out y))
