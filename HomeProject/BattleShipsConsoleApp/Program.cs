@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
@@ -17,19 +18,28 @@ namespace BattleShipsConsoleApp
         static void Main(string[] args)
         {
             _basePath = args.Length == 1 ? args[0] : System.IO.Directory.GetCurrentDirectory();
+            if (!Directory.Exists(_basePath + System.IO.Path.DirectorySeparatorChar + "Configs"))
+            {
+                Directory.CreateDirectory(_basePath + System.IO.Path.DirectorySeparatorChar + "Configs");
+            }
+
+            if (!Directory.Exists(_basePath + System.IO.Path.DirectorySeparatorChar + "SavedGames"))
+            {
+                Directory.CreateDirectory(_basePath + System.IO.Path.DirectorySeparatorChar + "SavedGames");
+            }
             var fileNameStandardConfig = _basePath + System.IO.Path.DirectorySeparatorChar + "Configs" + System.IO.Path.DirectorySeparatorChar + "standard.json";
             var fileNameSavedGame = _basePath + System.IO.Path.DirectorySeparatorChar + "SavedGames" + System.IO.Path.DirectorySeparatorChar + "game.json";
             Console.Clear();
             var mainMenu = new Menu("<c=RED>Battle</c><c=BLUE>ships</c><c=GREEN> Game</c>", EMenuDepth.Main);
             mainMenu.AddMenuItems(new List<MenuItem>()
             {
-                new MenuItem("1", "<c=BLUE>Test</c> BattleShip <c=RED>Game</c>", runGame),
+                new MenuItem("1", "<c=BLUE>Test</c> BattleShip <c=RED>Game</c>", RunGame),
                 new MenuItem("2", "<c=RED>See Game Settings</c>", SeeSettings),
             });
             mainMenu.RunMenu(fileNameStandardConfig,fileNameSavedGame);
         }
 
-        private static string runGame(string filename, string savefilename)
+        private static string RunGame(string filename, string savefilename)
         {
             BsBrain? brain = new BsBrain(new GameConfig());
             if (System.IO.File.Exists(savefilename) && System.IO.File.Exists(filename))
@@ -90,8 +100,8 @@ namespace BattleShipsConsoleApp
                 BsConsoleUi.DrawBoard(brain.GetBoard(brain.Move()));
                 while (true)
                 {
-                    var FF1 = BsConsoleUi.Move(brain);
-                    if (FF1 == "FF")
+                    var ff1 = BsConsoleUi.Move(brain);
+                    if (ff1 == "FF")
                     {
                         if (System.IO.File.Exists(savefilename))
                         {
@@ -100,12 +110,12 @@ namespace BattleShipsConsoleApp
                         Thread.Sleep(5000);
                         return "";
                     }
-                    if (FF1 == "MISS")
+                    if (ff1 == "MISS")
                     {
                         Console.WriteLine("You Missed!");
                         break;
                     }
-                    if (FF1 == "SAVE")
+                    if (ff1 == "SAVE")
                     {
                         var jsonstr = brain.GetBrainJson(brain.Move());
                         Console.WriteLine(jsonstr);

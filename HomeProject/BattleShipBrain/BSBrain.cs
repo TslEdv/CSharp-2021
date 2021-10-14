@@ -14,13 +14,13 @@ namespace BattleShipBrain
 
         private readonly Random _rnd = new Random();
 
-        public BsBrain(GameConfig config)
+        public BsBrain(GameConfig? config)
         {
             GameBoards[0] = new GameBoard();
             GameBoards[1] = new GameBoard();
             
-            GameBoards[0].Board = new BoardSquareState[config.BoardSizeX, config.BoardSizeY];
-            GameBoards[1].Board = new BoardSquareState[config.BoardSizeX, config.BoardSizeY];
+            GameBoards[0].Board = new BoardSquareState[config!.BoardSizeX, config.BoardSizeY];
+            GameBoards[1].Board = new BoardSquareState[config!.BoardSizeX, config.BoardSizeY];
 
             for (var x = 0; x < config.BoardSizeX; x++)
             {
@@ -129,42 +129,35 @@ namespace BattleShipBrain
             var jsonStr = JsonSerializer.Serialize(dto, jsonOptions);
             return jsonStr;
         }
+
         public void RestoreBrainFromJson(string json)
         {
-            SaveGameDTO? restore = JsonSerializer.Deserialize<SaveGameDTO>(json);
+            var restore = JsonSerializer.Deserialize<SaveGameDTO>(json);
             this._currentPlayerNo = restore!.CurrentPlayerNo;
             this.GameBoards[0].Ships = restore.GameBoards[0].Ships;
             this.GameBoards[1].Ships = restore.GameBoards[1].Ships;
             var xvalues = restore.GameBoards[0].Board!.Count;
             var yvalues = restore.GameBoards[0].Board![0].Count;
-            this.GameBoards[0].Board = new BoardSquareState[xvalues,yvalues];
-            this.GameBoards[1].Board = new BoardSquareState[xvalues,yvalues];
+            this.GameBoards[0].Board = new BoardSquareState[xvalues, yvalues];
+            this.GameBoards[1].Board = new BoardSquareState[xvalues, yvalues];
             var x = 0;
             var y = 0;
-            foreach (var variable in restore.GameBoards[0].Board!)
+            for (var i = 0; i < 2; i++)
             {
-                foreach (var squareState in variable)
+                foreach (var variable in restore.GameBoards[i].Board!)
                 {
-                    this.GameBoards[0].Board[x, y] = squareState;
-                    y++;
+                    foreach (var squareState in variable)
+                    {
+                        this.GameBoards[i].Board[x, y] = squareState;
+                        y++;
+                    }
+
+                    y = 0;
+                    x++;
                 }
 
+                x = 0;
                 y = 0;
-                x++;
-            }
-
-            x = 0;
-            y = 0;
-            foreach (var variable in restore.GameBoards[1].Board!)
-            {
-                foreach (var squareState in variable)
-                {
-                    this.GameBoards[1].Board[x, y] = squareState;
-                    y++;
-                }
-
-                y = 0;
-                x++;
             }
         }
     }
