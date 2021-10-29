@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
-using System.Xml;
 using BattleShipBrain;
 using BattleShipConsoleUI;
+using DAL;
+using Domain;
 using MenuSystem;
 
 namespace BattleShipsConsoleApp
@@ -17,18 +16,18 @@ namespace BattleShipsConsoleApp
         private static string? _basePath;
         static void Main(string[] args)
         {
-            _basePath = args.Length == 1 ? args[0] : System.IO.Directory.GetCurrentDirectory();
-            if (!Directory.Exists(_basePath + System.IO.Path.DirectorySeparatorChar + "Configs"))
+            _basePath = args.Length == 1 ? args[0] : Directory.GetCurrentDirectory();
+            if (!Directory.Exists(_basePath + Path.DirectorySeparatorChar + "Configs"))
             {
-                Directory.CreateDirectory(_basePath + System.IO.Path.DirectorySeparatorChar + "Configs");
+                Directory.CreateDirectory(_basePath + Path.DirectorySeparatorChar + "Configs");
             }
 
-            if (!Directory.Exists(_basePath + System.IO.Path.DirectorySeparatorChar + "SavedGames"))
+            if (!Directory.Exists(_basePath + Path.DirectorySeparatorChar + "SavedGames"))
             {
-                Directory.CreateDirectory(_basePath + System.IO.Path.DirectorySeparatorChar + "SavedGames");
+                Directory.CreateDirectory(_basePath + Path.DirectorySeparatorChar + "SavedGames");
             }
-            var fileNameStandardConfig = _basePath + System.IO.Path.DirectorySeparatorChar + "Configs" + System.IO.Path.DirectorySeparatorChar + "standard.json";
-            var fileNameSavedGame = _basePath + System.IO.Path.DirectorySeparatorChar + "SavedGames" + System.IO.Path.DirectorySeparatorChar + "game.json";
+            var fileNameStandardConfig = _basePath + Path.DirectorySeparatorChar + "Configs" + Path.DirectorySeparatorChar + "standard.json";
+            var fileNameSavedGame = _basePath + Path.DirectorySeparatorChar + "SavedGames" + Path.DirectorySeparatorChar + "game.json";
             Console.Clear();
             var mainMenu = new Menu("<c=RED>Battle</c><c=BLUE>ships</c><c=GREEN> Game</c>", EMenuDepth.Main);
             mainMenu.AddMenuItems(new List<MenuItem>()
@@ -42,29 +41,56 @@ namespace BattleShipsConsoleApp
         private static string RunGame(string filename, string savefilename)
         {
             BsBrain? brain = new BsBrain(new GameConfig());
-            if (System.IO.File.Exists(savefilename) && System.IO.File.Exists(filename))
+            using var db = new ApplicationDbContext();
+            if (File.Exists(savefilename) && File.Exists(filename))
             {
-                Console.WriteLine("Detected a saved game! Would you like to continue it?(y/n):");
+                Console.WriteLine("Detected a local saved game! Would you like to continue it?(y/n):");
                 switch (Console.ReadLine()?.Trim().ToUpper())
                 {
                     case "Y":
-                        var brainconf = System.IO.File.ReadAllText(savefilename);
-                        brain!.RestoreBrainFromJson(brainconf);
+                        var brainconf = File.ReadAllText(savefilename);
+                        brain.RestoreBrainFromJson(brainconf);
+                        break;
+                    case "N":
+                        Console.WriteLine("Load a saved game from database?(y/n):");
+                        switch (Console.ReadLine()?.Trim().ToUpper())
+                        {
+                            case "Y":
+                                Console.WriteLine("Insert Game ID:");
+                                var id = Convert.ToInt32(Console.ReadLine()?.Trim());
+                                brain.RestoreBrainFromJson(db.Games.Find(id).GameState);
+                                db.Games.Remove(db.Games.Find(id));
+                                db.SaveChanges();
+                                break;
+                            case "N":
+                                Console.WriteLine("Loading config...");
+                                var confText = File.ReadAllText(filename);
+                                var conf = JsonSerializer.Deserialize<GameConfig>(confText);
+                                brain = new BsBrain(conf);
+                                break;
+                        }
+                        break;
+                }
+            }
+            else if (File.Exists(filename))
+            {
+                Console.WriteLine("Load a saved game from database?(y/n):");
+                switch (Console.ReadLine()?.Trim().ToUpper())
+                {
+                    case "Y":
+                        Console.WriteLine("Insert Game ID:");
+                        var id = Convert.ToInt32(Console.ReadLine()?.Trim());
+                        brain.RestoreBrainFromJson(db.Games.Find(id).GameState);
+                        db.Games.Remove(db.Games.Find(id));
+                        db.SaveChanges();
                         break;
                     case "N":
                         Console.WriteLine("Loading config...");
-                        var confText = System.IO.File.ReadAllText(filename);
+                        var confText = File.ReadAllText(filename);
                         var conf = JsonSerializer.Deserialize<GameConfig>(confText);
                         brain = new BsBrain(conf);
                         break;
                 }
-            }
-            else if (System.IO.File.Exists(filename))
-            {
-                Console.WriteLine("Loading config...");
-                var confText = System.IO.File.ReadAllText(filename);
-                var conf = JsonSerializer.Deserialize<GameConfig>(confText);
-                brain = new BsBrain(conf);
             }
             else
             {
@@ -73,7 +99,7 @@ namespace BattleShipsConsoleApp
 
             }
             Console.WriteLine("First player board:");
-            BsConsoleUi.DrawBoard(brain!.GetBoard(0));
+            BsConsoleUi.DrawBoard(brain.GetBoard(0));
             Console.WriteLine("Second player board:");
             BsConsoleUi.DrawBoard(brain.GetBoard(1));
             var done = false;
@@ -103,9 +129,9 @@ namespace BattleShipsConsoleApp
                     var ff1 = BsConsoleUi.Move(brain);
                     if (ff1 == "FF")
                     {
-                        if (System.IO.File.Exists(savefilename))
+                        if (File.Exists(savefilename))
                         {
-                            System.IO.File.Delete(savefilename);
+                            File.Delete(savefilename);
                         } 
                         Thread.Sleep(5000);
                         return "";
@@ -119,7 +145,14 @@ namespace BattleShipsConsoleApp
                     {
                         var jsonstr = brain.GetBrainJson(brain.Move());
                         Console.WriteLine(jsonstr);
-                        System.IO.File.WriteAllText(savefilename, jsonstr);
+                        File.WriteAllText(savefilename, jsonstr);
+                        var savegamedb = new Game
+                        {
+                            GameState = jsonstr
+                        };
+                        db.Games.Add(savegamedb);
+                        db.SaveChanges();
+                        Console.WriteLine("Your Game ID: " + savegamedb.GameId);
                         Thread.Sleep(5000);
                         return "";
                     }
@@ -133,9 +166,9 @@ namespace BattleShipsConsoleApp
         private static string SeeSettings(string filename, string savefilename)
         {
             GameConfig? config;
-            if (System.IO.File.Exists(filename))
+            if (File.Exists(filename))
             {
-                var confText = System.IO.File.ReadAllText(filename);
+                var confText = File.ReadAllText(filename);
                 config = JsonSerializer.Deserialize<GameConfig>(confText);
                 
             }
@@ -146,8 +179,10 @@ namespace BattleShipsConsoleApp
             var settingsMenu = new Menu("<c=RED>Set</c><c=BLUE>ti</c><c=GREEN>ngs</c>", EMenuDepth.SubMenu);
             settingsMenu.AddMenuItems(new List<MenuItem>()
             {
-                new MenuItem("1", $"Reset current config:" + System.Environment.NewLine + $"{config}", ResetSettings),
+                new MenuItem("1", $"Reset current config:" + Environment.NewLine + $"{config}", ResetSettings),
                 new MenuItem("2", "<c=RED>Make New Settings</c>", NewSettings),
+                new MenuItem("3", "<c=BLUE>Import Setting From DB</c>", DbSettingsImport),
+
             });
             return settingsMenu.RunMenu(filename, savefilename)!;
         }
@@ -164,14 +199,13 @@ namespace BattleShipsConsoleApp
             Console.WriteLine("Enter TouchRule (0 - NoTouch, 1 - CornerTouch, 2 - SideTouch):");
             input = int.Parse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty);
             conf.EShipTouchRule = (EShipTouchRule) input;
-            var shipinput = "";
             conf.ShipConfigs = new List<ShipConfig>();
             while (true)
             {
                 var shipcon = new ShipConfig();
                 Console.WriteLine("To exit ship creation - q");
                 Console.WriteLine("Enter ship name:");
-                shipinput = Console.ReadLine()?.Trim();
+                var shipinput = Console.ReadLine()?.Trim();
                 if (shipinput != null && shipinput.ToUpper() == "Q")
                 {
                     break;
@@ -194,7 +228,16 @@ namespace BattleShipsConsoleApp
             };
             var confJsonStr = JsonSerializer.Serialize(conf, jsonOptions);
             Console.WriteLine("Saving default config!");
-            System.IO.File.WriteAllText(filename, confJsonStr);
+            using var db = new ApplicationDbContext();
+            var saveconfdb = new Config
+            {
+                ConfigStr = confJsonStr
+            };
+            db.Configs.Add(saveconfdb);
+            db.SaveChanges();
+            Console.WriteLine("Your Conf ID: " + saveconfdb.ConfigId);
+            File.WriteAllText(filename, confJsonStr);
+            Thread.Sleep(5000);
             return "";
         }
 
@@ -207,7 +250,16 @@ namespace BattleShipsConsoleApp
             };
             var confJsonStr = JsonSerializer.Serialize(conf, jsonOptions);
             Console.WriteLine("Saving default config!");
-            System.IO.File.WriteAllText(filename, confJsonStr);
+            File.WriteAllText(filename, confJsonStr);
+            return "";
+        }
+
+        private static string DbSettingsImport(string filename, string savefilename)
+        {
+            using var db = new ApplicationDbContext();
+            Console.WriteLine("Insert Game ID:");
+            var id = Convert.ToInt32(Console.ReadLine()?.Trim());
+            File.WriteAllText(filename, db.Configs.Find(id).ConfigStr);
             return "";
         }
     }

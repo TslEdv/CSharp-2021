@@ -1,12 +1,12 @@
 {
-  "BoardSizeX": 3,
-  "BoardSizeY": 3,
+  "BoardSizeX": 10,
+  "BoardSizeY": 10,
   "ShipConfigs": [
     {
-      "Name": "maiden",
-      "Quantity": 1,
-      "ShipSizeY": 1,
-      "ShipSizeX": 1
+      "Name": "SaltyMaiden",
+      "Quantity": 4,
+      "ShipSizeY": 2,
+      "ShipSizeX": 3
     }
   ],
   "EShipTouchRule": 0

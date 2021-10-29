@@ -13,6 +13,10 @@ ProjectSection(SolutionItems) = preProject
 	..\..\Directory.Build.props = ..\..\Directory.Build.props
 EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{FD3C0538-1DDD-4C64-95E1-C39186F4AF5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{5F93094E-7E64-43A6-9BFF-A6D419F46B9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,5 +39,13 @@ Global
 		{66A03C95-023F-4C58-B4D8-91CCEF736B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66A03C95-023F-4C58-B4D8-91CCEF736B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66A03C95-023F-4C58-B4D8-91CCEF736B29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD3C0538-1DDD-4C64-95E1-C39186F4AF5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD3C0538-1DDD-4C64-95E1-C39186F4AF5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD3C0538-1DDD-4C64-95E1-C39186F4AF5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD3C0538-1DDD-4C64-95E1-C39186F4AF5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F93094E-7E64-43A6-9BFF-A6D419F46B9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F93094E-7E64-43A6-9BFF-A6D419F46B9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F93094E-7E64-43A6-9BFF-A6D419F46B9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F93094E-7E64-43A6-9BFF-A6D419F46B9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
