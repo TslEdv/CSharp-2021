@@ -1,0 +1,33 @@
+﻿@page
+@model WebApp.Pages.NewGame
+
+@{
+    ViewData["Title"] = "New Game";
+}
+
+<p>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Configs[0].ConfigId)
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr onclick="window.location.href = '/CreateGame?id=0' ">
+            <td>
+                Default Configuration
+            </td>
+        </tr>
+        @foreach (var item in Model.Configs)
+        {
+            <tr onclick="window.location.href = '/CreateGame?id=@item.ConfigId' ">
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConfigId)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</p>

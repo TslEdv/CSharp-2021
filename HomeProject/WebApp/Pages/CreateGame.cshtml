@@ -1,0 +1,29 @@
+﻿@page
+@model WebApp.Pages.CreateGame
+
+@{
+    ViewData["Title"] = "Create Game";
+}
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>
+            Game Id
+        </th>
+        <th>
+            Config String
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr onclick="window.location.href = '/Game?id=@Model.GameId' ">
+        <td>
+            @Model.GameId
+        </td>
+        <td>
+            @Model.Config.ConfigStr
+        </td>
+    </tr>
+    </tbody>
+</table>

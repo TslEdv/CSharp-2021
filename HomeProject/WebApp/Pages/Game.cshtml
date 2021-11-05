@@ -1,0 +1,41 @@
+﻿@page
+@using BattleShipBrain
+@model WebApp.Pages.Game
+
+@{
+    ViewData["Title"] = "Game";
+}
+<div class="row">
+    <div class="col">
+        <table class="" border="1">
+            @for (var y = 0; y < Model.Board!.GetLength(1); y++)
+            {
+                <tr style="height: 30px;">
+                    @for (var x = 0; x < Model.Board!.GetLength(0); x++)
+                    {
+                        <td style="width: 30px; cursor: pointer" onclick="window.location.href = '/Game?id=@Model.GameId&x=@x&y=@y' ">
+                            @switch(Model.Board[x, y].IsShip, Model.Board[x, y].IsBomb)
+                            {
+                                case (false,false):
+                                    <text> </text>;
+                                    break;
+                                case (true,false):
+                                    <text>#</text>;
+                                    break;
+                                case (false,true):
+                                    <text>O</text>
+                                    break;
+                                case (true,true):
+                                    <text>X</text>;
+                                    break;
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="col">
+
+    </div>
+</div>

@@ -39,7 +39,6 @@ namespace BattleShipBrain
                 }
             }
         }
-
         public BoardSquareState[,] GetBoard(int playerNo)
         {
             return CopyOfBoard(GameBoards[playerNo].Board);
@@ -62,8 +61,30 @@ namespace BattleShipBrain
 
         public int Move()
         {
-            var turn = this._currentPlayerNo;
+            var turn = _currentPlayerNo;
             return turn;
+        }
+
+        public void PlayerMove(int x, int y)
+        {
+            GameBoards[_currentPlayerNo].Board[x, y].Bombing();
+            if (GameBoards[_currentPlayerNo].Board[x, y].IsBomb &&
+                GameBoards[_currentPlayerNo].Board[x, y].IsShip)
+            {
+                _currentPlayerNo = _currentPlayerNo;
+            }
+            else
+            {
+                switch (_currentPlayerNo)
+                {
+                    case 0:
+                        _currentPlayerNo = 1;
+                        break;
+                    case 1:
+                        _currentPlayerNo = 0;
+                        break;
+                }
+            }
         }
         public string Player1Move(int x, int y)
         {
@@ -77,7 +98,7 @@ namespace BattleShipBrain
                 case (true,true):
                     break;
                 case (false,true):
-                    this._currentPlayerNo = 1;
+                    _currentPlayerNo = 1;
                     return "MISS";
             }
             
@@ -95,7 +116,7 @@ namespace BattleShipBrain
                 case (true,true):
                     break;
                 case (false,true):
-                    this._currentPlayerNo = 0;
+                    _currentPlayerNo = 0;
                     return "MISS";
             }
             
@@ -133,13 +154,13 @@ namespace BattleShipBrain
         public void RestoreBrainFromJson(string json)
         {
             var restore = JsonSerializer.Deserialize<SaveGameDTO>(json);
-            this._currentPlayerNo = restore!.CurrentPlayerNo;
-            this.GameBoards[0].Ships = restore.GameBoards[0].Ships;
-            this.GameBoards[1].Ships = restore.GameBoards[1].Ships;
+            _currentPlayerNo = restore!.CurrentPlayerNo;
+            GameBoards[0].Ships = restore.GameBoards[0].Ships;
+            GameBoards[1].Ships = restore.GameBoards[1].Ships;
             var xvalues = restore.GameBoards[0].Board!.Count;
             var yvalues = restore.GameBoards[0].Board![0].Count;
-            this.GameBoards[0].Board = new BoardSquareState[xvalues, yvalues];
-            this.GameBoards[1].Board = new BoardSquareState[xvalues, yvalues];
+            GameBoards[0].Board = new BoardSquareState[xvalues, yvalues];
+            GameBoards[1].Board = new BoardSquareState[xvalues, yvalues];
             var x = 0;
             var y = 0;
             for (var i = 0; i < 2; i++)
@@ -148,7 +169,7 @@ namespace BattleShipBrain
                 {
                     foreach (var squareState in variable)
                     {
-                        this.GameBoards[i].Board[x, y] = squareState;
+                        GameBoards[i].Board[x, y] = squareState;
                         y++;
                     }
 
