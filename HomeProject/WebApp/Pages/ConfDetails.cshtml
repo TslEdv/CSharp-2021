@@ -1,0 +1,33 @@
+﻿@page
+@model WebApp.Pages.ConfDetails
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Game Config</h4>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GameConfig.ConfigId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GameConfig.ConfigId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GameConfig.ConfigStr)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GameConfig.ConfigStr)
+        </dd>
+    </dl>
+
+    
+</div>
+<div>
+    <a asp-page="./NewGame">Back to List</a>
+</div>

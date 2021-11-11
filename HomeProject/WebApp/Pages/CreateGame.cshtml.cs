@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BattleShipBrain;
+﻿using BattleShipBrain;
 using DAL;
 using Domain;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WebApp.Pages
@@ -19,7 +16,7 @@ namespace WebApp.Pages
         }
         public static BsBrain Brain { get; set; } = new BsBrain(new GameConfig());
         
-        public Config Config { get; set; } = new Config();
+        public Config Config { get; private set; } = new Config();
 
         public int GameId;
 

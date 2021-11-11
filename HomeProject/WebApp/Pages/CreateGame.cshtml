@@ -5,6 +5,9 @@
     ViewData["Title"] = "Create Game";
 }
 
+<h1>The game has been started!</h1>
+<h2>Click on the row to continue to the game</h2>
+
 <table class="table table-striped">
     <thead>
     <tr>
@@ -17,7 +20,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr onclick="window.location.href = '/Game?id=@Model.GameId' ">
+    <tr onclick="window.location.href = '/Game?id=@Model.GameId'">
         <td>
             @Model.GameId
         </td>

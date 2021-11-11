@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading;
 
 namespace BattleShipBrain
 {
@@ -20,7 +18,7 @@ namespace BattleShipBrain
             GameBoards[1] = new GameBoard();
             
             GameBoards[0].Board = new BoardSquareState[config!.BoardSizeX, config.BoardSizeY];
-            GameBoards[1].Board = new BoardSquareState[config!.BoardSizeX, config.BoardSizeY];
+            GameBoards[1].Board = new BoardSquareState[config.BoardSizeX, config.BoardSizeY];
 
             for (var x = 0; x < config.BoardSizeX; x++)
             {
@@ -53,12 +51,22 @@ namespace BattleShipBrain
                 {
                     {
                         res[x,y] = board[x,y];
-                    };
+                    }
                 }
             }
             return res;
         }
 
+        public void ChangeMove()
+        {
+            _currentPlayerNo = _currentPlayerNo switch
+            {
+                0 => 1,
+                1 => 0,
+                _ => _currentPlayerNo
+            };
+        }
+        
         public int Move()
         {
             var turn = _currentPlayerNo;
@@ -71,7 +79,6 @@ namespace BattleShipBrain
             if (GameBoards[_currentPlayerNo].Board[x, y].IsBomb &&
                 GameBoards[_currentPlayerNo].Board[x, y].IsShip)
             {
-                _currentPlayerNo = _currentPlayerNo;
             }
             else
             {

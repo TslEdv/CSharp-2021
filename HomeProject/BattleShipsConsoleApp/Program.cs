@@ -40,7 +40,8 @@ namespace BattleShipsConsoleApp
 
         private static string RunGame(string filename, string savefilename)
         {
-            BsBrain? brain = new BsBrain(new GameConfig());
+            BsBrain brain = new BsBrain(new GameConfig());
+            var gameid = 0;
             using var db = new ApplicationDbContext();
             if (File.Exists(savefilename) && File.Exists(filename))
             {
@@ -59,8 +60,7 @@ namespace BattleShipsConsoleApp
                                 Console.WriteLine("Insert Game ID:");
                                 var id = Convert.ToInt32(Console.ReadLine()?.Trim());
                                 brain.RestoreBrainFromJson(db.Games.Find(id).GameState);
-                                db.Games.Remove(db.Games.Find(id));
-                                db.SaveChanges();
+                                gameid = id;
                                 break;
                             case "N":
                                 Console.WriteLine("Loading config...");
@@ -81,8 +81,7 @@ namespace BattleShipsConsoleApp
                         Console.WriteLine("Insert Game ID:");
                         var id = Convert.ToInt32(Console.ReadLine()?.Trim());
                         brain.RestoreBrainFromJson(db.Games.Find(id).GameState);
-                        db.Games.Remove(db.Games.Find(id));
-                        db.SaveChanges();
+                        gameid = id;
                         break;
                     case "N":
                         Console.WriteLine("Loading config...");
@@ -132,7 +131,12 @@ namespace BattleShipsConsoleApp
                         if (File.Exists(savefilename))
                         {
                             File.Delete(savefilename);
-                        } 
+                        }
+                        if (gameid != 0)
+                        {
+                            db.Games.Remove(db.Games.Find(gameid));
+                            db.SaveChanges();
+                        }
                         Thread.Sleep(5000);
                         return "";
                     }
@@ -146,11 +150,8 @@ namespace BattleShipsConsoleApp
                         var jsonstr = brain.GetBrainJson(brain.Move());
                         Console.WriteLine(jsonstr);
                         File.WriteAllText(savefilename, jsonstr);
-                        var savegamedb = new Game
-                        {
-                            GameState = jsonstr
-                        };
-                        db.Games.Add(savegamedb);
+                        var savegamedb = db.Games.Find(gameid);
+                        savegamedb.GameState = jsonstr;
                         db.SaveChanges();
                         Console.WriteLine("Your Game ID: " + savegamedb.GameId);
                         Thread.Sleep(5000);

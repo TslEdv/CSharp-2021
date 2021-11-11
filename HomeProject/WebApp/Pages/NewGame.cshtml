@@ -6,28 +6,50 @@
 }
 
 <p>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Configs[0].ConfigId)
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr onclick="window.location.href = '/CreateGame?id=0' ">
+<h1>Click on the row to choose the config and start a new game</h1>
+<p>
+    <a asp-page="./CreateConf">Create New</a>
+</p>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Configs[0].ConfigId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Configs[0].CreationTime)
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr onclick="window.location.href = '/CreateGame?id=0' ">
+        <td>
+            Default Configuration
+        </td>
+        <td>
+            
+        </td>
+        <td>
+            <a asp-page="./ConfDetails" asp-route-id="0">Details | </a>
+        </td>
+    </tr>
+    @foreach (var item in Model.Configs)
+    {
+        <tr onclick="window.location.href = '/CreateGame?id=@item.ConfigId' ">
             <td>
-                Default Configuration
+                @Html.DisplayFor(modelItem => item.ConfigId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationTime)
+            </td>
+            <td>
+                <a asp-page="./ConfDetails" asp-route-id="@item.ConfigId">Details | </a>
+                <a asp-page="./ConfDelete" asp-route-id="@item.ConfigId">Delete</a>
             </td>
         </tr>
-        @foreach (var item in Model.Configs)
-        {
-            <tr onclick="window.location.href = '/CreateGame?id=@item.ConfigId' ">
-                <td>
-                    @Html.DisplayFor(modelItem => item.ConfigId)
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-</p>
+    }
+    </tbody>
+</table>

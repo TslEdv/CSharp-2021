@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BattleShipBrain;
 using DAL;
 using Domain;
 using Microsoft.AspNetCore.Mvc.RazorPages;

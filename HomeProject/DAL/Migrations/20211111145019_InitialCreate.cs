@@ -12,7 +12,8 @@ namespace DAL.Migrations
                 {
                     ConfigId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ConfigStr = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ConfigStr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationTime = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -25,7 +26,8 @@ namespace DAL.Migrations
                 {
                     GameId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    GameState = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    GameState = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationTime = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

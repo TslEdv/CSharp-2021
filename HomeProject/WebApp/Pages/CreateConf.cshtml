@@ -1,0 +1,67 @@
+﻿@page
+@model WebApp.Pages.CreateConf
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Game Config</h4>
+<hr/>
+<div class="row">
+    <div class="col-md-8 col-sm-8">
+        <form method="post">
+
+            <div>
+                <text>
+                    Insert New Game Config into input similar to this format:
+                </text>
+            </div>
+            
+            <div>
+                <text>
+{
+  "BoardSizeX": 10,
+  "BoardSizeY": 10,
+  "ShipConfigs": [
+    {
+      "Name": "SaltyMaiden",
+      "Quantity": 4,
+      "ShipSizeY": 2,
+      "ShipSizeX": 3
+    }
+  ],
+  "EShipTouchRule": 0
+}
+                </text>
+            </div>
+            
+            <div>
+                <text>
+                    TouchRule must range from 0-2
+                </text>
+            </div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Config.ConfigStr" class="control-label bg-info"></label>
+                <input asp-for="Config.ConfigStr" class="form-control"/>
+                <span asp-validation-for="Config.ConfigStr" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

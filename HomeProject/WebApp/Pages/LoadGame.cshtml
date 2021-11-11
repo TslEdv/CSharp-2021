@@ -5,13 +5,23 @@
     ViewData["Title"] = "Load Game";
 }
 
+<h1>Click on a row with your game to continue it</h1>
+<p>
+    <a asp-page="./NewGame">Create New</a>
+</p>
 <table class="table table-striped">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Games[0].GameId)
-            </th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Games[0].GameId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Games[0].CreationTime)
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
     </thead>
     <tbody>
     @foreach (var item in Model.Games)
@@ -20,12 +30,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.GameId)
             </td>
-                       <td>
-                           <a asp-page="/DeleteGame" asp-route-id="@item.GameId">Delete</a>
-                        </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationTime)
+            </td>
+            <td>
+                <a asp-page="/DeleteGame" asp-route-id="@item.GameId">Delete</a>
+            </td>
 
         </tr>
-}
+    }
     </tbody>
 </table>
 
