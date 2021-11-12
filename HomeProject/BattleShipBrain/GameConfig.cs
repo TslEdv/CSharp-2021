@@ -13,28 +13,28 @@ namespace BattleShipBrain
             new ShipConfig()
             {
                 Name = "Patrol",
-                Quantity = 5,
+                Quantity = 1,
                 ShipSizeY = 1,
                 ShipSizeX = 1,
             },
             new ShipConfig()
             {
                 Name = "Cruiser",
-                Quantity = 4,
+                Quantity = 1,
                 ShipSizeY = 1,
                 ShipSizeX = 2,
             },
             new ShipConfig()
             {
                 Name = "Submarine",
-                Quantity = 3,
+                Quantity = 1,
                 ShipSizeY = 1,
                 ShipSizeX = 3,
             },
             new ShipConfig()
             {
                 Name = "Battleship",
-                Quantity = 2,
+                Quantity = 1,
                 ShipSizeY = 1,
                 ShipSizeX = 4,
             },

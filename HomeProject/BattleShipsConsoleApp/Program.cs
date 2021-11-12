@@ -11,10 +11,11 @@ using MenuSystem;
 
 namespace BattleShipsConsoleApp
 {
-    class Program
+    internal static class Program
     {
         private static string? _basePath;
-        static void Main(string[] args)
+
+        private static void Main(string[] args)
         {
             _basePath = args.Length == 1 ? args[0] : Directory.GetCurrentDirectory();
             if (!Directory.Exists(_basePath + Path.DirectorySeparatorChar + "Configs"))
@@ -38,19 +39,19 @@ namespace BattleShipsConsoleApp
             mainMenu.RunMenu(fileNameStandardConfig,fileNameSavedGame);
         }
 
-        private static string RunGame(string filename, string savefilename)
+        private static string RunGame(string filename, string saveFileName)
         {
             BsBrain brain = new BsBrain(new GameConfig());
-            var gameid = 0;
+            var gameId = 0;
             using var db = new ApplicationDbContext();
-            if (File.Exists(savefilename) && File.Exists(filename))
+            if (File.Exists(saveFileName) && File.Exists(filename))
             {
                 Console.WriteLine("Detected a local saved game! Would you like to continue it?(y/n):");
                 switch (Console.ReadLine()?.Trim().ToUpper())
                 {
                     case "Y":
-                        var brainconf = File.ReadAllText(savefilename);
-                        brain.RestoreBrainFromJson(brainconf);
+                        var brainConf = File.ReadAllText(saveFileName);
+                        brain.RestoreBrainFromJson(brainConf);
                         break;
                     case "N":
                         Console.WriteLine("Load a saved game from database?(y/n):");
@@ -60,7 +61,7 @@ namespace BattleShipsConsoleApp
                                 Console.WriteLine("Insert Game ID:");
                                 var id = Convert.ToInt32(Console.ReadLine()?.Trim());
                                 brain.RestoreBrainFromJson(db.Games.Find(id).GameState);
-                                gameid = id;
+                                gameId = id;
                                 break;
                             case "N":
                                 Console.WriteLine("Loading config...");
@@ -81,7 +82,7 @@ namespace BattleShipsConsoleApp
                         Console.WriteLine("Insert Game ID:");
                         var id = Convert.ToInt32(Console.ReadLine()?.Trim());
                         brain.RestoreBrainFromJson(db.Games.Find(id).GameState);
-                        gameid = id;
+                        gameId = id;
                         break;
                     case "N":
                         Console.WriteLine("Loading config...");
@@ -98,9 +99,9 @@ namespace BattleShipsConsoleApp
 
             }
             Console.WriteLine("First player board:");
-            BsConsoleUi.DrawBoard(brain.GetBoard(0));
+            BsConsoleUi.DrawBoard(brain.GetBoard(0), brain.GetFireBoard(0));
             Console.WriteLine("Second player board:");
-            BsConsoleUi.DrawBoard(brain.GetBoard(1));
+            BsConsoleUi.DrawBoard(brain.GetBoard(1), brain.GetFireBoard(1));
             var done = false;
             while(done != true)
             {
@@ -122,19 +123,26 @@ namespace BattleShipsConsoleApp
             while (true)
             {
                 Console.Clear();
-                BsConsoleUi.DrawBoard(brain.GetBoard(brain.Move()));
+                BsConsoleUi.DrawBoard(brain.GetBoard(brain.Move()), brain.GetFireBoard(brain.Move()));
+                foreach (var ship in brain.ListShips(brain.Move()))
+                {
+                    Console.WriteLine("Name: " + ship.Name);
+                    Console.WriteLine("Size: " + ship.GetShipSize());
+                    Console.WriteLine("Damage: " + ship.GetShipDamageCount(brain.GetBoard(brain.Move())));
+                    Console.WriteLine("Status: " + ship.IsShipSunk(brain.GetBoard(brain.Move())));
+                }
                 while (true)
                 {
                     var ff1 = BsConsoleUi.Move(brain);
                     if (ff1 == "FF")
                     {
-                        if (File.Exists(savefilename))
+                        if (File.Exists(saveFileName))
                         {
-                            File.Delete(savefilename);
+                            File.Delete(saveFileName);
                         }
-                        if (gameid != 0)
+                        if (gameId != 0)
                         {
-                            db.Games.Remove(db.Games.Find(gameid));
+                            db.Games.Remove(db.Games.Find(gameId));
                             db.SaveChanges();
                         }
                         Thread.Sleep(5000);
@@ -147,24 +155,23 @@ namespace BattleShipsConsoleApp
                     }
                     if (ff1 == "SAVE")
                     {
-                        var jsonstr = brain.GetBrainJson(brain.Move());
-                        Console.WriteLine(jsonstr);
-                        File.WriteAllText(savefilename, jsonstr);
-                        var savegamedb = db.Games.Find(gameid);
-                        savegamedb.GameState = jsonstr;
+                        var jsonStr = brain.GetBrainJson(brain.Move());
+                        Console.WriteLine(jsonStr);
+                        File.WriteAllText(saveFileName, jsonStr);
+                        var saveGameDb = db.Games.Find(gameId);
+                        saveGameDb.GameState = jsonStr;
                         db.SaveChanges();
-                        Console.WriteLine("Your Game ID: " + savegamedb.GameId);
+                        Console.WriteLine("Your Game ID: " + saveGameDb.GameId);
                         Thread.Sleep(5000);
                         return "";
                     }
                     Console.WriteLine("You Hit!");
                 }
-                BsConsoleUi.DrawBoard(brain.GetBoard(0));
                 Thread.Sleep(5000);
             }
         }
 
-        private static string SeeSettings(string filename, string savefilename)
+        private static string SeeSettings(string filename, string saveFileName)
         {
             GameConfig? config;
             if (File.Exists(filename))
@@ -185,10 +192,10 @@ namespace BattleShipsConsoleApp
                 new MenuItem("3", "<c=BLUE>Import Setting From DB</c>", DbSettingsImport),
 
             });
-            return settingsMenu.RunMenu(filename, savefilename)!;
+            return settingsMenu.RunMenu(filename, saveFileName)!;
         }
 
-        private static string NewSettings(string filename, string savefilename)
+        private static string NewSettings(string filename, string saveFileName)
         {
             GameConfig conf = new GameConfig();
             Console.WriteLine("Enter BoardSizeX:");
@@ -203,25 +210,25 @@ namespace BattleShipsConsoleApp
             conf.ShipConfigs = new List<ShipConfig>();
             while (true)
             {
-                var shipcon = new ShipConfig();
+                var shipConf = new ShipConfig();
                 Console.WriteLine("To exit ship creation - q");
                 Console.WriteLine("Enter ship name:");
-                var shipinput = Console.ReadLine()?.Trim();
-                if (shipinput != null && shipinput.ToUpper() == "Q")
+                var shipInput = Console.ReadLine()?.Trim();
+                if (shipInput != null && shipInput.ToUpper() == "Q")
                 {
                     break;
                 }
-                shipcon.Name = shipinput;
+                shipConf.Name = shipInput;
                 Console.WriteLine("Enter ship quantity:");
                 input = Convert.ToInt32(Console.ReadLine()?.Trim().ToUpper());
-                shipcon.Quantity = input;
+                shipConf.Quantity = input;
                 Console.WriteLine("Enter ShipSizeX:");
                 input = Convert.ToInt32(Console.ReadLine()?.Trim().ToUpper());
-                shipcon.ShipSizeX = input;
+                shipConf.ShipSizeX = input;
                 Console.WriteLine("Enter ShipSizeY:");
                 input = Convert.ToInt32(Console.ReadLine()?.Trim().ToUpper());
-                shipcon.ShipSizeY = input;
-                conf.ShipConfigs.Add(shipcon);
+                shipConf.ShipSizeY = input;
+                conf.ShipConfigs.Add(shipConf);
             }
             var jsonOptions = new JsonSerializerOptions()
             {
@@ -230,19 +237,19 @@ namespace BattleShipsConsoleApp
             var confJsonStr = JsonSerializer.Serialize(conf, jsonOptions);
             Console.WriteLine("Saving default config!");
             using var db = new ApplicationDbContext();
-            var saveconfdb = new Config
+            var saveConfDb = new Config
             {
                 ConfigStr = confJsonStr
             };
-            db.Configs.Add(saveconfdb);
+            db.Configs.Add(saveConfDb);
             db.SaveChanges();
-            Console.WriteLine("Your Conf ID: " + saveconfdb.ConfigId);
+            Console.WriteLine("Your Conf ID: " + saveConfDb.ConfigId);
             File.WriteAllText(filename, confJsonStr);
             Thread.Sleep(5000);
             return "";
         }
 
-        private static string ResetSettings(string filename, string savefilename)
+        private static string ResetSettings(string filename, string saveFileName)
         {
             GameConfig conf = new GameConfig();
             var jsonOptions = new JsonSerializerOptions()
@@ -255,7 +262,7 @@ namespace BattleShipsConsoleApp
             return "";
         }
 
-        private static string DbSettingsImport(string filename, string savefilename)
+        private static string DbSettingsImport(string filename, string saveFileName)
         {
             using var db = new ApplicationDbContext();
             Console.WriteLine("Insert Game ID:");

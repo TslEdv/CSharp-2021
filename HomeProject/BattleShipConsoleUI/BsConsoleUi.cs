@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BattleShipBrain;
 
 namespace BattleShipConsoleUI
@@ -70,57 +71,65 @@ namespace BattleShipConsoleUI
             
             return brain.Player2Move(x,y);
         }
-        public static void DrawBoard(BoardSquareState[,] board)
+        public static void DrawBoard(BoardSquareState[,] boardOwn,BoardSquareState[,] boardFire)
         {
-            Console.Write($"      ");
-            for (var x = 0; x < board.GetLength(0); x++)
+            List<BoardSquareState[,]> boards = new List<BoardSquareState[,]>
             {
-                Console.Write($"   {x}  ");
-            }
-
-            Console.WriteLine();
-            for (var x = 0; x < board.GetLength(0) + 1; x++)
+                boardOwn,
+                boardFire
+            };
+            foreach (var board in boards)
             {
-                if (x > 0)
-                {
-                    Console.Write($"+-----");
-                }
-                else
-                {
-                    Console.Write("      ");
-                }
-            }
-
-            for (var y = 0; y < board.GetLength(1); y++)
-            {
-                Console.WriteLine("+");
-                Console.Write($"   {y}  ");
-                for (var x = 0; x < board.GetLength(0); x++)
-                {
-                    Console.Write(board[x, y]);
-                }
+                         Console.Write($"      ");
+                            for (var x = 0; x < board.GetLength(0); x++)
+                            {
+                                Console.Write($"   {x}  ");
+                            }
                 
-                Console.WriteLine("|");
-                for (var x = 0; x < board.GetLength(0) + 1; x++)
-                {
-                    if (x > 0)
-                    {
-                        Console.Write($"+-----");
-                    }
-                    else
-                    {
-                        Console.Write("      ");
-                    }
-                }
+                            Console.WriteLine();
+                            for (var x = 0; x < board.GetLength(0) + 1; x++)
+                            {
+                                if (x > 0)
+                                {
+                                    Console.Write($"+-----");
+                                }
+                                else
+                                {
+                                    Console.Write("      ");
+                                }
+                            }
+                
+                            for (var y = 0; y < board.GetLength(1); y++)
+                            {
+                                Console.WriteLine("+");
+                                Console.Write($"   {y}  ");
+                                for (var x = 0; x < board.GetLength(0); x++)
+                                {
+                                    Console.Write(board[x, y]);
+                                }
+                                
+                                Console.WriteLine("|");
+                                for (var x = 0; x < board.GetLength(0) + 1; x++)
+                                {
+                                    if (x > 0)
+                                    {
+                                        Console.Write($"+-----");
+                                    }
+                                    else
+                                    {
+                                        Console.Write("      ");
+                                    }
+                                }
+                            }
+                
+                            Console.WriteLine("+");
+                            for (var x = 0; x < board.GetLength(0) + 1; x++)
+                            {
+                                Console.Write($"=======");
+                            }
+                
+                            Console.WriteLine();
             }
-
-            Console.WriteLine("+");
-            for (var x = 0; x < board.GetLength(0) + 1; x++)
-            {
-                Console.Write($"=======");
-            }
-
-            Console.WriteLine();
         }
     }
 }

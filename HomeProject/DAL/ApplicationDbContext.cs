@@ -10,9 +10,8 @@ namespace DAL
         public DbSet<Config> Configs { get; set; } = default!;
         public DbSet<Game> Games { get; set; } = default!;
 
-        private static string ConnectionString =
-            "Server=barrel.itcollege.ee;User Id=student;Password=Student.Pass.1;Database=student_edvess;MultipleActiveResultSets=true";
-        
+        private const string ConnectionString = "Server=barrel.itcollege.ee;User Id=student;Password=Student.Pass.1;Database=student_edvess;MultipleActiveResultSets=true";
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(ConnectionString);

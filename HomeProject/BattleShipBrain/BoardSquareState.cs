@@ -1,8 +1,10 @@
-﻿namespace BattleShipBrain
+﻿using System.IO;
+
+namespace BattleShipBrain
 {
     public struct BoardSquareState
     {
-        public bool IsShip { get; set; }
+        public bool IsShip { get ; set; }
         public bool IsBomb { get; set; }
 
         public void Bombing()

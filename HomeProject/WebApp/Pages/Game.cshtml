@@ -1,9 +1,11 @@
 ﻿@page
+@using System.Diagnostics.Eventing.Reader
 @model WebApp.Pages.Game
 
 @{
     ViewData["Title"] = "Game";
 }
+
 <style>
       td {
         text-align: center;
@@ -11,42 +13,105 @@
         width: 30px; 
         cursor: pointer
       }
+      .flex-container {
+          display: flex;
+      }
+      
+      .flex-child {
+          flex: 1;
+      }  
+      
+      .flex-child:first-child {
+          margin-right: 20px;
+      } 
     </style>
-<div class="row">
-    <div class="col">
-        <table class="" border="1">
-            @for (var y = 0; y < Model.Board!.GetLength(1); y++)
-            {
-                <tr style="height: 30px;">
-                    @for (var x = 0; x < Model.Board!.GetLength(0); x++)
-                    {
-                        <td onclick="window.location.href = '/Game?id=@Model.GameId&x=@x&y=@y&move=1' ">
-                            @switch(Model.Board[x, y].IsShip, Model.Board[x, y].IsBomb)
-                            {
-                                case (false,false):
-                                    <text> </text>
-                                    break;
-                                case (true,false):
-                                    <text><img src="https://img.favpng.com/12/21/1/ship-icon-png-favpng-x1zdHYr6xfQet9EDJfweMqtAv.jpg" width=30 alt="#"/></text>
-                                    break;
-                                case (false,true):
-                                    <text><img src="https://static.vecteezy.com/system/resources/previews/001/195/909/original/water-logo-splash-png.png" width=20 alt="O"/></text>
-                                    break;
-                                case (true,true):
-                                    <text><img src="https://uxwing.com/wp-content/themes/uxwing/download/34-crime-security-military-law/bomb.png" width=20 alt="X"/></text>
-                                    break;
-                            }
-                        </td>
-                    }
-                </tr>
-            }
-        </table>
+@if (Model.State == false)
+{
+    <div class="text-center">
+        <h1 class="display-4">@Model.Player</h1>
     </div>
-</div>
-<div style="margin-top: 50px">
-    <form method="post">
-        <input type="hidden" asp-for="CurrentGame.GameId"/>
-        <input type="submit" value="Surrender" class="btn btn-danger"/> |
+
+    <div class="flex-container">
+        <div class="flex-child firetable">
+            <table class="" border="1">
+                <caption style="text-align:center">Firing Field</caption>
+                @for (var y = 0; y < Model.FireBoard!.GetLength(1); y++)
+                {
+                    <tr style="height: 30px;">
+                        @for (var x = 0; x < Model.FireBoard.GetLength(0); x++)
+                        {
+                            <td onclick="window.location.href ='/Game?id=@Model.GameId&x=@x&y=@y&move=1'">
+                                @switch(Model.FireBoard[x, y].IsShip, Model.FireBoard[x, y].IsBomb)
+                                {
+                                    case (false,false):
+                                        <text> </text>
+                                        break;
+                                    case (true,false):
+                                        <text><img src="https://img.favpng.com/12/21/1/ship-icon-png-favpng-x1zdHYr6xfQet9EDJfweMqtAv.jpg" width=30 alt="#"/></text>
+                                        break;
+                                    case (false,true):
+                                        <text><img src="https://static.vecteezy.com/system/resources/previews/001/195/909/original/water-logo-splash-png.png" width=20 alt="O"/></text>
+                                        break;
+                                    case (true,true):
+                                        <text><img src="https://uxwing.com/wp-content/themes/uxwing/download/34-crime-security-military-law/bomb.png" width=20 alt="X"/></text>
+                                        break;
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            </table>
+        </div>
+
+        <div class="flex-child realtable">
+            <table class="" border="1">
+                <caption style="text-align:center">Own Field</caption>
+                @for (var y = 0; y < Model.Board!.GetLength(1); y++)
+                {
+                    <tr style="height: 30px;">
+                        @for (var x = 0; x < Model.Board.GetLength(0); x++)
+                        {
+                            <td>
+                                @switch(Model.Board[x, y].IsShip, Model.Board[x, y].IsBomb)
+                                {
+                                    case (false,false):
+                                        <text> </text>
+                                        break;
+                                    case (true,false):
+                                        <text><img src="https://img.favpng.com/12/21/1/ship-icon-png-favpng-x1zdHYr6xfQet9EDJfweMqtAv.jpg" width=30 alt="#"/></text>
+                                        break;
+                                    case (false,true):
+                                        <text><img src="https://static.vecteezy.com/system/resources/previews/001/195/909/original/water-logo-splash-png.png" width=20 alt="O"/></text>
+                                        break;
+                                    case (true,true):
+                                        <text><img src="https://uxwing.com/wp-content/themes/uxwing/download/34-crime-security-military-law/bomb.png" width=20 alt="X"/></text>
+                                        break;
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+    <div>
+        @foreach (var ship in @Model.Ships!)
+        {
+            <p>Name: @ship.Name Size: @ship.GetShipSize().ToString() Damage: @ship.GetShipDamageCount(@Model.Board).ToString() Status: @ship.IsShipSunk(@Model.Board)</p>
+        }
+    </div>
+    <div style="margin-top: 50px">
+        <form method="post">
+            <input type="hidden" asp-for="CurrentGame.GameId"/>
+            <input type="submit" value="Surrender" class="btn btn-danger"/> |
+            <a asp-page="./Index">Back to main page</a>
+        </form>
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">Game Over - @Model.Player !</h1>
         <a asp-page="./Index">Back to main page</a>
-    </form>
-</div>
+    </div>
+}

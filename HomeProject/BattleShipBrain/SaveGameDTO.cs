@@ -2,15 +2,16 @@
 
 namespace BattleShipBrain
 {
-    public class SaveGameDTO
+    public class SaveGameDto
     {
         public int CurrentPlayerNo { get; set; } = 0;
-        public GameBoardDTO[] GameBoards  { get; set; } = new GameBoardDTO[2];
+        public GameBoardDto[] GameBoards  { get; set; } = new GameBoardDto[2];
         
-        public class GameBoardDTO
+        public class GameBoardDto
         {
             public List<List<BoardSquareState>>? Board { get; set; }
             public List<Ship>? Ships { get; set; }
+
         }
 
     }
