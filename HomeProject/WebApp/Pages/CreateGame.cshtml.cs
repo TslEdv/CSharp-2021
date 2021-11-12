@@ -14,7 +14,7 @@ namespace WebApp.Pages
         {
             _ctx = ctx;
         }
-        public static BsBrain Brain { get; set; } = new BsBrain(new GameConfig());
+        public BsBrain Brain { get; set; } = new BsBrain(new GameConfig());
         
         public Config Config { get; private set; } = new Config();
 

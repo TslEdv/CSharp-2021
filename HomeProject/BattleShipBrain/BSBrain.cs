@@ -20,7 +20,7 @@ namespace BattleShipBrain
 
             _gameBoards[0].Board = new BoardSquareState[config!.BoardSizeX, config.BoardSizeY];
             _gameBoards[1].Board = new BoardSquareState[config.BoardSizeX, config.BoardSizeY];
-            
+
             for (var x = 0; x < config.BoardSizeX; x++)
             {
                 for (var y = 0; y < config.BoardSizeY; y++)
@@ -60,6 +60,7 @@ namespace BattleShipBrain
                     });
                 }
             }
+
             Random rand = new Random(Guid.NewGuid().GetHashCode());
             for (var p = 0; p < 2; p++)
             {
@@ -68,97 +69,76 @@ namespace BattleShipBrain
                     var isOpen = true;
                     while (isOpen)
                     {
-                        var startColumn = rand.Next(0, config.BoardSizeX-1);
-                        var startRow = rand.Next(0, config.BoardSizeY-1);
+                        var startColumn = rand.Next(0, config.BoardSizeX - 1);
+                        var startRow = rand.Next(0, config.BoardSizeY - 1);
                         int endRow = startRow, endColumn = startColumn;
                         var orientation = rand.Next(1, 101) % 2; //0 for Horizontal
 
                         if (orientation == 0)
                         {
-                            for (var i = 0; i < ship.Length-1; i++)
+                            for (var i = 0; i < ship.Length - 1; i++)
                             {
                                 endRow++;
                             }
-                        }
-                        else
-                        {
-                            for (var i = 0; i < ship.Length-1; i++)
+
+                            for (var i = 0; i < ship.Height - 1; i++)
                             {
                                 endColumn++;
                             }
                         }
+                        else
+                        {
+                            for (var i = 0; i < ship.Length - 1; i++)
+                            {
+                                endColumn++;
+                            }
 
-                        if (endRow > config.BoardSizeY-1 || endColumn > config.BoardSizeX-1)
+                            for (var i = 0; i < ship.Height - 1; i++)
+                            {
+                                endRow++;
+                            }
+                        }
+
+                        if (endRow > config.BoardSizeY - 1 || endColumn > config.BoardSizeX - 1)
                         {
                             isOpen = true;
                             continue;
                         }
 
                         var count = 0;
-                        if (endRow != startRow)
+
+                        for (var i = startColumn; i < endColumn+1; i++)
                         {
-                            for (var i = startRow; i < endRow; i++)
+                            for (var j = startRow; j < endRow+1; j++)
                             {
-                                if (!_gameBoards[p].Board[startColumn, i].IsShip)
-                                {
-                                    count++;
-                                }
-                            }
-                        }
-                        
-                        if (endColumn != startColumn)
-                        {
-                            for (var i = startColumn; i < endColumn; i++)
-                            {
-                                if (!_gameBoards[p].Board[i, startRow].IsShip)
+                                if (!_gameBoards[p].Board[i, j].IsShip)
                                 {
                                     count++;
                                 }
                             }
                         }
 
-                        if (orientation == 0)
+                        if (count == ship.Height * ship.Length)
                         {
-                            if (count + startRow == endRow)
+                            for (var i = startColumn; i < endColumn+1; i++)
                             {
-                                for (var i = startRow; i < endRow + 1; i++)
-                                {
-                                    ship.Coordinates.Add(new Coordinate()
-                                    {
-                                        X = startColumn,
-                                        Y = i
-                                    });
-                                    _gameBoards[p].Board[startColumn, i].IsShip = true;
-                                    _gameBoards[p].Board[startColumn, i].IsBomb = false;
-                                }
-                            }
-                            else
-                            {
-                                isOpen = true;
-                                continue;
-                            }
-                        }
-
-                        if (orientation == 1)
-                        {
-                            if (count + startColumn == endColumn)
-                            {
-                                for (var i = startColumn; i < endColumn + 1; i++)
+                                for (var j = startRow; j < endRow+1; j++)
                                 {
                                     ship.Coordinates.Add(new Coordinate()
                                     {
                                         X = i,
-                                        Y = startRow
+                                        Y = j
                                     });
-                                    _gameBoards[p].Board[i, startRow].IsShip = true;
-                                    _gameBoards[p].Board[i, startRow].IsBomb = false;
+                                    _gameBoards[p].Board[i, j].IsShip = true;
+                                    _gameBoards[p].Board[i, j].IsBomb = false;
                                 }
                             }
-                            else
-                            {
-                                isOpen = true;
-                                continue;
-                            }
+                        }
+
+                        else
+                        {
+                            isOpen = true;
+                            continue;
                         }
 
                         isOpen = false;
@@ -192,7 +172,7 @@ namespace BattleShipBrain
 
             return false;
         }
-        
+
         public List<Ship> ListShips(int playerNo)
         {
             return _gameBoards[playerNo].Ships!.ToList();
@@ -275,7 +255,7 @@ namespace BattleShipBrain
 
             return res;
         }
-        
+
         public int Move()
         {
             var turn = _currentPlayerNo;
@@ -299,7 +279,6 @@ namespace BattleShipBrain
             if (_gameBoards[NextMove()].Board[x, y].IsBomb &&
                 _gameBoards[NextMove()].Board[x, y].IsShip)
             {
-                
             }
             else
             {
@@ -310,7 +289,6 @@ namespace BattleShipBrain
                     _ => _currentPlayerNo
                 };
             }
-
         }
 
         public string Player1Move(int x, int y)
@@ -377,7 +355,7 @@ namespace BattleShipBrain
                 {
                     dto.GameBoards[i].Ships?.Add(ship);
                 }
-                
+
                 for (var x = 0; x < _gameBoards[i].Board.GetLength(0); x++)
                 {
                     var xValues = new List<BoardSquareState>();
@@ -424,6 +402,5 @@ namespace BattleShipBrain
                 y = 0;
             }
         }
-        
     }
 }

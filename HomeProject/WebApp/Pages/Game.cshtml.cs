@@ -18,7 +18,7 @@ namespace WebApp.Pages
             _ctx = ctx;
         }
 
-        private static BsBrain Brain { get; set; } = new BsBrain(new GameConfig());
+        private BsBrain? Brain { get; set; } = new BsBrain(new GameConfig());
         
         public BoardSquareState[,]? Board { get; private set; }
         public BoardSquareState[,]? FireBoard { get; private set; }
@@ -32,7 +32,7 @@ namespace WebApp.Pages
         {
             GameId = id;
             CurrentGame = await _ctx.Games.FindAsync(id);
-            Brain.RestoreBrainFromJson(CurrentGame.GameState);
+            Brain!.RestoreBrainFromJson(CurrentGame.GameState);
             if (Brain.GameFinish())
             {
                 State = true;
