@@ -14,32 +14,39 @@ namespace WebApp.Pages
         {
             _ctx = ctx;
         }
-        public BsBrain Brain { get; set; } = new BsBrain(new GameConfig());
+
+        private BsBrain Brain { get; set; } = new BsBrain(new GameConfig());
         
         public Config Config { get; private set; } = new Config();
 
         public int GameId;
+
+        public bool IsRandom { get; private set; } = true;
 
         public void OnGet(int id)
         {
             if (id != 0)
             {
                 Config = _ctx.Configs.Find(id);
-                var savedconf = JsonSerializer.Deserialize<GameConfig>(_ctx.Configs.Find(id).ConfigStr);
-                Brain = new BsBrain(savedconf);
+                var savedConf = JsonSerializer.Deserialize<GameConfig>(_ctx.Configs.Find(id).ConfigStr);
+                if (savedConf is {IsRandom: false})
+                {
+                    IsRandom = false;
+                }
+                Brain = new BsBrain(savedConf);
             }
             else
             {
                 Config.ConfigStr = new GameConfig().ToString();
             }
-            var jsonstr = Brain.GetBrainJson(Brain.Move());
-            var savegamedb = new Domain.Game()
+            var jsonStr = Brain.GetBrainJson(Brain.Move());
+            var saveGameDb = new Domain.Game()
             {
-                GameState = jsonstr
+                GameState = jsonStr
             };
-            _ctx.Games.Add(savegamedb);
+            _ctx.Games.Add(saveGameDb);
             _ctx.SaveChanges();
-            GameId = savegamedb.GameId;
+            GameId = saveGameDb.GameId;
         }
     }
 }

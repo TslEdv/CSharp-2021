@@ -17,13 +17,13 @@ namespace BattleShipBrain
             switch (IsShip, IsBomb)
             {
                 case (false,false):
-                    return "|  ~  ";
+                    return "~  ";
                 case (true,false):
-                    return "|  #  ";
+                    return "#  ";
                 case (false,true):
-                    return "|  o  ";
+                    return "o  ";
                 case (true,true):
-                    return "|  X  ";
+                    return "X  ";
             }
         }
     }

@@ -7,6 +7,7 @@ namespace BattleShipBrain
     {
         public int BoardSizeX { get; set; } = 10;
         public int BoardSizeY { get; set; } = 10;
+        public bool IsRandom { get; set; } = true;
 
         public List<ShipConfig> ShipConfigs { get; set; } = new List<ShipConfig>()
         {

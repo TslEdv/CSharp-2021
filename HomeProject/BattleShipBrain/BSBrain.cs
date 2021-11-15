@@ -61,98 +61,18 @@ namespace BattleShipBrain
                 }
             }
 
-            Random rand = new Random(Guid.NewGuid().GetHashCode());
-            for (var p = 0; p < 2; p++)
+            if (config.IsRandom)
             {
-                foreach (var ship in _gameBoards[p].Ships!)
-                {
-                    var isOpen = true;
-                    while (isOpen)
-                    {
-                        var startColumn = rand.Next(0, config.BoardSizeX - 1);
-                        var startRow = rand.Next(0, config.BoardSizeY - 1);
-                        int endRow = startRow, endColumn = startColumn;
-                        var orientation = rand.Next(1, 101) % 2; //0 for Horizontal
-
-                        if (orientation == 0)
-                        {
-                            for (var i = 0; i < ship.Length - 1; i++)
-                            {
-                                endRow++;
-                            }
-
-                            for (var i = 0; i < ship.Height - 1; i++)
-                            {
-                                endColumn++;
-                            }
-                        }
-                        else
-                        {
-                            for (var i = 0; i < ship.Length - 1; i++)
-                            {
-                                endColumn++;
-                            }
-
-                            for (var i = 0; i < ship.Height - 1; i++)
-                            {
-                                endRow++;
-                            }
-                        }
-
-                        if (endRow > config.BoardSizeY - 1 || endColumn > config.BoardSizeX - 1)
-                        {
-                            isOpen = true;
-                            continue;
-                        }
-
-                        var count = 0;
-
-                        for (var i = startColumn; i < endColumn+1; i++)
-                        {
-                            for (var j = startRow; j < endRow+1; j++)
-                            {
-                                if (!_gameBoards[p].Board[i, j].IsShip)
-                                {
-                                    count++;
-                                }
-                            }
-                        }
-
-                        if (count == ship.Height * ship.Length)
-                        {
-                            for (var i = startColumn; i < endColumn+1; i++)
-                            {
-                                for (var j = startRow; j < endRow+1; j++)
-                                {
-                                    ship.Coordinates.Add(new Coordinate()
-                                    {
-                                        X = i,
-                                        Y = j
-                                    });
-                                    _gameBoards[p].Board[i, j].IsShip = true;
-                                    _gameBoards[p].Board[i, j].IsBomb = false;
-                                }
-                            }
-                        }
-
-                        else
-                        {
-                            isOpen = true;
-                            continue;
-                        }
-
-                        isOpen = false;
-                    }
-                }
+                FillBoardRandom();
             }
         }
 
+
         public bool GameFinish()
         {
-            int sunk = 0;
             foreach (var gameBoard in _gameBoards)
             {
-                sunk = 0;
+                var sunk = 0;
                 if (gameBoard.Ships != null)
                 {
                     foreach (var ship in gameBoard.Ships)
@@ -261,8 +181,18 @@ namespace BattleShipBrain
             var turn = _currentPlayerNo;
             return turn;
         }
+        
+        public void ChangePlayer()
+        {
+            _currentPlayerNo = _currentPlayerNo switch
+            {
+                0 => 1,
+                1 => 0,
+                _ => _currentPlayerNo
+            };
+        }
 
-        public int NextMove()
+        private int NextMove()
         {
             var turn = _currentPlayerNo switch
             {
@@ -400,6 +330,114 @@ namespace BattleShipBrain
 
                 x = 0;
                 y = 0;
+            }
+        }
+
+        private void FillBoardRandom()
+        {
+            Random rand = new Random(Guid.NewGuid().GetHashCode());
+            for (var p = 0; p < 2; p++)
+            {
+                foreach (var ship in _gameBoards[p].Ships!)
+                {
+                    var isOpen = true;
+                    while (isOpen)
+                    {
+                        var startColumn = rand.Next(0, _gameBoards[0].Board.GetLength(0) - 1);
+                        var startRow = rand.Next(0, _gameBoards[0].Board.GetLength(1) - 1);
+                        int endRow = startRow, endColumn = startColumn;
+                        var orientation = rand.Next(1, 101) % 2; //0 for Horizontal
+
+                        if (orientation == 0)
+                        {
+                            for (var i = 0; i < ship.Length - 1; i++)
+                            {
+                                endRow++;
+                            }
+
+                            for (var i = 0; i < ship.Height - 1; i++)
+                            {
+                                endColumn++;
+                            }
+                        }
+                        else
+                        {
+                            for (var i = 0; i < ship.Length - 1; i++)
+                            {
+                                endColumn++;
+                            }
+
+                            for (var i = 0; i < ship.Height - 1; i++)
+                            {
+                                endRow++;
+                            }
+                        }
+
+                        if (endRow > _gameBoards[0].Board.GetLength(1) - 1 - 1 ||
+                            endColumn > _gameBoards[0].Board.GetLength(0) - 1)
+                        {
+                            isOpen = true;
+                            continue;
+                        }
+
+                        var count = 0;
+
+                        for (var i = startColumn; i < endColumn + 1; i++)
+                        {
+                            for (var j = startRow; j < endRow + 1; j++)
+                            {
+                                if (!_gameBoards[p].Board[i, j].IsShip)
+                                {
+                                    count++;
+                                }
+                            }
+                        }
+
+                        if (count == ship.Height * ship.Length)
+                        {
+                            for (var i = startColumn; i < endColumn + 1; i++)
+                            {
+                                for (var j = startRow; j < endRow + 1; j++)
+                                {
+                                    ship.Coordinates.Add(new Coordinate()
+                                    {
+                                        X = i,
+                                        Y = j
+                                    });
+                                    _gameBoards[p].Board[i, j].IsShip = true;
+                                    _gameBoards[p].Board[i, j].IsBomb = false;
+                                }
+                            }
+                        }
+
+                        else
+                        {
+                            isOpen = true;
+                            continue;
+                        }
+
+                        isOpen = false;
+                    }
+                }
+            }
+        }
+
+        public void PlaceShips(int x, int xEnd, int y, int yEnd, Ship ship)
+        {
+            for (var i = x; i < xEnd + 1; i++)
+            {
+                for (var j = y; j < yEnd + 1; j++)
+                {
+                    foreach (var shipNow in _gameBoards[_currentPlayerNo].Ships!.Where(shipNow => shipNow.Equals(ship)))
+                    {
+                        shipNow.Coordinates.Add(new Coordinate()
+                        {
+                            X = i,
+                            Y = j
+                        });
+                        _gameBoards[_currentPlayerNo].Board[i, j].IsShip = true;
+                    }
+                }
             }
         }
     }

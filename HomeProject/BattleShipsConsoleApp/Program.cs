@@ -35,6 +35,7 @@ namespace BattleShipsConsoleApp
             {
                 new MenuItem("1", "<c=BLUE>Test</c> BattleShip <c=RED>Game</c>", RunGame),
                 new MenuItem("2", "<c=RED>See Game Settings</c>", SeeSettings),
+                new MenuItem("3", "<c=BLUE>Test</c> Place <c=RED>Game</c>", PlaceGame),
             });
             mainMenu.RunMenu(fileNameStandardConfig,fileNameSavedGame);
         }
@@ -88,15 +89,55 @@ namespace BattleShipsConsoleApp
                         Console.WriteLine("Loading config...");
                         var confText = File.ReadAllText(filename);
                         var conf = JsonSerializer.Deserialize<GameConfig>(confText);
-                        brain = new BsBrain(conf);
+                        Console.WriteLine("Randomize ship placement?(y/n):");
+                        switch (Console.ReadLine()?.Trim().ToUpper())
+                        {
+                            case "Y":
+                                brain = new BsBrain(conf);
+                                break;
+                            case "N":
+                                if (conf != null) conf.IsRandom = false;
+                                brain = new BsBrain(conf);
+                                foreach (var ship in brain.ListShips(brain.Move()))
+                                {
+                                    BsConsoleUi.ConsolePlacement(brain, ship);
+                                }
+                                brain.ChangePlayer();
+                                foreach (var ship in brain.ListShips(brain.Move()))
+                                {
+                                    BsConsoleUi.ConsolePlacement(brain, ship);
+                                }
+                                brain.ChangePlayer();
+                                break;
+                        }
                         break;
                 }
             }
             else
             {
                 Console.WriteLine("No Config found, loading default...");
-                brain = new BsBrain(new GameConfig());
-
+                Console.WriteLine("Randomize ship placement?(y/n):");
+                GameConfig config = new GameConfig();
+                switch (Console.ReadLine()?.Trim().ToUpper())
+                {
+                    case "Y":
+                        brain = new BsBrain(config);
+                        break;
+                    case "N":
+                        config.IsRandom = false;
+                        brain = new BsBrain(config);
+                        foreach (var ship in brain.ListShips(brain.Move()))
+                        {
+                            BsConsoleUi.ConsolePlacement(brain, ship);
+                        }
+                        brain.ChangePlayer();
+                        foreach (var ship in brain.ListShips(brain.Move()))
+                        {
+                            BsConsoleUi.ConsolePlacement(brain, ship);
+                        }
+                        brain.ChangePlayer();
+                        break;
+                }
             }
             Console.WriteLine("First player board:");
             BsConsoleUi.DrawBoard(brain.GetBoard(0), brain.GetFireBoard(0));
@@ -134,6 +175,20 @@ namespace BattleShipsConsoleApp
                 while (true)
                 {
                     var ff1 = BsConsoleUi.Move(brain);
+                    if (ff1 == "OVER")
+                    {
+                        if (File.Exists(saveFileName))
+                        {
+                            File.Delete(saveFileName);
+                        }
+                        if (gameId != 0)
+                        {
+                            db.Games.Remove(db.Games.Find(gameId));
+                            db.SaveChanges();
+                        }
+                        Thread.Sleep(5000);
+                        return "";
+                    }
                     if (ff1 == "FF")
                     {
                         if (File.Exists(saveFileName))
@@ -165,7 +220,9 @@ namespace BattleShipsConsoleApp
                         Thread.Sleep(5000);
                         return "";
                     }
+
                     Console.WriteLine("You Hit!");
+
                 }
                 Thread.Sleep(5000);
             }
@@ -269,6 +326,67 @@ namespace BattleShipsConsoleApp
             var id = Convert.ToInt32(Console.ReadLine()?.Trim());
             File.WriteAllText(filename, db.Configs.Find(id).ConfigStr);
             return "";
+        }
+
+        private static string PlaceGame(string filename, string saveFileName)
+        {
+            GameConfig config = new GameConfig();
+            config.IsRandom = false;
+            BsBrain brain = new BsBrain(config);
+            /*BoardSquareState[,] board = new BoardSquareState[10,10];
+            List<Ship> shipList = new List<Ship>
+            {
+                new Ship
+                {
+                    Name = "Patrick",
+                    Height = 1,
+                    Length = 3,
+                    Coordinates = new List<Coordinate>()
+                },
+                new Ship
+                {
+                    Name = "Patrick",
+                    Height = 1,
+                    Length = 3,
+                    Coordinates = new List<Coordinate>()
+                },
+                new Ship
+                {
+                    Name = "SpongeBob",
+                    Height = 1,
+                    Length = 2,
+                    Coordinates = new List<Coordinate>()
+                }
+            };
+            for (var x = 0; x < 10; x++)
+            {
+                for (var y = 0; y < 10; y++)
+                {
+                    board[x, y] = new BoardSquareState
+                    {
+                        IsBomb = false,
+                        IsShip = false
+                    };
+                }
+            }
+            */
+
+            foreach (var ship in brain.ListShips(brain.Move()))
+            {
+                BsConsoleUi.ConsolePlacement(brain, ship);
+            }
+            brain.ChangePlayer();
+            foreach (var ship in brain.ListShips(brain.Move()))
+            {
+                BsConsoleUi.ConsolePlacement(brain, ship);
+            }
+            Console.WriteLine("First player board:");
+            BsConsoleUi.DrawBoard(brain.GetBoard(0), brain.GetFireBoard(0));
+            Console.WriteLine("Second player board:");
+            BsConsoleUi.DrawBoard(brain.GetBoard(1), brain.GetFireBoard(1));
+            Thread.Sleep(50000);
+            return "";
+
         }
     }
 }

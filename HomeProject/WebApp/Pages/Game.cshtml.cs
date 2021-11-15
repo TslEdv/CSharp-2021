@@ -28,7 +28,7 @@ namespace WebApp.Pages
         public List<Ship>? Ships { get; private set; } = new List<Ship>();
 
         public bool State = false;
-        public async Task<IActionResult> OnGetAsync(int id, int x, int y, int move)
+        public async Task<IActionResult> OnGetAsync(int id, int x, int y, int move, int placement)
         {
             GameId = id;
             CurrentGame = await _ctx.Games.FindAsync(id);

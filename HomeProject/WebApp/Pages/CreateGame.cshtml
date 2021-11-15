@@ -20,13 +20,27 @@
     </tr>
     </thead>
     <tbody>
-    <tr onclick="window.location.href = '/Game?id=@Model.GameId'">
-        <td>
-            @Model.GameId
-        </td>
-        <td>
-            @Model.Config.ConfigStr
-        </td>
-    </tr>
+    @if (Model.IsRandom == false)
+    {
+        <tr onclick="window.location.href = '/Game?id=@Model.GameId&placement=1'">
+            <td>
+                @Model.GameId
+            </td>
+            <td>
+                @Model.Config.ConfigStr
+            </td>
+        </tr>
+    }
+    else
+    {
+        <tr onclick="window.location.href = '/Game?id=@Model.GameId'">
+            <td>
+                @Model.GameId
+            </td>
+            <td>
+                @Model.Config.ConfigStr
+            </td>
+        </tr>
+    }
     </tbody>
 </table>
