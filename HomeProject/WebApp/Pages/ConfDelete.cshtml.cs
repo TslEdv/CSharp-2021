@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -26,6 +28,11 @@ namespace WebApp.Pages
             }
 
             Config = await _context.Configs.FirstOrDefaultAsync(m => m.ConfigId== id);
+            List<Domain.Game> games = _context.Games.ToList();
+            if (games.Any(game => Config.ConfigId == game.ConfigId))
+            {
+                return RedirectToPage("/CannotDelete");
+            }
 
             if (Config == null)
             {
@@ -42,6 +49,8 @@ namespace WebApp.Pages
             }
 
             Config = await _context.Configs.FindAsync(id);
+            
+            
 
             if (Config != null)
             {
@@ -49,7 +58,7 @@ namespace WebApp.Pages
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToPage("/LoadGame");
+            return RedirectToPage("/NewGame");
         }
     }
 }

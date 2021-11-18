@@ -16,10 +16,12 @@ namespace WebApp.Pages
         }
 
         public List<Config> Configs = default!;
+        public List<Domain.Game> Games = default!;
 
         public void OnGet()
         { 
             Configs = _ctx.Configs.ToList();
+            Games = _ctx.Games.ToList();
         }
     }
 }

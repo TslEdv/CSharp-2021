@@ -25,11 +25,5 @@ namespace WebApp.Pages
             return Page();
         }
         
-        /*public RedirectToPageResult OnPost()
-        {
-            return RedirectToPage("/Game?id=" + Value);
-        }
-        */
-
     }
 }

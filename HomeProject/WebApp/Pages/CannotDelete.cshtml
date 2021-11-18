@@ -1,0 +1,19 @@
+﻿@page
+@model WebApp.Pages.CannotDelete
+
+@{
+    ViewData["Title"] = "DeleteError";
+}
+
+<h1>Warning!</h1>
+
+<div>
+    <h4>Cannot delete this item</h4>
+    <hr />
+    <text>This item is in use elsewhere, to delete it, first delete it's users</text>
+
+
+</div>
+<div>
+    <a asp-page="./Index">Back to Main Menu</a>
+</div>

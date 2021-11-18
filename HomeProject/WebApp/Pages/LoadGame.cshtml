@@ -16,6 +16,12 @@
             @Html.DisplayNameFor(model => model.Games[0].GameId)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Games[0].Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Games[0].ConfigId)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Games[0].CreationTime)
         </th>
         <th>
@@ -29,6 +35,19 @@
         <tr onclick="window.location.href = '/Game?id=@item.GameId' ">
             <td>
                 @Html.DisplayFor(modelItem => item.GameId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @if (item.ConfigId == null)
+                {
+                    <text>0</text>
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.ConfigId)
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreationTime)

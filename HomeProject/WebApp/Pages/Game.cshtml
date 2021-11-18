@@ -1,5 +1,6 @@
 ﻿@page
 @using System.Diagnostics.Eventing.Reader
+@using BattleShipBrain
 @model WebApp.Pages.Game
 
 @{
@@ -25,7 +26,110 @@
           margin-right: 20px;
       } 
     </style>
-@if (Model.State == false)
+@if (Model.State == EGameStatus.Finished)
+{
+    <div class="text-center">
+        <h1 class="display-4">Game Over - @Model.Player !</h1>
+        <a asp-page="./Index">Back to main page</a>
+    </div>
+}
+else if (Model.State == EGameStatus.Placing)
+{
+    <div class="text-center">
+        <h1 class="display-4">@Model.Player</h1>
+    </div>
+    <div class="flex-child realtable">
+        <table class="" border="1">
+            <caption style="text-align:center">Own Field</caption>
+            @for (var y = 0; y < Model.Board!.GetLength(1); y++)
+            {
+                <tr style="height: 30px;">
+                    @for (var x = 0; x < Model.Board.GetLength(0); x++)
+                    {
+                        <td onclick="let url = window.location.href; url+='&x=@x&y=@y&move=1' ;window.location.href = url">
+                            @switch(Model.Board[x, y].IsShip, Model.Board[x, y].IsBomb)
+                            {
+                                case (false,false):
+                                    <text> </text>
+                                    break;
+                                case (true,false):
+                                    <text><img src="https://img.favpng.com/12/21/1/ship-icon-png-favpng-x1zdHYr6xfQet9EDJfweMqtAv.jpg" width=30 alt="#"/></text>
+                                    break;
+                                case (false,true):
+                                    <text><img src="https://static.vecteezy.com/system/resources/previews/001/195/909/original/water-logo-splash-png.png" width=20 alt="O"/></text>
+                                    break;
+                                case (true,true):
+                                    <text><img src="https://uxwing.com/wp-content/themes/uxwing/download/34-crime-security-military-law/bomb.png" width=20 alt="X"/></text>
+                                    break;
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    <div>
+        <p>Place Ship:</p>
+        <table class="" border="1">
+                    @if (Model.Rotate == 0)
+                    {
+                        @for (var y = 0; y < Model.CurrentShip!.Height; y++)
+                        {
+                            <tr style="height: 30px;">
+                                @for (var x = 0; x < Model.CurrentShip.Length; x++)
+                                {
+                                    <td>
+                                        <text>
+                                            <img src="https://img.favpng.com/12/21/1/ship-icon-png-favpng-x1zdHYr6xfQet9EDJfweMqtAv.jpg" width=30 alt="#"/>
+                                        </text>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        @for (var y = 0; y < Model.CurrentShip!.Length; y++)
+                        {
+                            <tr style="height: 30px;">
+                                @for (var x = 0; x < Model.CurrentShip.Height; x++)
+                                {
+                                    <td>
+                                        <text>
+                                            <img src="https://img.favpng.com/12/21/1/ship-icon-png-favpng-x1zdHYr6xfQet9EDJfweMqtAv.jpg" width=30 alt="#"/>
+                                        </text>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+        </table>
+    </div>
+    
+    <div style="margin-top: 50px">
+        @if (Model.Rotate == 0)
+        {
+            <text>
+                <img src="https://cdn3.iconfinder.com/data/icons/virtual-notebook/16/button_rotate-512.png" alt="" width="30" height="30" onclick="window.location.href ='/Game?id=@Model.GameId&rotation=1'"/>
+            </text>
+        }
+        else
+        {
+            <text>
+                <img src="https://cdn3.iconfinder.com/data/icons/virtual-notebook/16/button_rotate-512.png" alt="" width="30" height="30" onclick="window.location.href ='/Game?id=@Model.GameId&rotation=0'"/>
+            </text>
+        }
+    </div>
+    
+    <div style="margin-top: 50px">
+        <form method="post">
+            <input type="hidden" asp-for="CurrentGame.GameId"/>
+            <input type="submit" value="Surrender" class="btn btn-danger"/> |
+            <a asp-page="./Index">Back to main page</a>
+        </form>
+    </div>
+}
+else
 {
     <div class="text-center">
         <h1 class="display-4">@Model.Player</h1>
@@ -106,12 +210,5 @@
             <input type="submit" value="Surrender" class="btn btn-danger"/> |
             <a asp-page="./Index">Back to main page</a>
         </form>
-    </div>
-}
-else
-{
-    <div class="text-center">
-        <h1 class="display-4">Game Over - @Model.Player !</h1>
-        <a asp-page="./Index">Back to main page</a>
     </div>
 }

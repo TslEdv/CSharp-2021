@@ -9,12 +9,11 @@ namespace BattleShipBrain
     {
         private int _currentPlayerNo;
         private readonly GameBoard[] _gameBoards = new GameBoard[2];
-
-
-        private readonly Random _rnd = new Random();
+        private EGameStatus _status;
 
         public BsBrain(GameConfig? config)
         {
+            _status = EGameStatus.Placing;
             _gameBoards[0] = new GameBoard();
             _gameBoards[1] = new GameBoard();
 
@@ -64,30 +63,29 @@ namespace BattleShipBrain
             if (config.IsRandom)
             {
                 FillBoardRandom();
+                _status = EGameStatus.Started;
+            }
+            else
+            {
+                _status = EGameStatus.Placing;
             }
         }
 
-
+        public EGameStatus GetGameStatus()
+        {
+            var status = _status;
+            return status;
+        }
+        
         public bool GameFinish()
         {
             foreach (var gameBoard in _gameBoards)
             {
-                var sunk = 0;
-                if (gameBoard.Ships != null)
-                {
-                    foreach (var ship in gameBoard.Ships)
-                    {
-                        if (ship.IsShipSunk(gameBoard.Board) == "Sunk")
-                        {
-                            sunk++;
-                        }
-                    }
-                }
+                var sunk = gameBoard.Ships!.Where(ship => ship.Coordinates.Count != 0).Count(ship => ship.IsShipSunk(gameBoard.Board) == "Sunk");
 
-                if (gameBoard.Ships != null && sunk == gameBoard.Ships.Count)
-                {
-                    return true;
-                }
+                if (gameBoard.Ships == null || sunk != gameBoard.Ships.Count) continue;
+                _status = EGameStatus.Finished;
+                return true;
             }
 
             return false;
@@ -192,7 +190,7 @@ namespace BattleShipBrain
             };
         }
 
-        private int NextMove()
+        public int NextMove()
         {
             var turn = _currentPlayerNo switch
             {
@@ -206,6 +204,11 @@ namespace BattleShipBrain
         public void PlayerMove(int x, int y)
         {
             _gameBoards[NextMove()].Board[x, y].Bombing();
+            GameFinish();
+            if (_status == EGameStatus.Finished)
+            {
+                return;
+            }
             if (_gameBoards[NextMove()].Board[x, y].IsBomb &&
                 _gameBoards[NextMove()].Board[x, y].IsShip)
             {
@@ -275,7 +278,8 @@ namespace BattleShipBrain
                 {
                     [0] = new SaveGameDto.GameBoardDto(),
                     [1] = new SaveGameDto.GameBoardDto()
-                }
+                },
+                GameStatus = _status
             };
             for (var i = 0; i < 2; i++)
             {
@@ -305,7 +309,8 @@ namespace BattleShipBrain
         public void RestoreBrainFromJson(string json)
         {
             var restore = JsonSerializer.Deserialize<SaveGameDto>(json);
-            _currentPlayerNo = restore!.CurrentPlayerNo;
+            _status = restore!.GameStatus;
+            _currentPlayerNo = restore.CurrentPlayerNo;
             _gameBoards[0].Ships = restore.GameBoards[0].Ships;
             _gameBoards[1].Ships = restore.GameBoards[1].Ships;
             var xValues = restore.GameBoards[0].Board!.Count;
@@ -439,6 +444,15 @@ namespace BattleShipBrain
                     }
                 }
             }
+        }
+
+        public void StartGame()
+        {
+            if (_gameBoards.Any(gameBoard => gameBoard.Ships!.Any(ship => ship.Coordinates.Count == 0)))
+            {
+                return;
+            }
+            _status = EGameStatus.Started;
         }
     }
 }

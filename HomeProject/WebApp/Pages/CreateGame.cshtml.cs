@@ -25,6 +25,7 @@ namespace WebApp.Pages
 
         public void OnGet(int id)
         {
+            var saveGameDb = new Domain.Game();
             if (id != 0)
             {
                 Config = _ctx.Configs.Find(id);
@@ -34,16 +35,17 @@ namespace WebApp.Pages
                     IsRandom = false;
                 }
                 Brain = new BsBrain(savedConf);
+                saveGameDb.ConfigId = id;
+                saveGameDb.Config = Config;
             }
             else
             {
                 Config.ConfigStr = new GameConfig().ToString();
             }
             var jsonStr = Brain.GetBrainJson(Brain.Move());
-            var saveGameDb = new Domain.Game()
-            {
-                GameState = jsonStr
-            };
+
+            saveGameDb.GameState = jsonStr;
+            saveGameDb.Status = Brain.GetGameStatus();
             _ctx.Games.Add(saveGameDb);
             _ctx.SaveChanges();
             GameId = saveGameDb.GameId;
