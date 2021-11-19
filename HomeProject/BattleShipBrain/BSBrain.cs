@@ -190,7 +190,7 @@ namespace BattleShipBrain
             };
         }
 
-        public int NextMove()
+        private int NextMove()
         {
             var turn = _currentPlayerNo switch
             {
@@ -427,23 +427,97 @@ namespace BattleShipBrain
             }
         }
 
-        public void PlaceShips(int x, int xEnd, int y, int yEnd, Ship ship)
+        public bool PlaceShips(int x, int xEnd, int y, int yEnd, Ship ship, EShipTouchRule rule)
         {
+            List<Coordinate> testCoordinates = new();
+            for (var i = x; i < xEnd + 1; i++)
+            {
+                for (var j = y; j < yEnd + 1; j++)
+                {
+                    foreach (var shipTest in _gameBoards[_currentPlayerNo].Ships!)
+                    {
+                        if (shipTest.Coordinates.Contains(new Coordinate(i, j)))
+                        {
+                            return false;
+                        }
+
+                        if (testCoordinates.Contains(new Coordinate(i, j))) continue;
+                        if (i < _gameBoards[0].Board.GetLength(0) && j < _gameBoards[0].Board.GetLength(1))
+                        {
+                            testCoordinates.Add(new Coordinate(i, j));
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            if (testCoordinates.Count != ship.Height * ship.Length)
+            {
+                return false;
+            }
+
+            switch (rule)
+            {
+                case EShipTouchRule.SideTouch:
+                    break;
+                case EShipTouchRule.NoTouch:
+                    foreach (var coordinate in testCoordinates)
+                    {
+                        for (var i = -1; i < 2; i++)
+                        {
+                            for (var j = -1; j < 2; j++)
+                            {
+                                if (coordinate.X + i < 0 || coordinate.X + i >= _gameBoards[0].Board.GetLength(0) ||
+                                    coordinate.Y + j < 0 || coordinate.Y + j >= _gameBoards[0].Board.GetLength(1)) continue;
+                                if (_gameBoards[_currentPlayerNo].Board[coordinate.X + i, coordinate.Y + j].IsShip)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case EShipTouchRule.CornerTouch:
+                    foreach (var coordinate in testCoordinates)
+                    {
+                        for (var i = -1; i < 2; i++)
+                        {
+                            for (var j = -1; j < 2; j++)
+                            {
+                                if (coordinate.X + i < 0 || coordinate.X + i >= _gameBoards[0].Board.GetLength(0) ||
+                                    coordinate.Y + j < 0 || coordinate.Y + j >= _gameBoards[0].Board.GetLength(1)) continue;
+                                if (_gameBoards[_currentPlayerNo].Board[coordinate.X, coordinate.Y + j].IsShip)
+                                {
+                                    return false;
+                                }
+                                if (_gameBoards[_currentPlayerNo].Board[coordinate.X + i, coordinate.Y].IsShip)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(rule), rule, null);
+            }
+
             for (var i = x; i < xEnd + 1; i++)
             {
                 for (var j = y; j < yEnd + 1; j++)
                 {
                     foreach (var shipNow in _gameBoards[_currentPlayerNo].Ships!.Where(shipNow => shipNow.Equals(ship)))
                     {
-                        shipNow.Coordinates.Add(new Coordinate()
-                        {
-                            X = i,
-                            Y = j
-                        });
+                        shipNow.Coordinates = testCoordinates;
                         _gameBoards[_currentPlayerNo].Board[i, j].IsShip = true;
                     }
                 }
             }
+
+            return true;
         }
 
         public void StartGame()

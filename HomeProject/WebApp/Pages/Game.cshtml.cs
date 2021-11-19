@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BattleShipBrain;
 using DAL;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WebApp.Pages
 {
@@ -21,7 +25,6 @@ namespace WebApp.Pages
         }
 
         private BsBrain? Brain { get; set; } = new(new GameConfig());
-
         public BoardSquareState[,]? Board { get; private set; }
         public BoardSquareState[,]? FireBoard { get; private set; }
 
@@ -31,6 +34,7 @@ namespace WebApp.Pages
         public Ship? CurrentShip;
         public EGameStatus State;
         public int Rotate;
+        public Config Config { get; private set; } = new Config();
 
         public async Task<IActionResult> OnGetAsync(int id, int x, int y, int move, int rotation)
         {
@@ -38,6 +42,7 @@ namespace WebApp.Pages
             CurrentGame = await _ctx.Games.FindAsync(id);
             Brain!.RestoreBrainFromJson(CurrentGame.GameState);
             State = Brain.GetGameStatus();
+            var savedConf = JsonSerializer.Deserialize<GameConfig>((await _ctx.Configs.FindAsync(CurrentGame.ConfigId)).ConfigStr);
             if (Brain.GameFinish())
             {
                 CurrentGame.Status = Brain.GetGameStatus();
@@ -78,10 +83,18 @@ namespace WebApp.Pages
                                 switch (rotation)
                                 {
                                     case 0:
-                                        Brain.PlaceShips(x, x + Ships[i].Length - 1, y, y + Ships[i].Height - 1, Ships[i]);
+                                        if (Brain.PlaceShips(x, x + Ships[i].Length - 1, y, y + Ships[i].Height - 1,
+                                            Ships[i], savedConf!.EShipTouchRule) == false)
+                                        {
+                                            return RedirectToPage("./Game", new {id = GameId});
+                                        }
                                         break;
                                     case 1:
-                                        Brain.PlaceShips(x, x + Ships[i].Height - 1, y, y + Ships[i].Length - 1, Ships[i]);
+                                        if (Brain.PlaceShips(x, x + Ships[i].Height - 1, y, y + Ships[i].Length - 1,
+                                            Ships[i], savedConf!.EShipTouchRule) == false)
+                                        {
+                                            return RedirectToPage("./Game", new {id = GameId});
+                                        }
                                         break;
                                 }
 

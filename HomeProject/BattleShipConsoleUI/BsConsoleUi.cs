@@ -146,7 +146,7 @@ namespace BattleShipConsoleUI
             }
         }
 
-        public static void ConsolePlacement(BsBrain brain, Ship ship)
+        public static bool ConsolePlacement(BsBrain brain, Ship ship, EShipTouchRule rule)
         {
             BoardSquareState[,] board = brain.GetBoard(brain.Move());
             var x = 0;
@@ -239,20 +239,7 @@ namespace BattleShipConsoleUI
             } while (key != ConsoleKey.Enter);
 
             Console.CursorVisible = true;
-            /*for (var i = x; i < xEnd+1; i++)
-            {
-                for (var j = y; j < yEnd+1; j++)
-                {
-                    ship.Coordinates.Add(new Coordinate()
-                    {
-                        X = i,
-                        Y = j
-                    });
-                    board[i, j].IsShip = true;
-                }
-            }
-            */
-            brain.PlaceShips(x, xEnd, y, yEnd, ship);
+            return brain.PlaceShips(x, xEnd, y, yEnd, ship, rule);
         }
 
         private static void DrawPlacementBoard(BoardSquareState[,] board, List<Coordinate> coordinates)

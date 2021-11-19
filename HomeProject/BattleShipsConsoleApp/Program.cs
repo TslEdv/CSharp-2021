@@ -100,12 +100,12 @@ namespace BattleShipsConsoleApp
                                 brain = new BsBrain(conf);
                                 foreach (var ship in brain.ListShips(brain.Move()))
                                 {
-                                    BsConsoleUi.ConsolePlacement(brain, ship);
+                                    while(!BsConsoleUi.ConsolePlacement(brain, ship, conf!.EShipTouchRule));
                                 }
                                 brain.ChangePlayer();
                                 foreach (var ship in brain.ListShips(brain.Move()))
                                 {
-                                    BsConsoleUi.ConsolePlacement(brain, ship);
+                                    while(!BsConsoleUi.ConsolePlacement(brain, ship, conf!.EShipTouchRule));
                                 }
                                 brain.ChangePlayer();
                                 break;
@@ -128,12 +128,12 @@ namespace BattleShipsConsoleApp
                         brain = new BsBrain(config);
                         foreach (var ship in brain.ListShips(brain.Move()))
                         {
-                            BsConsoleUi.ConsolePlacement(brain, ship);
+                            while(!BsConsoleUi.ConsolePlacement(brain, ship, config.EShipTouchRule));
                         }
                         brain.ChangePlayer();
                         foreach (var ship in brain.ListShips(brain.Move()))
                         {
-                            BsConsoleUi.ConsolePlacement(brain, ship);
+                            while(!BsConsoleUi.ConsolePlacement(brain, ship, config.EShipTouchRule));
                         }
                         brain.ChangePlayer();
                         break;
@@ -333,52 +333,14 @@ namespace BattleShipsConsoleApp
             GameConfig config = new GameConfig();
             config.IsRandom = false;
             BsBrain brain = new BsBrain(config);
-            /*BoardSquareState[,] board = new BoardSquareState[10,10];
-            List<Ship> shipList = new List<Ship>
-            {
-                new Ship
-                {
-                    Name = "Patrick",
-                    Height = 1,
-                    Length = 3,
-                    Coordinates = new List<Coordinate>()
-                },
-                new Ship
-                {
-                    Name = "Patrick",
-                    Height = 1,
-                    Length = 3,
-                    Coordinates = new List<Coordinate>()
-                },
-                new Ship
-                {
-                    Name = "SpongeBob",
-                    Height = 1,
-                    Length = 2,
-                    Coordinates = new List<Coordinate>()
-                }
-            };
-            for (var x = 0; x < 10; x++)
-            {
-                for (var y = 0; y < 10; y++)
-                {
-                    board[x, y] = new BoardSquareState
-                    {
-                        IsBomb = false,
-                        IsShip = false
-                    };
-                }
-            }
-            */
-
             foreach (var ship in brain.ListShips(brain.Move()))
             {
-                BsConsoleUi.ConsolePlacement(brain, ship);
+                BsConsoleUi.ConsolePlacement(brain, ship, config.EShipTouchRule);
             }
             brain.ChangePlayer();
             foreach (var ship in brain.ListShips(brain.Move()))
             {
-                BsConsoleUi.ConsolePlacement(brain, ship);
+                BsConsoleUi.ConsolePlacement(brain, ship, config.EShipTouchRule);
             }
             Console.WriteLine("First player board:");
             BsConsoleUi.DrawBoard(brain.GetBoard(0), brain.GetFireBoard(0));
