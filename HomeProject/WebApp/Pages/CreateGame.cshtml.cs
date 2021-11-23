@@ -1,6 +1,8 @@
-﻿using BattleShipBrain;
+﻿using System.Threading.Tasks;
+using BattleShipBrain;
 using DAL;
 using Domain;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -14,8 +16,6 @@ namespace WebApp.Pages
         {
             _ctx = ctx;
         }
-
-        private BsBrain Brain { get; set; } = new BsBrain(new GameConfig());
         
         public Config Config { get; private set; } = new Config();
 
@@ -23,18 +23,23 @@ namespace WebApp.Pages
 
         public bool IsRandom { get; private set; } = true;
 
-        public void OnGet(int id)
+        public async Task<IActionResult> OnGet(int id)
         {
+            var brain = new BsBrain(new GameConfig());
             var saveGameDb = new Domain.Game();
             if (id != 0)
             {
-                Config = _ctx.Configs.Find(id);
-                var savedConf = JsonSerializer.Deserialize<GameConfig>(_ctx.Configs.Find(id).ConfigStr);
+                Config = await _ctx.Configs.FindAsync(id);
+                var savedConf = JsonSerializer.Deserialize<GameConfig>((await _ctx.Configs.FindAsync(id)).ConfigStr);
+                if (savedConf!.TestConf() == false)
+                {
+                    return RedirectToPage("./CannotCreate");
+                }
                 if (savedConf is {IsRandom: false})
                 {
                     IsRandom = false;
                 }
-                Brain = new BsBrain(savedConf);
+                brain = new BsBrain(savedConf);
                 saveGameDb.ConfigId = id;
                 saveGameDb.Config = Config;
             }
@@ -42,13 +47,14 @@ namespace WebApp.Pages
             {
                 Config.ConfigStr = new GameConfig().ToString();
             }
-            var jsonStr = Brain.GetBrainJson(Brain.Move());
+            var jsonStr = brain.GetBrainJson(brain.Move());
 
             saveGameDb.GameState = jsonStr;
-            saveGameDb.Status = Brain.GetGameStatus();
+            saveGameDb.Status = brain.GetGameStatus();
             _ctx.Games.Add(saveGameDb);
-            _ctx.SaveChanges();
+            await _ctx.SaveChangesAsync();
             GameId = saveGameDb.GameId;
+            return Page();
         }
     }
 }

@@ -14,7 +14,6 @@
 
     <ItemGroup>
       <Folder Include="Configs" />
-      <Folder Include="SavedGames" />
     </ItemGroup>
 
     <ItemGroup>

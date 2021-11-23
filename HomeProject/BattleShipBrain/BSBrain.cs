@@ -62,7 +62,7 @@ namespace BattleShipBrain
 
             if (config.IsRandom)
             {
-                FillBoardRandom();
+                FillBoardRandom(config);
                 _status = EGameStatus.Started;
             }
             else
@@ -338,9 +338,9 @@ namespace BattleShipBrain
             }
         }
 
-        private void FillBoardRandom()
+        private void FillBoardRandom(GameConfig config)
         {
-            Random rand = new Random(Guid.NewGuid().GetHashCode());
+            Random rand = new(Guid.NewGuid().GetHashCode());
             for (var p = 0; p < 2; p++)
             {
                 foreach (var ship in _gameBoards[p].Ships!)
@@ -400,18 +400,9 @@ namespace BattleShipBrain
 
                         if (count == ship.Height * ship.Length)
                         {
-                            for (var i = startColumn; i < endColumn + 1; i++)
+                            if (PlaceShips(startColumn, endColumn, startRow, endRow, ship, config.EShipTouchRule) == false)
                             {
-                                for (var j = startRow; j < endRow + 1; j++)
-                                {
-                                    ship.Coordinates.Add(new Coordinate()
-                                    {
-                                        X = i,
-                                        Y = j
-                                    });
-                                    _gameBoards[p].Board[i, j].IsShip = true;
-                                    _gameBoards[p].Board[i, j].IsBomb = false;
-                                }
+                                continue;
                             }
                         }
 
@@ -424,12 +415,13 @@ namespace BattleShipBrain
                         isOpen = false;
                     }
                 }
+                ChangePlayer();
             }
         }
 
         public bool PlaceShips(int x, int xEnd, int y, int yEnd, Ship ship, EShipTouchRule rule)
         {
-            List<Coordinate> testCoordinates = new();
+            List<Coordinate> testCoordinates = new ();
             for (var i = x; i < xEnd + 1; i++)
             {
                 for (var j = y; j < yEnd + 1; j++)
@@ -516,7 +508,7 @@ namespace BattleShipBrain
                     }
                 }
             }
-
+            
             return true;
         }
 

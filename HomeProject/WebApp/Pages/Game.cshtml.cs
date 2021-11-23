@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BattleShipBrain;
 using DAL;
-using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -34,7 +33,6 @@ namespace WebApp.Pages
         public Ship? CurrentShip;
         public EGameStatus State;
         public int Rotate;
-        public Config Config { get; private set; } = new Config();
 
         public async Task<IActionResult> OnGetAsync(int id, int x, int y, int move, int rotation)
         {
@@ -42,7 +40,11 @@ namespace WebApp.Pages
             CurrentGame = await _ctx.Games.FindAsync(id);
             Brain!.RestoreBrainFromJson(CurrentGame.GameState);
             State = Brain.GetGameStatus();
-            var savedConf = JsonSerializer.Deserialize<GameConfig>((await _ctx.Configs.FindAsync(CurrentGame.ConfigId)).ConfigStr);
+            var savedConf = new GameConfig();
+            if (CurrentGame.ConfigId != null)
+            {
+                savedConf = JsonSerializer.Deserialize<GameConfig>((await _ctx.Configs.FindAsync(CurrentGame.ConfigId)).ConfigStr);
+            }
             if (Brain.GameFinish())
             {
                 CurrentGame.Status = Brain.GetGameStatus();

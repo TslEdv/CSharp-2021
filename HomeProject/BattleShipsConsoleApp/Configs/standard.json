@@ -1,0 +1,1 @@
+"{ \u0022BoardSizeX\u0022: 10, \u0022BoardSizeY\u0022: 10, \u0022IsRandom\u0022: false, \u0022ShipConfigs\u0022: [ { \u0022Name\u0022: \u0022SaltyMaiden\u0022, \u0022Quantity\u0022: 2, \u0022ShipSizeY\u0022: 1, \u0022ShipSizeX\u0022: 3 } ], \u0022EShipTouchRule\u0022: 0 }"

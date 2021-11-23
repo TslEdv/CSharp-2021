@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
+using BattleShipBrain;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WebApp.Pages
 {
@@ -27,7 +29,11 @@ namespace WebApp.Pages
             {
                 return Page();
             }
-
+            var savedConf = JsonSerializer.Deserialize<GameConfig>(Config.ConfigStr);
+            if (savedConf!.TestConf() == false)
+            {
+                return RedirectToPage("./CannotCreate");
+            }
             _context.Configs.Add(Config);
             await _context.SaveChangesAsync();
 

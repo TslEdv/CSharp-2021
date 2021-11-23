@@ -302,7 +302,9 @@ namespace BattleShipConsoleUI
             {
                 Console.Write($"=======");
             }
-
+            Console.WriteLine();
+            Console.WriteLine("Press R to rotate the ship");
+            Console.WriteLine("Press ENTER to place the ship");
             Console.WriteLine();
         }
     }

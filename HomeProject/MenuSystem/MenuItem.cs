@@ -4,7 +4,7 @@ namespace MenuSystem
 {
     public class MenuItem
     {
-        public MenuItem(string shortCut, string buttonName, Func<string, string, string> runMethod)
+        public MenuItem(string shortCut, string buttonName, Func<string, string> runMethod)
         {
             if (string.IsNullOrEmpty(shortCut))
             {
@@ -22,10 +22,9 @@ namespace MenuSystem
         }
 
         public string ShortCut { get; set; }
-        public string ButtonName { get; private set; }
+        private string ButtonName { get; set; }
         
-
-        public Func<string, string, string> RunMethod;
+        public readonly Func<string, string> RunMethod;
 
         public override string ToString()
         {

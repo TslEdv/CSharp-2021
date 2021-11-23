@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.Json;
 
 namespace BattleShipBrain
@@ -57,6 +60,25 @@ namespace BattleShipBrain
                 WriteIndented = true
             };
             return JsonSerializer.Serialize(this, jsonOptions);
+        }
+
+        public bool TestConf()
+        {
+            int countSize;
+            switch (EShipTouchRule)
+            {
+                case EShipTouchRule.SideTouch:
+                    countSize = ShipConfigs.Sum(ship => ship.Quantity * ship.ShipSizeX * ship.ShipSizeY);
+                    return countSize <= BoardSizeX * BoardSizeY;
+                case EShipTouchRule.NoTouch:
+                    countSize = ShipConfigs.Sum(ship => ship.Quantity * (ship.ShipSizeX * ship.ShipSizeY + 2 * ship.ShipSizeX + 2 * ship.ShipSizeY + 4));
+                    return countSize <= BoardSizeX * BoardSizeY;
+                case EShipTouchRule.CornerTouch:
+                    countSize = ShipConfigs.Sum(ship => ship.Quantity * (ship.ShipSizeX * ship.ShipSizeY + 2 * ship.ShipSizeX + 2 * ship.ShipSizeY));
+                    return countSize <= BoardSizeX * BoardSizeY;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }
