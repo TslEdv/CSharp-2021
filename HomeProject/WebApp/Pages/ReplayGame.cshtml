@@ -1,0 +1,124 @@
+﻿@page
+@model WebApp.Pages.ReplayGame
+
+@{
+    ViewData["Title"] = "Replay";
+}
+
+<style>
+      td {
+        text-align: center;
+        vertical-align: middle;
+        width: 30px; 
+        cursor: pointer
+      }
+      .flex-container {
+          display: flex;
+      }
+      
+      .flex-child {
+          flex: 1;
+      }  
+      
+      .flex-child:first-child {
+          margin-right: 20px;
+      } 
+    </style>
+<div class="text-center">
+    <h1 class="display-4">Replay</h1>
+</div>
+
+<div class="flex-container">
+    <div class="flex-child firetable">
+        <table class="" border="1">
+            <caption style="text-align:center">Firing Field</caption>
+            @for (var y = 0; y < Model.Board1!.GetLength(1); y++)
+            {
+                <tr style="height: 30px;">
+                    @for (var x = 0; x < Model.Board1!.GetLength(0); x++)
+                    {
+                        <td>
+                            @switch(Model.Board1[x, y].IsShip, Model.Board1[x, y].IsBomb)
+                            {
+                                case (false,false):
+                                    <text> </text>
+                                    break;
+                                case (true,false):
+                                    <text><img src="https://img.favpng.com/12/21/1/ship-icon-png-favpng-x1zdHYr6xfQet9EDJfweMqtAv.jpg" width=30 alt="#"/></text>
+                                    break;
+                                case (false,true):
+                                    <text><img src="https://static.vecteezy.com/system/resources/previews/001/195/909/original/water-logo-splash-png.png" width=20 alt="O"/></text>
+                                    break;
+                                case (true,true):
+                                    <text><img src="https://uxwing.com/wp-content/themes/uxwing/download/34-crime-security-military-law/bomb.png" width=20 alt="X"/></text>
+                                    break;
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="flex-child realtable">
+        <table class="" border="1">
+            <caption style="text-align:center">Own Field</caption>
+            @for (var y = 0; y < Model.Board2!.GetLength(1); y++)
+            {
+                <tr style="height: 30px;">
+                    @for (var x = 0; x < Model.Board2.GetLength(0); x++)
+                    {
+                        <td>
+                            @switch(Model.Board2[x, y].IsShip, Model.Board2[x, y].IsBomb)
+                            {
+                                case (false,false):
+                                    <text> </text>
+                                    break;
+                                case (true,false):
+                                    <text><img src="https://img.favpng.com/12/21/1/ship-icon-png-favpng-x1zdHYr6xfQet9EDJfweMqtAv.jpg" width=30 alt="#"/></text>
+                                    break;
+                                case (false,true):
+                                    <text><img src="https://static.vecteezy.com/system/resources/previews/001/195/909/original/water-logo-splash-png.png" width=20 alt="O"/></text>
+                                    break;
+                                case (true,true):
+                                    <text><img src="https://uxwing.com/wp-content/themes/uxwing/download/34-crime-security-military-law/bomb.png" width=20 alt="X"/></text>
+                                    break;
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<div style="margin-top: 20px; margin-bottom: 20px;">
+        <text>
+            <img src="https://static.thenounproject.com/png/1384165-200.png"
+                 alt="Skip" 
+                 width="80"
+                 height="80" 
+                 onclick="window.location.href ='/ReplayGame?id=@Model.RePlayId&move=@Model.PlacementSkip'"/>
+        </text>
+</div>
+<div style="margin-top: 20px">
+    <text>
+        <img src="https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/512x512/plain/arrow_left.png"
+             alt="Left" 
+             width="60"
+             height="60" 
+             onclick="let searchParams = new URLSearchParams(window.location.search); 
+             let param = searchParams.get('move'); 
+             param--; 
+             window.location.href ='/ReplayGame?id=@Model.RePlayId&move=' + param;"/>
+    </text>
+    <text>
+        <img src="https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/512x512/plain/arrow_right.png"
+             alt="Right" 
+             width="60"
+             height="60" 
+             onclick="let searchParams = new URLSearchParams(window.location.search); 
+                 let param = searchParams.get('move'); 
+                 param++; 
+                 window.location.href ='/ReplayGame?id=@Model.RePlayId&move=' + param;"/>
+    </text>
+</div>

@@ -21,6 +21,19 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Replays",
+                columns: table => new
+                {
+                    ReplayId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Replays = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Replays", x => x.ReplayId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Games",
                 columns: table => new
                 {
@@ -29,7 +42,8 @@ namespace DAL.Migrations
                     GameState = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CreationTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ConfigId = table.Column<int>(type: "int", nullable: true)
+                    ConfigId = table.Column<int>(type: "int", nullable: true),
+                    ReplayId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -40,12 +54,23 @@ namespace DAL.Migrations
                         principalTable: "Configs",
                         principalColumn: "ConfigId",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Games_Replays_ReplayId",
+                        column: x => x.ReplayId,
+                        principalTable: "Replays",
+                        principalColumn: "ReplayId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Games_ConfigId",
                 table: "Games",
                 column: "ConfigId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_ReplayId",
+                table: "Games",
+                column: "ReplayId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -55,6 +80,9 @@ namespace DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Configs");
+
+            migrationBuilder.DropTable(
+                name: "Replays");
         }
     }
 }

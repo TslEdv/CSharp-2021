@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BattleShipBrain;
 using DAL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WebApp.Pages
@@ -38,6 +36,8 @@ namespace WebApp.Pages
         {
             GameId = id;
             CurrentGame = await _ctx.Games.FindAsync(id);
+            var replay = await _ctx.Replays.FindAsync(CurrentGame.ReplayId);
+            Brain!.RestoreLog(replay.Replays!);
             Brain!.RestoreBrainFromJson(CurrentGame.GameState);
             State = Brain.GetGameStatus();
             var savedConf = new GameConfig();
@@ -50,7 +50,6 @@ namespace WebApp.Pages
                 CurrentGame.Status = Brain.GetGameStatus();
                 CurrentGame.GameState = Brain.GetBrainJson(Brain.Move());
                 await _ctx.SaveChangesAsync();
-                return Page();
             }
 
             switch (Brain.GetGameStatus())
@@ -110,7 +109,10 @@ namespace WebApp.Pages
                                     Brain.ChangePlayer();
                                 }
 
+                                var log = await _ctx.Replays.FindAsync(CurrentGame.ReplayId);
+                                log.Replays = Brain.GetLogJson();
                                 Brain.StartGame();
+                                CurrentGame.Replay!.Replays = Brain.GetLogJson();
                                 CurrentGame.GameState = Brain.GetBrainJson(Brain.Move());
                                 CurrentGame.Status = Brain.GetGameStatus();
                                 await _ctx.SaveChangesAsync();
@@ -132,6 +134,8 @@ namespace WebApp.Pages
                             break;
                         case 1:
                             Brain.PlayerMove(x, y);
+                            var log = await _ctx.Replays.FindAsync(CurrentGame.ReplayId);
+                            log.Replays = Brain.GetLogJson();
                             Board = Brain.GetBoard(Brain.Move());
                             FireBoard = Brain.GetFireBoard(Brain.Move());
                             Player += Brain.Move() + 1 + " turn";

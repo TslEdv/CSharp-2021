@@ -51,6 +51,10 @@ namespace WebApp.Pages
 
             saveGameDb.GameState = jsonStr;
             saveGameDb.Status = brain.GetGameStatus();
+            saveGameDb.Replay = new Replay
+            {
+                Replays = brain.GetLogJson(),
+            };
             _ctx.Games.Add(saveGameDb);
             await _ctx.SaveChangesAsync();
             GameId = saveGameDb.GameId;

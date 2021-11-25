@@ -57,6 +57,9 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ReplayId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -64,7 +67,24 @@ namespace DAL.Migrations
 
                     b.HasIndex("ConfigId");
 
+                    b.HasIndex("ReplayId");
+
                     b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("Domain.Replay", b =>
+                {
+                    b.Property<int>("ReplayId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Replays")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ReplayId");
+
+                    b.ToTable("Replays");
                 });
 
             modelBuilder.Entity("Domain.Game", b =>
@@ -74,7 +94,14 @@ namespace DAL.Migrations
                         .HasForeignKey("ConfigId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Domain.Replay", "Replay")
+                        .WithMany()
+                        .HasForeignKey("ReplayId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Config");
+
+                    b.Navigation("Replay");
                 });
 #pragma warning restore 612, 618
         }

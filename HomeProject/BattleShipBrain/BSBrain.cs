@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace BattleShipBrain
 {
@@ -10,10 +11,12 @@ namespace BattleShipBrain
         private int _currentPlayerNo;
         private readonly GameBoard[] _gameBoards = new GameBoard[2];
         private EGameStatus _status;
+        private List<ReplayTile> GameLog;
 
         public BsBrain(GameConfig? config)
         {
             _status = EGameStatus.Placing;
+            GameLog = new List<ReplayTile>();
             _gameBoards[0] = new GameBoard();
             _gameBoards[1] = new GameBoard();
 
@@ -204,6 +207,15 @@ namespace BattleShipBrain
         public void PlayerMove(int x, int y)
         {
             _gameBoards[NextMove()].Board[x, y].Bombing();
+            GameLog.Add(new ReplayTile
+            {
+                X = x,
+                Y = y,
+                IsBomb = _gameBoards[NextMove()].Board[x, y].IsBomb,
+                IsShip = _gameBoards[NextMove()].Board[x, y].IsShip,
+                Player = _currentPlayerNo,
+                Placing = false
+            });
             GameFinish();
             if (_status == EGameStatus.Finished)
             {
@@ -264,6 +276,20 @@ namespace BattleShipBrain
             return "";
         }
 
+        public string GetLogJson()
+        {
+            var jsonOptions = new JsonSerializerOptions()
+            {
+                WriteIndented = true
+            };
+            
+            return JsonSerializer.Serialize(GameLog, jsonOptions);
+        }
+
+        public void RestoreLog(string log)
+        {
+           GameLog = JsonSerializer.Deserialize<List<ReplayTile>>(log)!;
+        }
         public string GetBrainJson(int playerNum)
         {
             var jsonOptions = new JsonSerializerOptions()
@@ -507,6 +533,19 @@ namespace BattleShipBrain
                         _gameBoards[_currentPlayerNo].Board[i, j].IsShip = true;
                     }
                 }
+            }
+
+            foreach (var logTile in testCoordinates.Select(coordinate => new ReplayTile
+            {
+                Player = _currentPlayerNo,
+                IsShip = true,
+                IsBomb = false,
+                X = coordinate.X,
+                Y = coordinate.Y,
+                Placing = true
+            }))
+            {
+                GameLog.Add(logTile);
             }
             
             return true;

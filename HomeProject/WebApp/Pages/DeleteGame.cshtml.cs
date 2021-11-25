@@ -16,6 +16,7 @@ namespace WebApp.Pages
 
         [BindProperty]
         public Domain.Game Game { get; set; } = default!;
+        public Domain.Replay GameReplay { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -41,9 +42,11 @@ namespace WebApp.Pages
             }
 
             Game = await _context.Games.FindAsync(id);
+            GameReplay = await _context.Replays.FindAsync(Game.ReplayId);
 
             if (Game != null)
             {
+                _context.Replays.Remove(GameReplay);
                 _context.Games.Remove(Game);
                 await _context.SaveChangesAsync();
             }

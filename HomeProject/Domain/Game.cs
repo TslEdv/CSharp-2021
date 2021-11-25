@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using BattleShipBrain;
 
 namespace Domain
@@ -12,10 +13,12 @@ namespace Domain
         public EGameStatus Status { get; set; }
 
         public string CreationTime { get; set; } = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
-
+        
         public int? ConfigId { get; set; }
-
         public Config? Config { get; set; }
+        
+        public int? ReplayId{ get; set; }
+        public Replay? Replay { get; set; }
 
         public override string ToString()
         {
