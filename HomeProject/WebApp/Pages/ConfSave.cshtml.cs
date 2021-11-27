@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using BattleShipBrain;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -50,13 +48,9 @@ namespace WebApp.Pages
 
 
             if (Config == null) return RedirectToPage("/NewGame");
-            var jsonOptions = new JsonSerializerOptions()
-            {
-                WriteIndented = true
-            };
             var datafile =  @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp"+ Path.DirectorySeparatorChar + "Configs" + Path.DirectorySeparatorChar + "standard.json";
-            var confJsonStr = JsonSerializer.Serialize(Config.ConfigStr, jsonOptions);
-            await System.IO.File.WriteAllTextAsync(datafile, confJsonStr);
+            var savedConf = JsonSerializer.Deserialize<GameConfig>(Config.ConfigStr);
+            await System.IO.File.WriteAllTextAsync(datafile, savedConf!.ToString());
 
             return RedirectToPage("/NewGame");
         }

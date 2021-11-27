@@ -31,6 +31,30 @@
     </tr>
     </thead>
     <tbody>
+    @if (System.IO.File.Exists(Model.LocalGamePath) && System.IO.File.Exists(Model.LocalLogPath))
+    {
+        <tr onclick="window.location.href = '/LocalGame?' ">
+            <td>
+                Local Game
+            </td>
+            <td>
+                @Model.State
+            </td>
+            <td>
+                Local
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                @if (Model.State == (EGameStatus) 2)
+                {
+                <a asp-page="/ReplayGame" asp-route-id="0">Replay | </a>
+                }
+            </td>
+
+        </tr> 
+    }
     @foreach (var item in Model.Games)
     {
         <tr onclick="window.location.href = '/Game?id=@item.GameId' ">
@@ -58,6 +82,7 @@
                 {
                     <a asp-page="/ReplayGame" asp-route-id="@item.GameId">Replay | </a>
                 }
+                <a asp-page="/SaveGameDisk" asp-route-id="@item.GameId">Download | </a>
                 <a asp-page="/DeleteGame" asp-route-id="@item.GameId">Delete</a>
             </td>
 

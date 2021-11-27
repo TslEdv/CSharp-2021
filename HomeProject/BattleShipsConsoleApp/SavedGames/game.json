@@ -1,27 +1,11 @@
 {
   "CurrentPlayerNo": 0,
-  "GameStatus": 1,
+  "GameStatus": 0,
   "GameBoards": [
     {
       "Board": [
         [
           {
-            "IsShip": true,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": true,
-            "IsBomb": false
-          },
-          {
             "IsShip": false,
             "IsBomb": false
           },
@@ -35,32 +19,6 @@
           },
           {
             "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          }
-        ],
-        [
-          {
-            "IsShip": true,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": true,
             "IsBomb": false
           },
           {
@@ -90,7 +48,11 @@
         ],
         [
           {
-            "IsShip": true,
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
             "IsBomb": false
           },
           {
@@ -102,7 +64,45 @@
             "IsBomb": false
           },
           {
-            "IsShip": true,
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
             "IsBomb": false
           },
           {
@@ -427,42 +427,34 @@
       ],
       "Ships": [
         {
-          "Name": "SaltyMaiden",
-          "Length": 3,
+          "Name": "Patrol",
+          "Length": 1,
           "Height": 1,
-          "Coordinates": [
-            {
-              "X": 0,
-              "Y": 0
-            },
-            {
-              "X": 1,
-              "Y": 0
-            },
-            {
-              "X": 2,
-              "Y": 0
-            }
-          ]
+          "Coordinates": []
         },
         {
-          "Name": "SaltyMaiden",
+          "Name": "Cruiser",
+          "Length": 2,
+          "Height": 1,
+          "Coordinates": []
+        },
+        {
+          "Name": "Submarine",
           "Length": 3,
           "Height": 1,
-          "Coordinates": [
-            {
-              "X": 0,
-              "Y": 3
-            },
-            {
-              "X": 1,
-              "Y": 3
-            },
-            {
-              "X": 2,
-              "Y": 3
-            }
-          ]
+          "Coordinates": []
+        },
+        {
+          "Name": "Battleship",
+          "Length": 4,
+          "Height": 1,
+          "Coordinates": []
+        },
+        {
+          "Name": "Carrier",
+          "Length": 5,
+          "Height": 1,
+          "Coordinates": []
         }
       ]
     },
@@ -482,7 +474,49 @@
             "IsBomb": false
           },
           {
-            "IsShip": true,
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
             "IsBomb": false
           },
           {
@@ -524,7 +558,49 @@
             "IsBomb": false
           },
           {
-            "IsShip": true,
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
             "IsBomb": false
           },
           {
@@ -566,48 +642,6 @@
             "IsBomb": false
           },
           {
-            "IsShip": true,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          }
-        ],
-        [
-          {
-            "IsShip": true,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
             "IsShip": false,
             "IsBomb": false
           },
@@ -638,49 +672,7 @@
         ],
         [
           {
-            "IsShip": true,
-            "IsBomb": false
-          },
-          {
             "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          },
-          {
-            "IsShip": false,
-            "IsBomb": false
-          }
-        ],
-        [
-          {
-            "IsShip": true,
             "IsBomb": false
           },
           {
@@ -891,42 +883,34 @@
       ],
       "Ships": [
         {
-          "Name": "SaltyMaiden",
-          "Length": 3,
+          "Name": "Patrol",
+          "Length": 1,
           "Height": 1,
-          "Coordinates": [
-            {
-              "X": 3,
-              "Y": 0
-            },
-            {
-              "X": 4,
-              "Y": 0
-            },
-            {
-              "X": 5,
-              "Y": 0
-            }
-          ]
+          "Coordinates": []
         },
         {
-          "Name": "SaltyMaiden",
+          "Name": "Cruiser",
+          "Length": 2,
+          "Height": 1,
+          "Coordinates": []
+        },
+        {
+          "Name": "Submarine",
           "Length": 3,
           "Height": 1,
-          "Coordinates": [
-            {
-              "X": 0,
-              "Y": 3
-            },
-            {
-              "X": 1,
-              "Y": 3
-            },
-            {
-              "X": 2,
-              "Y": 3
-            }
-          ]
+          "Coordinates": []
+        },
+        {
+          "Name": "Battleship",
+          "Length": 4,
+          "Height": 1,
+          "Coordinates": []
+        },
+        {
+          "Name": "Carrier",
+          "Length": 5,
+          "Height": 1,
+          "Coordinates": []
         }
       ]
     }

@@ -1,0 +1,47 @@
+﻿@page
+@model WebApp.Pages.SaveGameDisk
+
+@{
+    ViewData["Title"] = "Download";
+}
+
+<h1>Download</h1>
+
+<h3>Save this item?</h3>
+<div>
+    <h4>Game</h4>
+    <hr/>
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SaveGame.GameId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SaveGame.GameId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SaveGame.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SaveGame.Status)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SaveGame.ConfigId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SaveGame.ConfigId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SaveGame.CreationTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SaveGame.CreationTime)
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="SaveGame.ConfigId"/>
+        <input type="submit" value="Save" class="btn btn-danger"/> |
+        <a asp-page="./LoadGame">Back to List</a>
+    </form>
+</div>

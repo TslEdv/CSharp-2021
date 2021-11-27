@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using BattleShipBrain;
 using DAL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,9 +21,24 @@ namespace WebApp.Pages
         }
 
         public List<Domain.Game> Games { get; set; } = default!;
+
+        public string LocalGamePath { get; set; } = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" +
+                                                    Path.DirectorySeparatorChar + "SavedGames" + Path.DirectorySeparatorChar +
+                                                    "game.json";
+        public string LocalLogPath { get; set; } = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp"+ 
+                                                   Path.DirectorySeparatorChar + "GameLog" + 
+                                                   Path.DirectorySeparatorChar + "log.json";
         
-        public IActionResult OnGet()
+        public string LocalConfPath { get; set; } = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" + Path.DirectorySeparatorChar +
+                                                    "Configs" + Path.DirectorySeparatorChar + "localgameconf.json";
+        public EGameStatus State { get; set; }
+        
+        public async Task<IActionResult> OnGet()
         {
+            var brain = new BsBrain(new GameConfig());
+            brain.RestoreBrainFromJson(await System.IO.File.ReadAllTextAsync(LocalGamePath));
+            brain.RestoreLog(await System.IO.File.ReadAllTextAsync(LocalLogPath));
+            State = brain.GetGameStatus();
             Games = _ctx.Games.ToList();
             return Page();
         }

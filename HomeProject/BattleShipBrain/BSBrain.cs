@@ -204,7 +204,7 @@ namespace BattleShipBrain
             return turn;
         }
 
-        public void PlayerMove(int x, int y)
+        public bool PlayerMove(int x, int y)
         {
             _gameBoards[NextMove()].Board[x, y].Bombing();
             GameLog.Add(new ReplayTile
@@ -219,11 +219,12 @@ namespace BattleShipBrain
             GameFinish();
             if (_status == EGameStatus.Finished)
             {
-                return;
+                return false;
             }
             if (_gameBoards[NextMove()].Board[x, y].IsBomb &&
                 _gameBoards[NextMove()].Board[x, y].IsShip)
             {
+                return false;
             }
             else
             {
@@ -233,6 +234,7 @@ namespace BattleShipBrain
                     1 => 0,
                     _ => _currentPlayerNo
                 };
+                return true;
             }
         }
 

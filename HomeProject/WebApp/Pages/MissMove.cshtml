@@ -1,0 +1,29 @@
+﻿@page
+@model WebApp.Pages.MissMove
+
+@{
+    ViewData["Title"] = "MissMove";
+}
+<!DOCTYPE html>
+<html>
+<body>
+<h1>You Missed!</h1>
+@if (Model.Gameid == 0)
+{
+    <script>          
+    setTimeout(function(){
+    window.location.href = '/LocalGame';}
+    ,5000);
+    </script>
+}
+else
+{
+    <script>          
+    setTimeout(function(){
+    window.location.href = '/Game?id=@Model.Gameid';}
+    ,5000);
+    </script>
+}
+<p>Next Players Move in 5 sec ....</p>
+</body>
+</html>

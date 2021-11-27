@@ -31,6 +31,7 @@ namespace WebApp.Pages
         public Ship? CurrentShip;
         public EGameStatus State;
         public int Rotate;
+        public bool Pause = false;
 
         public async Task<IActionResult> OnGetAsync(int id, int x, int y, int move, int rotation)
         {
@@ -133,7 +134,9 @@ namespace WebApp.Pages
                             Ships = Brain.ListShips(Brain.Move());
                             break;
                         case 1:
-                            Brain.PlayerMove(x, y);
+                            var before = Brain.GetFireBoard(Brain.Move());
+                            var change = Brain.PlayerMove(x, y);
+                            before[x, y].IsBomb = true;
                             var log = await _ctx.Replays.FindAsync(CurrentGame.ReplayId);
                             log.Replays = Brain.GetLogJson();
                             Board = Brain.GetBoard(Brain.Move());
@@ -143,7 +146,12 @@ namespace WebApp.Pages
 
                             CurrentGame.GameState = Brain.GetBrainJson(Brain.Move());
                             await _ctx.SaveChangesAsync();
+                            if (change)
+                            {
+                                return RedirectToPage("./MissMove", new {id = GameId});
+                            }
                             break;
+                            
                     }
 
                     return Page();

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -26,20 +27,43 @@ namespace WebApp.Pages
 
         public async Task<IActionResult> OnGetAsync(int id, int move)
         {
-            RePlayId = id;
-            var game = await _ctx.Games.FindAsync(id);
-            if (game.Status != EGameStatus.Finished)
+            var config = new GameConfig();
+            var replay = new List<ReplayTile>();
+            if (id == 0)
             {
-                return RedirectToPage("./LoadGame");
+                string localGamePath = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" +
+                                       Path.DirectorySeparatorChar + "SavedGames" + Path.DirectorySeparatorChar +
+                                       "game.json";
+                string localLogPath = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" +
+                                      Path.DirectorySeparatorChar + "GameLog" +
+                                      Path.DirectorySeparatorChar + "log.json";
+                var confFile = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" + Path.DirectorySeparatorChar +
+                               "Configs" + Path.DirectorySeparatorChar + "localgameconf.json";
+                if (!System.IO.File.Exists(localGamePath) || !System.IO.File.Exists(localGamePath) ||
+                    !System.IO.File.Exists(confFile))
+                {
+                    return RedirectToPage("./LoadGame");
+                }
+                config = JsonSerializer.Deserialize<GameConfig>(await System.IO.File.ReadAllTextAsync(confFile));
+                replay = JsonSerializer.Deserialize<List<ReplayTile>>(await System.IO.File.ReadAllTextAsync(localLogPath));
             }
+            else
+            {
+                RePlayId = id;
+                var game = await _ctx.Games.FindAsync(id);
+                if (game.Status != EGameStatus.Finished)
+                {
+                    return RedirectToPage("./LoadGame");
+                }
 
-            var config = game.ConfigId != null
-                ? JsonSerializer.Deserialize<GameConfig>((await _ctx.Configs.FindAsync(game.ConfigId)).ConfigStr)
-                : new GameConfig();
+                config = game.ConfigId != null
+                    ? JsonSerializer.Deserialize<GameConfig>((await _ctx.Configs.FindAsync(game.ConfigId)).ConfigStr)
+                    : new GameConfig();
+                var gameLog = await _ctx.Replays.FindAsync(game.ReplayId);
+                replay = JsonSerializer.Deserialize<List<ReplayTile>>(gameLog.Replays!);
+            }
             Board1 = new BoardSquareState[config!.BoardSizeX, config.BoardSizeY];
             Board2 = new BoardSquareState[config.BoardSizeX, config.BoardSizeY];
-            var gameLog = await _ctx.Replays.FindAsync(game.ReplayId);
-            var replay = JsonSerializer.Deserialize<List<ReplayTile>>(gameLog.Replays!);
             foreach (var play in replay!.Where(play => play.Placing))
             {
                 PlacementSkip++;
