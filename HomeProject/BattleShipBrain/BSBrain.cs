@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace BattleShipBrain
 {
@@ -11,12 +10,12 @@ namespace BattleShipBrain
         private int _currentPlayerNo;
         private readonly GameBoard[] _gameBoards = new GameBoard[2];
         private EGameStatus _status;
-        private List<ReplayTile> GameLog;
+        private List<ReplayTile> _gameLog;
 
         public BsBrain(GameConfig? config)
         {
             _status = EGameStatus.Placing;
-            GameLog = new List<ReplayTile>();
+            _gameLog = new List<ReplayTile>();
             _gameBoards[0] = new GameBoard();
             _gameBoards[1] = new GameBoard();
 
@@ -79,7 +78,12 @@ namespace BattleShipBrain
             var status = _status;
             return status;
         }
-        
+
+        public void GameSurrender()
+        {
+            ChangePlayer();
+            _status = EGameStatus.Finished;
+        }
         public bool GameFinish()
         {
             foreach (var gameBoard in _gameBoards)
@@ -207,7 +211,7 @@ namespace BattleShipBrain
         public bool PlayerMove(int x, int y)
         {
             _gameBoards[NextMove()].Board[x, y].Bombing();
-            GameLog.Add(new ReplayTile
+            _gameLog.Add(new ReplayTile
             {
                 X = x,
                 Y = y,
@@ -226,16 +230,14 @@ namespace BattleShipBrain
             {
                 return false;
             }
-            else
+
+            _currentPlayerNo = _currentPlayerNo switch
             {
-                _currentPlayerNo = _currentPlayerNo switch
-                {
-                    0 => 1,
-                    1 => 0,
-                    _ => _currentPlayerNo
-                };
-                return true;
-            }
+                0 => 1,
+                1 => 0,
+                _ => _currentPlayerNo
+            };
+            return true;
         }
 
         public string Player1Move(int x, int y)
@@ -246,6 +248,15 @@ namespace BattleShipBrain
             }
 
             _gameBoards[1].Board[x, y].Bombing();
+            _gameLog.Add(new ReplayTile
+            {
+                X = x,
+                Y = y,
+                IsBomb = _gameBoards[NextMove()].Board[x, y].IsBomb,
+                IsShip = _gameBoards[NextMove()].Board[x, y].IsShip,
+                Player = _currentPlayerNo,
+                Placing = false
+            });
             switch (_gameBoards[1].Board[x, y].IsShip, _gameBoards[1].Board[x, y].IsBomb)
             {
                 case (true, true):
@@ -266,6 +277,15 @@ namespace BattleShipBrain
             }
 
             _gameBoards[0].Board[x, y].Bombing();
+            _gameLog.Add(new ReplayTile
+            {
+                X = x,
+                Y = y,
+                IsBomb = _gameBoards[NextMove()].Board[x, y].IsBomb,
+                IsShip = _gameBoards[NextMove()].Board[x, y].IsShip,
+                Player = _currentPlayerNo,
+                Placing = false
+            });
             switch (_gameBoards[0].Board[x, y].IsShip, _gameBoards[0].Board[x, y].IsBomb)
             {
                 case (true, true):
@@ -285,12 +305,12 @@ namespace BattleShipBrain
                 WriteIndented = true
             };
             
-            return JsonSerializer.Serialize(GameLog, jsonOptions);
+            return JsonSerializer.Serialize(_gameLog, jsonOptions);
         }
 
         public void RestoreLog(string log)
         {
-           GameLog = JsonSerializer.Deserialize<List<ReplayTile>>(log)!;
+           _gameLog = JsonSerializer.Deserialize<List<ReplayTile>>(log)!;
         }
         public string GetBrainJson(int playerNum)
         {
@@ -547,7 +567,7 @@ namespace BattleShipBrain
                 Placing = true
             }))
             {
-                GameLog.Add(logTile);
+                _gameLog.Add(logTile);
             }
             
             return true;

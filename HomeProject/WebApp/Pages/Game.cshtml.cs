@@ -146,6 +146,10 @@ namespace WebApp.Pages
 
                             CurrentGame.GameState = Brain.GetBrainJson(Brain.Move());
                             await _ctx.SaveChangesAsync();
+                            if (Brain.GameFinish())
+                            {
+                                return RedirectToPage("./Game", new {id = GameId});
+                            }
                             if (change)
                             {
                                 return RedirectToPage("./MissMove", new {id = GameId});
@@ -168,14 +172,17 @@ namespace WebApp.Pages
             }
 
             CurrentGame = await _ctx.Games.FindAsync(id);
+            Brain!.RestoreBrainFromJson(CurrentGame.GameState);
 
             if (CurrentGame != null)
             {
-                _ctx.Games.Remove(CurrentGame);
+                Brain.GameSurrender();
+                CurrentGame.Status = Brain.GetGameStatus();
+                CurrentGame.GameState = Brain.GetBrainJson(Brain.Move());
                 await _ctx.SaveChangesAsync();
             }
 
-            return RedirectToPage("./Index");
+            return Page();
         }
     }
 }

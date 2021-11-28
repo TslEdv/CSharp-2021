@@ -1,7 +1,7 @@
 {
   "BoardSizeX": 10,
   "BoardSizeY": 10,
-  "IsRandom": false,
+  "IsRandom": true,
   "ShipConfigs": [
     {
       "Name": "Patrol",

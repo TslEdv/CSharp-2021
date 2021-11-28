@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Xml;
 using BattleShipBrain;
 
@@ -18,8 +19,7 @@ namespace BattleShipConsoleUI
                     _ => ""
                 };
             Console.WriteLine("Game Over! Player " + (brain.Move() + 1) + "wins!");
-            return "";
-
+            return "OVER";
         }
 
         private static string Player1Move(BsBrain brain)
@@ -83,7 +83,7 @@ namespace BattleShipConsoleUI
 
             return brain.Player2Move(x, y);
         }
-
+        
         public static void DrawBoard(BoardSquareState[,] boardOwn, BoardSquareState[,] boardFire)
         {
             List<BoardSquareState[,]> boards = new List<BoardSquareState[,]>
@@ -146,7 +146,7 @@ namespace BattleShipConsoleUI
             }
         }
 
-        public static bool ConsolePlacement(BsBrain brain, Ship ship, EShipTouchRule rule)
+        public static int ConsolePlacement(BsBrain brain, Ship ship, EShipTouchRule rule)
         {
             BoardSquareState[,] board = brain.GetBoard(brain.Move());
             var x = 0;
@@ -235,11 +235,21 @@ namespace BattleShipConsoleUI
 
                         break;
                     }
+                    case ConsoleKey.X:
+                    {
+                        return 0;
+                    }
                 }
             } while (key != ConsoleKey.Enter);
 
             Console.CursorVisible = true;
-            return brain.PlaceShips(x, xEnd, y, yEnd, ship, rule);
+            switch (brain.PlaceShips(x, xEnd, y, yEnd, ship, rule))
+            {
+                case false:
+                    return 1;
+                case true:
+                    return 2;
+            }
         }
 
         private static void DrawPlacementBoard(BoardSquareState[,] board, List<Coordinate> coordinates)
@@ -302,7 +312,9 @@ namespace BattleShipConsoleUI
             {
                 Console.Write($"=======");
             }
+
             Console.WriteLine();
+            Console.WriteLine("Press X to SAVE and EXIT");
             Console.WriteLine("Press R to rotate the ship");
             Console.WriteLine("Press ENTER to place the ship");
             Console.WriteLine();

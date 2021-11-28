@@ -15,7 +15,7 @@ namespace MenuSystem
         private readonly MenuItem _return = new MenuItem("R", "Return", null!);
         private readonly MenuItem _exit = new MenuItem("X", "Exit", null!);
         private readonly EMenuDepth _menuDepth;
-
+        
         public Menu(string title, EMenuDepth depth)
         {
             _menuTitle = title;
@@ -219,7 +219,7 @@ namespace MenuSystem
                     var item = _menuItems.FirstOrDefault(t => t.ShortCut.ToUpper() == input);
                     input = item?.RunMethod == null ? input : item.RunMethod(input);
                 }
-                runDone = _specialShortCuts.Contains(input);
+                runDone = _specialShortCuts.Contains(input!);
             } while (!runDone);
             if (input == _return.ShortCut.ToUpper()) return "";
             if (input == _exit.ShortCut.ToUpper()) Environment.Exit(0);

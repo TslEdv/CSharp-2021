@@ -24,7 +24,7 @@ namespace MenuSystem
         public string ShortCut { get; set; }
         private string ButtonName { get; set; }
         
-        public readonly Func<string, string> RunMethod;
+        public readonly Func<string, string?> RunMethod;
 
         public override string ToString()
         {
