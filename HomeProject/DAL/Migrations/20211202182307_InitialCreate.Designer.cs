@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211125200750_InitialCreate")]
+    [Migration("20211202182307_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,6 +28,15 @@ namespace DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("BoardSizeX")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BoardSizeY")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConfigName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConfigStr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -36,9 +45,40 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsRandom")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TouchRule")
+                        .HasColumnType("int");
+
                     b.HasKey("ConfigId");
 
                     b.ToTable("Configs");
+                });
+
+            modelBuilder.Entity("Domain.ConfigShip", b =>
+                {
+                    b.Property<int>("ConfigShipId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ConfigId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShipId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ConfigShipId");
+
+                    b.HasIndex("ConfigId");
+
+                    b.HasIndex("ShipId");
+
+                    b.ToTable("ConfigShips");
                 });
 
             modelBuilder.Entity("Domain.Game", b =>
@@ -89,6 +129,47 @@ namespace DAL.Migrations
                     b.ToTable("Replays");
                 });
 
+            modelBuilder.Entity("Domain.Ship", b =>
+                {
+                    b.Property<int>("ShipId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ShipHeight")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShipLength")
+                        .HasColumnType("int");
+
+                    b.HasKey("ShipId");
+
+                    b.ToTable("Ships");
+                });
+
+            modelBuilder.Entity("Domain.ConfigShip", b =>
+                {
+                    b.HasOne("Domain.Config", "Config")
+                        .WithMany("ConfigShips")
+                        .HasForeignKey("ConfigId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Ship", "Ship")
+                        .WithMany("ConfigShips")
+                        .HasForeignKey("ShipId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Config");
+
+                    b.Navigation("Ship");
+                });
+
             modelBuilder.Entity("Domain.Game", b =>
                 {
                     b.HasOne("Domain.Config", "Config")
@@ -104,6 +185,16 @@ namespace DAL.Migrations
                     b.Navigation("Config");
 
                     b.Navigation("Replay");
+                });
+
+            modelBuilder.Entity("Domain.Config", b =>
+                {
+                    b.Navigation("ConfigShips");
+                });
+
+            modelBuilder.Entity("Domain.Ship", b =>
+                {
+                    b.Navigation("ConfigShips");
                 });
 #pragma warning restore 612, 618
         }

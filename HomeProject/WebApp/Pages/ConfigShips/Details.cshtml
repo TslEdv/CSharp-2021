@@ -1,0 +1,37 @@
+@page
+@model WebApp.Pages_ConfigShips.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>ConfigShip</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ConfigShip.Quantity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ConfigShip.Quantity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ConfigShip.Config!.ConfigName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ConfigShip.Config!.ConfigName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ConfigShip.Ship)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ConfigShip.Ship!.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.ConfigShip.ConfigShipId">Edit</a> |
+    <a asp-page="/ConfigShips/Index">Back to List</a>
+</div>

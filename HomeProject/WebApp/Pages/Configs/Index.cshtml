@@ -1,0 +1,66 @@
+@page
+@model WebApp.Pages_Configs.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Config[0].ConfigName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Config[0].IsRandom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Config[0].BoardSizeX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Config[0].BoardSizeY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Config[0].TouchRule)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Config[0].CreationTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Config) {
+        <tr onclick="window.location.href = '/CreateGame?id=@item.ConfigId' ">
+            <td>
+                @Html.DisplayFor(modelItem => item.ConfigName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsRandom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BoardSizeX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BoardSizeY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TouchRule)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationTime)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ConfigId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ConfigId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ConfigId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

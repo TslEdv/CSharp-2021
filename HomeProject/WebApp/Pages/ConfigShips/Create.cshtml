@@ -1,0 +1,83 @@
+@page
+@model WebApp.Pages_ConfigShips.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>ConfigShip</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <input type="hidden" asp-for="ConfigShip.ConfigId"/>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ConfigShip.Quantity" class="control-label"></label>
+                <input asp-for="ConfigShip.Quantity" class="form-control"/>
+                <span asp-validation-for="ConfigShip.Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfigShip.ShipId" class="control-label"></label>
+                <select asp-for="ConfigShip.ShipId" class="form-control" asp-items="ViewBag.ShipId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+<p>
+    <a asp-page="/Ships/ShipCreate" asp-route-id="@Model.ConfigShip.ConfigId">Create New</a>
+</p>
+<div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Ship Id
+        </th>
+        <th>
+            Ship Name
+        </th>
+        <th>
+            Ship Height (y-axis)
+        </th>
+        <th>
+            Ship Length (x-axis)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Ships) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShipId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShipHeight)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShipLength)
+            </td>
+            <td>
+                <a asp-page="/Ships/Delete" asp-route-id="@item.ShipId">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+</div>
+<div>
+    <a asp-page="/Configs/Edit" asp-route-id="@Model.ConfigShip.ConfigId">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

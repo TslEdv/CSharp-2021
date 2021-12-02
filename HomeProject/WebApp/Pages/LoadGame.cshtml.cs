@@ -28,16 +28,19 @@ namespace WebApp.Pages
         public string LocalLogPath { get; set; } = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp"+ 
                                                    Path.DirectorySeparatorChar + "GameLog" + 
                                                    Path.DirectorySeparatorChar + "log.json";
-        
-        public string LocalConfPath { get; set; } = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" + Path.DirectorySeparatorChar +
-                                                    "Configs" + Path.DirectorySeparatorChar + "localgameconf.json";
+
+        private string LocalConfPath { get; set; } = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" + Path.DirectorySeparatorChar +
+                                                     "Configs" + Path.DirectorySeparatorChar + "localgameconf.json";
         public EGameStatus State { get; set; }
         
         public async Task<IActionResult> OnGet()
         {
             var brain = new BsBrain(new GameConfig());
-            brain.RestoreBrainFromJson(await System.IO.File.ReadAllTextAsync(LocalGamePath));
-            brain.RestoreLog(await System.IO.File.ReadAllTextAsync(LocalLogPath));
+            if (System.IO.File.Exists(LocalGamePath) && System.IO.File.Exists(LocalLogPath) && System.IO.File.Exists(LocalConfPath))
+            {
+                brain.RestoreBrainFromJson(await System.IO.File.ReadAllTextAsync(LocalGamePath));
+                brain.RestoreLog(await System.IO.File.ReadAllTextAsync(LocalLogPath));
+            }
             State = brain.GetGameStatus();
             Games = _ctx.Games.ToList();
             return Page();

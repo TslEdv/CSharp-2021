@@ -8,6 +8,7 @@ namespace BattleShipBrain
 {
     public class GameConfig
     {
+        public string? Name { get; set; }
         public int BoardSizeX { get; set; } = 10;
         public int BoardSizeY { get; set; } = 10;
         public bool IsRandom { get; set; } = true;
@@ -65,6 +66,24 @@ namespace BattleShipBrain
         public bool TestConf()
         {
             int countSize;
+            if (BoardSizeX <= 0 || BoardSizeY <= 0)
+            {
+                return false;
+            }
+
+            if (ShipConfigs.Any(ship => ship.Quantity == 0))
+            {
+                return false;
+            }
+            if (ShipConfigs.Any(ship => ship.ShipSizeX > BoardSizeX || ship.ShipSizeY > BoardSizeY ))
+            {
+                return false;
+            }
+
+            if (ShipConfigs.Count == 0)
+            {
+                return false;
+            }
             switch (EShipTouchRule)
             {
                 case EShipTouchRule.SideTouch:

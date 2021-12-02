@@ -1,0 +1,106 @@
+@page
+@using BattleShipBrain
+@model WebApp.Pages_Configs.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Config</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Config.ConfigId" />
+            <input type="hidden" asp-for="Config.ConfigStr" />
+            <div class="form-group">
+                <label asp-for="Config.ConfigName" class="control-label"></label>
+                <input asp-for="Config.ConfigName" class="form-control" />
+                <span asp-validation-for="Config.ConfigName" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Config.IsRandom" /> @Html.DisplayNameFor(model => model.Config.IsRandom)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Config.BoardSizeX" class="control-label"></label>
+                <input asp-for="Config.BoardSizeX" class="form-control" />
+                <span asp-validation-for="Config.BoardSizeX" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Config.BoardSizeY" class="control-label"></label>
+                <input asp-for="Config.BoardSizeY" class="form-control" />
+                <span asp-validation-for="Config.BoardSizeY" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Config.TouchRule" class="control-label"></label>
+                <select asp-for="Config.TouchRule" class="form-control">
+                    <option value="@EShipTouchRule.CornerTouch">@EShipTouchRule.CornerTouch</option>
+                    <option value="@EShipTouchRule.NoTouch">@EShipTouchRule.NoTouch</option>
+                    <option value="@EShipTouchRule.SideTouch">@EShipTouchRule.SideTouch</option>
+                </select>
+                <span asp-validation-for="Config.TouchRule" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<p>
+    <a asp-page="/ConfigShips/Create" asp-route-id="@Model.Config.ConfigId">Create New</a>
+</p>
+<div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Ship Name
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th>
+            Ship Height (y-axis)
+        </th>
+        <th>
+            Ship Length (x-axis)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ConfigShips) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ship!.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ship!.ShipHeight)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ship!.ShipLength)
+            </td>
+            <td>
+                <a asp-page="/ConfigShips/Edit" asp-route-id="@item.ConfigShipId">Edit</a> |
+                <a asp-page="/ConfigShips/Details" asp-route-id="@item.ConfigShipId">Details</a> |
+                <a asp-page="/ConfigShips/Delete" asp-route-id="@item.ConfigShipId">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<div>
+    <a asp-page="/Configs/Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}</div>

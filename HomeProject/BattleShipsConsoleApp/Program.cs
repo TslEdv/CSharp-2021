@@ -139,11 +139,11 @@ namespace BattleShipsConsoleApp
                 GameState = jsonStr,
                 Status = brain.GetGameStatus(),
                 ConfigId = int.Parse(confId),
-                Config = db.Configs.Find(int.Parse(confId))
-            };
-            saveGameDb.Replay = new Replay
-            {
-                Replays = brain.GetLogJson(),
+                Config = db.Configs.Find(int.Parse(confId)),
+                Replay = new Replay
+                {
+                    Replays = brain.GetLogJson(),
+                }
             };
             db.Games.Add(saveGameDb);
             db.SaveChanges();
