@@ -47,7 +47,7 @@ namespace WebApp.Pages
             if (SaveGame == null) return RedirectToPage("/LoadGame");
             var datafile =  @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp"+ Path.DirectorySeparatorChar + "SavedGames" + Path.DirectorySeparatorChar + "game.json";
             var logfile =  @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp"+ Path.DirectorySeparatorChar + "GameLog" + Path.DirectorySeparatorChar + "log.json";
-            var conffile =  @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp"+ Path.DirectorySeparatorChar + "Configs" + Path.DirectorySeparatorChar + "localgameconf.json";
+            var conffile =  @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp"+ Path.DirectorySeparatorChar + "Configs" + Path.DirectorySeparatorChar + "standard.json";
             await System.IO.File.WriteAllTextAsync(datafile, SaveGame.GameState);
             var log =  await _context.Replays.FindAsync(SaveGame.ReplayId);
             var config = await _context.Configs.FindAsync(SaveGame.ConfigId);

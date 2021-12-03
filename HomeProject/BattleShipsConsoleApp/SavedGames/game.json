@@ -1,0 +1,2068 @@
+{
+  "CurrentPlayerNo": 0,
+  "GameStatus": 1,
+  "GameBoards": [
+    {
+      "Board": [
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ]
+      ],
+      "Ships": [
+        {
+          "Name": "SpongeBob",
+          "Length": 3,
+          "Height": 1,
+          "Coordinates": [
+            {
+              "X": 6,
+              "Y": 8
+            },
+            {
+              "X": 7,
+              "Y": 8
+            },
+            {
+              "X": 8,
+              "Y": 8
+            }
+          ]
+        },
+        {
+          "Name": "SpongeBob",
+          "Length": 3,
+          "Height": 1,
+          "Coordinates": [
+            {
+              "X": 4,
+              "Y": 3
+            },
+            {
+              "X": 4,
+              "Y": 4
+            },
+            {
+              "X": 4,
+              "Y": 5
+            }
+          ]
+        },
+        {
+          "Name": "SpongeBob",
+          "Length": 3,
+          "Height": 1,
+          "Coordinates": [
+            {
+              "X": 9,
+              "Y": 5
+            },
+            {
+              "X": 10,
+              "Y": 5
+            },
+            {
+              "X": 11,
+              "Y": 5
+            }
+          ]
+        },
+        {
+          "Name": "SpongeBob",
+          "Length": 3,
+          "Height": 1,
+          "Coordinates": [
+            {
+              "X": 5,
+              "Y": 0
+            },
+            {
+              "X": 6,
+              "Y": 0
+            },
+            {
+              "X": 7,
+              "Y": 0
+            }
+          ]
+        },
+        {
+          "Name": "SpongeBob",
+          "Length": 3,
+          "Height": 1,
+          "Coordinates": [
+            {
+              "X": 12,
+              "Y": 10
+            },
+            {
+              "X": 13,
+              "Y": 10
+            },
+            {
+              "X": 14,
+              "Y": 10
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Board": [
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": true,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ],
+        [
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          },
+          {
+            "IsShip": false,
+            "IsBomb": false
+          }
+        ]
+      ],
+      "Ships": [
+        {
+          "Name": "SpongeBob",
+          "Length": 3,
+          "Height": 1,
+          "Coordinates": [
+            {
+              "X": 0,
+              "Y": 2
+            },
+            {
+              "X": 0,
+              "Y": 3
+            },
+            {
+              "X": 0,
+              "Y": 4
+            }
+          ]
+        },
+        {
+          "Name": "SpongeBob",
+          "Length": 3,
+          "Height": 1,
+          "Coordinates": [
+            {
+              "X": 2,
+              "Y": 6
+            },
+            {
+              "X": 3,
+              "Y": 6
+            },
+            {
+              "X": 4,
+              "Y": 6
+            }
+          ]
+        },
+        {
+          "Name": "SpongeBob",
+          "Length": 3,
+          "Height": 1,
+          "Coordinates": [
+            {
+              "X": 7,
+              "Y": 4
+            },
+            {
+              "X": 7,
+              "Y": 5
+            },
+            {
+              "X": 7,
+              "Y": 6
+            }
+          ]
+        },
+        {
+          "Name": "SpongeBob",
+          "Length": 3,
+          "Height": 1,
+          "Coordinates": [
+            {
+              "X": 4,
+              "Y": 2
+            },
+            {
+              "X": 5,
+              "Y": 2
+            },
+            {
+              "X": 6,
+              "Y": 2
+            }
+          ]
+        },
+        {
+          "Name": "SpongeBob",
+          "Length": 3,
+          "Height": 1,
+          "Coordinates": [
+            {
+              "X": 12,
+              "Y": 8
+            },
+            {
+              "X": 12,
+              "Y": 9
+            },
+            {
+              "X": 12,
+              "Y": 10
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

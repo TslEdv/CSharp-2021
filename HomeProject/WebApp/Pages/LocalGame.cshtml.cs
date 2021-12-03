@@ -31,7 +31,7 @@ namespace WebApp.Pages
                                   Path.DirectorySeparatorChar + "GameLog" +
                                   Path.DirectorySeparatorChar + "log.json";
             var confFile = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" + Path.DirectorySeparatorChar +
-                           "Configs" + Path.DirectorySeparatorChar + "localgameconf.json";
+                           "Configs" + Path.DirectorySeparatorChar + "standard.json";
             if (!System.IO.File.Exists(localGamePath) || !System.IO.File.Exists(localGamePath) ||
                 !System.IO.File.Exists(confFile))
             {

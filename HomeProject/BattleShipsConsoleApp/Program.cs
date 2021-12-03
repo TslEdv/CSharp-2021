@@ -9,6 +9,8 @@ using BattleShipConsoleUI;
 using DAL;
 using Domain;
 using MenuSystem;
+using Microsoft.EntityFrameworkCore;
+using Ship = Domain.Ship;
 
 namespace BattleShipsConsoleApp
 {
@@ -42,13 +44,11 @@ namespace BattleShipsConsoleApp
             var mainMenu = new Menu("<c=RED>Battle</c><c=BLUE>ships</c><c=GREEN> Game</c>", EMenuDepth.Main);
             mainMenu.AddMenuItems(new List<MenuItem>()
             {
-                //new("1", "<c=BLUE>Test</c> BattleShip <c=RED>Game</c>", RunGame),
-                //new("2", "<c=RED>See Game Settings</c>", SeeSettings),
-                //new("3", "<c=BLUE>Test</c> Place <c=RED>Game</c>", PlaceGame),
                 new("1", "<c=BLUE>Load</c> <c=RED>Game</c>", LoadGames),
                 new("2", "<c=RED>New Game</c>", StartGame),
                 new("3", "Delete Games", DeleteGames),
-                new("4", "Delete Configs", DeleteConfigs)
+                new("4", "Edit Configs", EditConfigs),
+                new("5", "Delete Configs", DeleteConfigs)
             });
             mainMenu.RunMenu();
         }
@@ -61,7 +61,10 @@ namespace BattleShipsConsoleApp
             startMenu.AddMenuItem(menuEntry);
             foreach (var gameConfig in db.Configs)
             {
-                menuEntry = new MenuItem(gameConfig.ConfigId.ToString(), gameConfig.CreationTime, RunNewGame);
+                menuEntry = new MenuItem(gameConfig.ConfigId.ToString(),
+                    "Name:" + gameConfig.ConfigName + " IsRandom:"
+                    + gameConfig.IsRandom + " Rule:" + gameConfig.TouchRule
+                    + " Created:" + gameConfig.CreationTime, RunNewGame);
                 startMenu.AddMenuItem(menuEntry);
             }
 
@@ -111,6 +114,20 @@ namespace BattleShipsConsoleApp
             return "";
         }
 
+        private static string EditConfigs(string s)
+        {
+            using var db = new ApplicationDbContext();
+            var loadMenu = new Menu("Edit Configs", EMenuDepth.SubMenu);
+            foreach (var gameConfig in db.Configs)
+            {
+                var editMenuItem =
+                    new MenuItem(gameConfig.ConfigId.ToString(), gameConfig.CreationTime, EditConfig);
+                loadMenu.AddMenuItem(editMenuItem);
+            }
+
+            return loadMenu.RunMenu();
+        }
+
         private static string DeleteConfigs(string s)
         {
             using var db = new ApplicationDbContext();
@@ -131,6 +148,13 @@ namespace BattleShipsConsoleApp
             var savedConf = int.Parse(confId) == 0
                 ? new GameConfig()
                 : JsonSerializer.Deserialize<GameConfig>(db.Configs.Find(int.Parse(confId)).ConfigStr);
+            if (!savedConf!.TestConf())
+            {
+                Console.Clear();
+                Console.WriteLine("This Configuration is invalid, please check it's parameters!");
+                Thread.Sleep(5000);
+                return "";
+            }
 
             BsBrain brain = new(savedConf);
             var jsonStr = brain.GetBrainJson(brain.Move());
@@ -171,6 +195,11 @@ namespace BattleShipsConsoleApp
                         done = true;
                         break;
                     case "N":
+                        Console.WriteLine("Thank you for playing!");
+                        Console.WriteLine();
+                        Thread.Sleep(2000);
+                        return "";
+                    default:
                         Console.WriteLine("Thank you for playing!");
                         Console.WriteLine();
                         Thread.Sleep(2000);
@@ -313,6 +342,11 @@ namespace BattleShipsConsoleApp
                             Console.WriteLine();
                             Thread.Sleep(2000);
                             return;
+                        default:
+                            Console.WriteLine("Thank you for playing!");
+                            Console.WriteLine();
+                            Thread.Sleep(2000);
+                            return;
                     }
                 }
             }
@@ -333,6 +367,9 @@ namespace BattleShipsConsoleApp
                         Console.WriteLine();
                         Thread.Sleep(2000);
                         return;
+                    default:
+                        done = true;
+                        break;
                 }
             }
 
@@ -456,10 +493,23 @@ namespace BattleShipsConsoleApp
                     if (ff1 == "SAVE")
                     {
                         var jsonStr = brain.GetBrainJson(brain.Move());
-                        Console.WriteLine(jsonStr);
-                        var testFile = _basePath + Path.DirectorySeparatorChar + "SavedGames" +
-                                       Path.DirectorySeparatorChar + "game.json";
-                        File.WriteAllText(testFile, jsonStr);
+                        Console.WriteLine("Save Game Locally?(y/n)");
+                        switch (Console.ReadLine()?.Trim().ToUpper())
+                        {
+                            case "Y":
+                                var testFile = _basePath + Path.DirectorySeparatorChar + "SavedGames" +
+                                               Path.DirectorySeparatorChar + "game.json";
+                                File.WriteAllText(testFile, jsonStr);
+                                var saveLog = db.Replays.Find(currentGame.ReplayId);
+                                var config = db.Configs.Find(currentGame.ConfigId);
+                                var savedConf = JsonSerializer.Deserialize<GameConfig>(config.ConfigStr);
+                                File.WriteAllTextAsync(_filename!, savedConf!.ToString());
+                                File.WriteAllTextAsync(_logFile!, saveLog.Replays);
+                                break;
+                            case "N":
+                                break;
+                        }
+
                         currentGame.GameState = brain.GetBrainJson(brain.Move());
                         currentGame.Status = brain.GetGameStatus();
                         log = db.Replays.Find(currentGame.ReplayId);
@@ -486,354 +536,140 @@ namespace BattleShipsConsoleApp
         {
             BsBrain brain = new(new GameConfig());
             using var db = new ApplicationDbContext();
-            /*if (File.Exists(SaveFileName) && File.Exists(Filename))
-            {
-                Console.WriteLine("Detected a local saved game! Would you like to continue it?(y/n):");
-                switch (Console.ReadLine()?.Trim().ToUpper())
-                {
-                    case "Y":
-                        var brainConf = File.ReadAllText(SaveFileName);
-                        brain.RestoreBrainFromJson(brainConf);
-                        break;
-                    case "N":
-                        Console.WriteLine("Load a saved game from database?(y/n):");
-                        switch (Console.ReadLine()?.Trim().ToUpper())
-                        {
-                            case "Y":
-                                Console.WriteLine("Insert Game ID:");
-                                var id = Convert.ToInt32(Console.ReadLine()?.Trim());
-                                brain.RestoreBrainFromJson(db.Games.Find(id).GameState);
-                                gameId = id;
-                                break;
-                            case "N":
-                                Console.WriteLine("Loading config...");
-                                var confText = File.ReadAllText(Filename);
-                                var conf = JsonSerializer.Deserialize<GameConfig>(confText);
-                                brain = new BsBrain(conf);
-                                break;
-                        }
-                        break;
-                }
-            }
-            else if (File.Exists(Filename))
-            {
-                Console.WriteLine("Load a saved game from database?(y/n):");
-                switch (Console.ReadLine()?.Trim().ToUpper())
-                {
-                    case "Y":
-                        Console.WriteLine("Insert Game ID:");
-                        var id = Convert.ToInt32(Console.ReadLine()?.Trim());
-                        brain.RestoreBrainFromJson(db.Games.Find(id).GameState);
-                        gameId = id;
-                        break;
-                    case "N":
-                        Console.WriteLine("Loading config...");
-                        var confText = File.ReadAllText(Filename);
-                        var conf = JsonSerializer.Deserialize<GameConfig>(confText);
-                        Console.WriteLine("Randomize ship placement?(y/n):");
-                        switch (Console.ReadLine()?.Trim().ToUpper())
-                        {
-                            case "Y":
-                                brain = new BsBrain(conf);
-                                break;
-                            case "N":
-                                if (conf != null) conf.IsRandom = false;
-                                brain = new BsBrain(conf);
-                                foreach (var ship in brain.ListShips(brain.Move()))
-                                {
-                                    while(!BsConsoleUi.ConsolePlacement(brain, ship, conf!.EShipTouchRule));
-                                }
-                                brain.ChangePlayer();
-                                foreach (var ship in brain.ListShips(brain.Move()))
-                                {
-                                    while(!BsConsoleUi.ConsolePlacement(brain, ship, conf!.EShipTouchRule));
-                                }
-                                brain.ChangePlayer();
-                                break;
-                        }
-                        break;
-                }
-            }
-            else
-            {
-                Console.WriteLine("No Config found, loading default...");
-                Console.WriteLine("Randomize ship placement?(y/n):");
-                GameConfig config = new GameConfig();
-                switch (Console.ReadLine()?.Trim().ToUpper())
-                {
-                    case "Y":
-                        brain = new BsBrain(config);
-                        break;
-                    case "N":
-                        config.IsRandom = false;
-                        brain = new BsBrain(config);
-                        foreach (var ship in brain.ListShips(brain.Move()))
-                        {
-                            while(!BsConsoleUi.ConsolePlacement(brain, ship, config.EShipTouchRule));
-                        }
-                        brain.ChangePlayer();
-                        foreach (var ship in brain.ListShips(brain.Move()))
-                        {
-                            while(!BsConsoleUi.ConsolePlacement(brain, ship, config.EShipTouchRule));
-                        }
-                        brain.ChangePlayer();
-                        break;
-                }
-            }
-            */
             var id = Convert.ToInt32(gameId);
             var currentGame = db.Games.Find(id);
             brain.RestoreBrainFromJson(db.Games.Find(id).GameState);
-            /*if (brain.GetGameStatus() == EGameStatus.Placing)
-            {
-                var savedConf = JsonSerializer.Deserialize<GameConfig>(db.Configs.Find(currentGame.ConfigId).ConfigStr);
-                foreach (var ship in brain.ListShips(brain.Move()))
-                {
-                    while(!BsConsoleUi.ConsolePlacement(brain, ship, savedConf!.EShipTouchRule))
-                    {
-                        brain.StartGame();
-                        currentGame.GameState = brain.GetBrainJson(brain.Move());
-                        currentGame.Status = brain.GetGameStatus();
-                        db.SaveChanges();
-                    }
-                }
-                brain.ChangePlayer();
-                foreach (var ship in brain.ListShips(brain.Move()))
-                {
-                    while(!BsConsoleUi.ConsolePlacement(brain, ship, savedConf!.EShipTouchRule))
-                    {
-                        brain.StartGame();
-                        currentGame.GameState = brain.GetBrainJson(brain.Move());
-                        currentGame.Status = brain.GetGameStatus();
-                        db.SaveChanges();
-                    }
-                }
-                brain.ChangePlayer();
-            }
-            Console.WriteLine("First player board:");
-            BsConsoleUi.DrawBoard(brain.GetBoard(0), brain.GetFireBoard(0));
-            Console.WriteLine("Second player board:");
-            BsConsoleUi.DrawBoard(brain.GetBoard(1), brain.GetFireBoard(1));
-            var done = false;
-            while(done != true)
-            {
-                Console.Write("Start Game? (Y/N):");
-                var answer = Console.ReadLine()?.ToUpper().Trim();
-                switch (answer)
-                {
-                    case "Y":
-                        done = true;
-                        break;
-                    case "N":
-                        Console.WriteLine("Thank you for playing!");
-                        Console.WriteLine();
-                        Thread.Sleep(2000);
-                        return "";
-                }
-            }
-
-            while (true)
-            {
-                Console.Clear();
-                BsConsoleUi.DrawBoard(brain.GetBoard(brain.Move()), brain.GetFireBoard(brain.Move()));
-                foreach (var ship in brain.ListShips(brain.Move()))
-                {
-                    Console.WriteLine("Name: " + ship.Name);
-                    Console.WriteLine("Size: " + ship.GetShipSize());
-                    Console.WriteLine("Damage: " + ship.GetShipDamageCount(brain.GetBoard(brain.Move())));
-                    Console.WriteLine("Status: " + ship.IsShipSunk(brain.GetBoard(brain.Move())));
-                }
-                while (true)
-                {
-                    var ff1 = BsConsoleUi.Move(brain);
-                    if (ff1 == "OVER")
-                    {
-                        if (File.Exists(SaveFileName))
-                        {
-                            File.Delete(SaveFileName);
-                        }
-                        if (id != 0)
-                        {
-                            db.Games.Remove(currentGame);
-                            db.SaveChanges();
-                        }
-                        Thread.Sleep(5000);
-                        return "";
-                    }
-                    if (ff1 == "FF")
-                    {
-                        if (File.Exists(SaveFileName))
-                        {
-                            File.Delete(SaveFileName);
-                        }
-                        if (id != 0)
-                        {
-                            db.Games.Remove(currentGame);
-                            db.SaveChanges();
-                        }
-                        Thread.Sleep(5000);
-                        return "";
-                    }
-                    if (ff1 == "MISS")
-                    {
-                        Console.WriteLine("You Missed!");
-                        currentGame.GameState = brain.GetBrainJson(brain.Move());
-                        currentGame.Status = brain.GetGameStatus();
-                        db.SaveChanges();
-                        break;
-                    }
-                    if (ff1 == "SAVE")
-                    {
-                        var jsonStr = brain.GetBrainJson(brain.Move());
-                        Console.WriteLine(jsonStr);
-                        File.WriteAllText(SaveFileName, jsonStr);
-                        currentGame.GameState = brain.GetBrainJson(brain.Move());
-                        currentGame.Status = brain.GetGameStatus();
-                        db.SaveChanges();
-                        Console.WriteLine("Your Game ID: " + currentGame.GameId);
-                        Thread.Sleep(5000);
-                        return "";
-                    }
-
-                    Console.WriteLine("You Hit!");
-                    currentGame.GameState = brain.GetBrainJson(brain.Move());
-                    currentGame.Status = brain.GetGameStatus();
-                    db.SaveChanges();
-
-                }
-                Thread.Sleep(5000);
-            }
-            */
             PlayGame(brain, currentGame);
             return "";
         }
-
-        /*private static string SeeSettings(string empty)
-        {
-            GameConfig? config;
-            if (File.Exists(_filename))
-            {
-                var confText = File.ReadAllText(_filename!);
-                config = JsonSerializer.Deserialize<GameConfig>(confText);
-            }
-            else
-            {
-                config = new GameConfig();
-            }
-
-            var settingsMenu = new Menu("<c=RED>Set</c><c=BLUE>ti</c><c=GREEN>ngs</c>", EMenuDepth.SubMenu);
-            settingsMenu.AddMenuItems(new List<MenuItem>()
-            {
-                new MenuItem("1", $"Reset current config:" + Environment.NewLine + $"{config}", ResetSettings),
-                new MenuItem("2", "<c=RED>Make New Settings</c>", NewSettings),
-                new MenuItem("3", "<c=BLUE>Import Setting From DB</c>", DbSettingsImport),
-            });
-            return settingsMenu.RunMenu();
-        }*/
-
         private static string NewSettings(string s)
         {
-            GameConfig conf = new GameConfig();
+            GameConfig conf = new();
+            Console.WriteLine("Enter Configuration Name:");
+            conf.Name = Console.ReadLine();
             Console.WriteLine("Enter BoardSizeX:");
-            var input = int.Parse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty);
-            conf.BoardSizeX = input;
+            if (int.TryParse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty, out var res))
+            {
+                conf.BoardSizeX = res;
+            }
+
             Console.WriteLine("Enter BoardSizeY:");
-            input = int.Parse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty);
-            conf.BoardSizeY = input;
+            if (int.TryParse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty, out res))
+            {
+                conf.BoardSizeY = res;
+            }
+
             Console.WriteLine("Enter TouchRule (0 - NoTouch, 1 - CornerTouch, 2 - SideTouch):");
-            input = int.Parse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty);
-            conf.EShipTouchRule = (EShipTouchRule) input;
+            if (int.TryParse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty, out res))
+            {
+                conf.EShipTouchRule = (EShipTouchRule) res;
+            }
+
+            Console.WriteLine("Is Placement randomized? (y/n):");
+            conf.IsRandom = Console.ReadLine()?.Trim().ToUpper() switch
+            {
+                "Y" => true,
+                "N" => false,
+                _ => true
+            };
             conf.ShipConfigs = new List<ShipConfig>();
+            var jsonOptions = new JsonSerializerOptions()
+            {
+                WriteIndented = true
+            };
+            var confJsonStr = JsonSerializer.Serialize(conf, jsonOptions);
+            var db = new ApplicationDbContext();
+            var saveConfDb = new Config
+            {
+                ConfigStr = confJsonStr,
+                BoardSizeX = conf.BoardSizeX,
+                BoardSizeY = conf.BoardSizeY,
+                ConfigName = conf.Name,
+                ConfigShips = new List<ConfigShip>(),
+                TouchRule = conf.EShipTouchRule,
+                IsRandom = conf.IsRandom
+            };
+            db.Configs.Add(saveConfDb);
+            db.SaveChanges();
             while (true)
             {
-                var shipConf = new ShipConfig();
-                Console.WriteLine("To exit ship creation - q");
-                Console.WriteLine("Enter ship name:");
-                var shipInput = Console.ReadLine()?.Trim();
-                if (shipInput != null && shipInput.ToUpper() == "Q")
+                Console.Clear();
+                db = new ApplicationDbContext();
+                Console.WriteLine("C) Create New Ship");
+                foreach (var ship in db.Ships)
+                {
+                    Console.WriteLine(ship.ShipId + ") " + "Name:" + ship.Name + " Length:" + ship.ShipLength +
+                                      " Height:" + ship.ShipHeight);
+                }
+
+                Console.WriteLine("X) Finish adding Ships");
+                var answer = Console.ReadLine()?.Trim().ToUpper();
+                Console.Write("Option: ");
+                if (answer == "X")
                 {
                     break;
                 }
 
-                shipConf.Name = shipInput;
-                Console.WriteLine("Enter ship quantity:");
-                input = Convert.ToInt32(Console.ReadLine()?.Trim().ToUpper());
-                shipConf.Quantity = input;
-                Console.WriteLine("Enter ShipSizeX:");
-                input = Convert.ToInt32(Console.ReadLine()?.Trim().ToUpper());
-                shipConf.ShipSizeX = input;
-                Console.WriteLine("Enter ShipSizeY:");
-                input = Convert.ToInt32(Console.ReadLine()?.Trim().ToUpper());
-                shipConf.ShipSizeY = input;
-                conf.ShipConfigs.Add(shipConf);
+                if (answer == "C")
+                {
+                    var ship = new Ship();
+                    Console.WriteLine("To exit ship creation - q");
+                    Console.WriteLine("Enter ship name:");
+                    var shipInput = Console.ReadLine()?.Trim();
+                    if (shipInput != null && shipInput.ToUpper() == "Q")
+                    {
+                        break;
+                    }
+
+                    if (shipInput != null) ship.Name = shipInput;
+                    Console.WriteLine("Enter Height:");
+                    if (int.TryParse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty, out var input))
+                    {
+                        ship.ShipHeight = input;
+                    }
+
+                    Console.WriteLine("Enter Length:");
+                    if (int.TryParse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty, out input))
+                    {
+                        ship.ShipLength = input;
+                    }
+
+                    db.Ships.Add(ship);
+                    db.SaveChanges();
+                }
+
+                if (!int.TryParse(answer, out _)) continue;
+                {
+                    if (db.Ships.Find(Convert.ToInt32(answer)) == null) continue;
+                    Console.WriteLine("Enter ship quantity:");
+                    var input = Convert.ToInt32(Console.ReadLine()?.Trim().ToUpper());
+                    var ship = db.Ships.Find(Convert.ToInt32(answer));
+                    conf.ShipConfigs.Add(new ShipConfig
+                    {
+                        Name = ship.Name,
+                        Quantity = input,
+                        ShipSizeX = ship.ShipLength,
+                        ShipSizeY = ship.ShipHeight
+                    });
+                    var addedShip = new ConfigShip
+                    {
+                        ConfigId = saveConfDb.ConfigId,
+                        Quantity = input,
+                        Ship = ship,
+                        ShipId = ship.ShipId
+                    };
+                    db.ConfigShips.Add(addedShip);
+                    db.SaveChanges();
+                }
             }
 
-            var jsonOptions = new JsonSerializerOptions()
-            {
-                WriteIndented = true
-            };
-            var confJsonStr = JsonSerializer.Serialize(conf, jsonOptions);
-            using var db = new ApplicationDbContext();
-            var saveConfDb = new Config
-            {
-                ConfigStr = confJsonStr
-            };
-            db.Configs.Add(saveConfDb);
+            confJsonStr = JsonSerializer.Serialize(conf, jsonOptions);
+            saveConfDb.ConfigStr = confJsonStr;
+            db.Attach(saveConfDb).State = EntityState.Modified;
             db.SaveChanges();
-            Console.WriteLine("Your Conf ID: " + saveConfDb.ConfigId);
-            Thread.Sleep(5000);
+            Thread.Sleep(3000);
             return "";
         }
-
-        /*private static string ResetSettings(string filename)
-        {
-            GameConfig conf = new();
-            var jsonOptions = new JsonSerializerOptions()
-            {
-                WriteIndented = true
-            };
-            var confJsonStr = JsonSerializer.Serialize(conf, jsonOptions);
-            Console.WriteLine("Saving default config!");
-            File.WriteAllText(filename, confJsonStr);
-            return "";
-        }*/
-
-        /*private static string DbSettingsImport(string filename)
-        {
-            using var db = new ApplicationDbContext();
-            Console.WriteLine("Insert Game ID:");
-            var id = Convert.ToInt32(Console.ReadLine()?.Trim());
-            File.WriteAllText(filename, db.Configs.Find(id).ConfigStr);
-            return "";
-        }*/
-
-        /*private static string PlaceGame(string s)
-        {
-            GameConfig config = new()
-            {
-                IsRandom = false
-            };
-            BsBrain brain = new BsBrain(config);
-            foreach (var ship in brain.ListShips(brain.Move()))
-            {
-                BsConsoleUi.ConsolePlacement(brain, ship, config.EShipTouchRule);
-            }
-
-            brain.ChangePlayer();
-            foreach (var ship in brain.ListShips(brain.Move()))
-            {
-                BsConsoleUi.ConsolePlacement(brain, ship, config.EShipTouchRule);
-            }
-
-            Console.WriteLine("First player board:");
-            BsConsoleUi.DrawBoard(brain.GetBoard(0), brain.GetFireBoard(0));
-            Console.WriteLine("Second player board:");
-            BsConsoleUi.DrawBoard(brain.GetBoard(1), brain.GetFireBoard(1));
-            Thread.Sleep(50000);
-            return "";
-        }
-        */
-
         private static string DeleteGame(string gameId)
         {
             using var db = new ApplicationDbContext();
@@ -844,6 +680,235 @@ namespace BattleShipsConsoleApp
             db.Games.Remove(game);
             db.SaveChanges();
             return "";
+        }
+
+        private static string EditConfig(string confId)
+        {
+            using var db = new ApplicationDbContext();
+            var id = Convert.ToInt32(confId);
+            var config = db.Configs
+                .Include(c => c.ConfigShips)
+                .ThenInclude(cs => cs.Ship)
+                .FirstOrDefault(m => m.ConfigId == id);
+            List<Game> games = db.Games.ToList();
+            if (games.Any(game => config!.ConfigId == game.ConfigId))
+            {
+                Console.Clear();
+                Console.WriteLine("Config is in use, cannot edit it currently!");
+                Thread.Sleep(5000);
+                return "";
+            }
+            GameConfig conf = JsonSerializer.Deserialize<GameConfig>(config!.ConfigStr)!;
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Choose which parameter to edit");
+                Console.WriteLine("1) Name:" + config.ConfigName);
+                Console.WriteLine("2) IsRandom:" + config.IsRandom);
+                Console.WriteLine("3) TouchRule:" + config.TouchRule);
+                Console.WriteLine("4) X:" + config.BoardSizeX);
+                Console.WriteLine("5) Y:" + config.BoardSizeY);
+                Console.WriteLine("6) Ships:");
+                foreach (var configShip in config.ConfigShips!)
+                {
+                    Console.WriteLine(configShip.Ship!.Name + " Height:" + configShip.Ship.ShipHeight + " Length:" +
+                                      configShip.Ship.ShipLength);
+                }
+
+                Console.WriteLine("R) Return");
+                Console.Write("Option");
+                switch (Console.ReadLine()?.Trim().ToUpper())
+                {
+                    case "1":
+                        Console.WriteLine("Enter Configuration Name:");
+                        config.ConfigName = Console.ReadLine();
+                        conf.Name = config.ConfigName;
+                        db.Attach(config).State = EntityState.Modified;
+                        db.SaveChanges();
+                        break;
+                    case "2":
+                        Console.WriteLine("Is Placement randomized? (y/n):");
+                        conf.IsRandom = Console.ReadLine()?.Trim().ToUpper() switch
+                        {
+                            "Y" => true,
+                            "N" => false,
+                            _ => true
+                        };
+                        config.IsRandom = conf.IsRandom;
+                        db.Attach(config).State = EntityState.Modified;
+                        db.SaveChanges();
+                        break;
+                    case "3":
+                        Console.WriteLine("Enter TouchRule (0 - NoTouch, 1 - CornerTouch, 2 - SideTouch):");
+                        if (int.TryParse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty, out var res))
+                        {
+                            conf.EShipTouchRule = (EShipTouchRule) res;
+                        }
+
+                        db.Attach(config).State = EntityState.Modified;
+                        db.SaveChanges();
+                        break;
+                    case "4":
+                        Console.WriteLine("Enter BoardSizeX:");
+                        if (int.TryParse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty, out res))
+                        {
+                            conf.BoardSizeX = res;
+                        }
+
+                        config.BoardSizeX = conf.BoardSizeX;
+                        db.Attach(config).State = EntityState.Modified;
+                        db.SaveChanges();
+                        break;
+                    case "5":
+                        Console.WriteLine("Enter BoardSizeY:");
+                        if (int.TryParse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty, out res))
+                        {
+                            conf.BoardSizeY = res;
+                        }
+
+                        config.BoardSizeY = conf.BoardSizeY;
+                        db.Attach(config).State = EntityState.Modified;
+                        db.SaveChanges();
+                        break;
+                    case "6":
+                        while (true)
+                        {
+                            Console.Clear();
+                            foreach (var configShip in config.ConfigShips!)
+                            {
+                                Console.WriteLine(configShip.Ship!.Name + " Height:"
+                                                                        + configShip.Ship.ShipHeight + " Length:"
+                                                                        + configShip.Ship.ShipLength);
+                            }
+
+                            Console.WriteLine("A) Add Ship");
+                            Console.WriteLine("D) Delete Ship");
+                            Console.WriteLine("X) Finish Editing Ships");
+                            Console.Write("Option: ");
+                            var answer = Console.ReadLine()?.Trim().ToUpper();
+                            if (answer == "X")
+                            {
+                                break;
+                            }
+
+                            if (answer == "D")
+                            {
+                                foreach (var configShip in config.ConfigShips!)
+                                {
+                                    Console.WriteLine(configShip.ConfigShipId + ")" + configShip.Ship!.Name + " Height:"
+                                                      + configShip.Ship.ShipHeight + " Length:"
+                                                      + configShip.Ship.ShipLength);
+                                }
+
+                                Console.Write("Option: ");
+                                answer = Console.ReadLine()?.Trim().ToUpper();
+                                if (!int.TryParse(answer, out _)) continue;
+                                if (db.ConfigShips.Find(Convert.ToInt32(answer)) == null) continue;
+                                var editShip = db.ConfigShips.Include(cs => cs.Ship)
+                                    .FirstOrDefault(s => s.ConfigShipId == Convert.ToInt32(answer));
+                                foreach (var ship in conf.ShipConfigs.Where(ship => ship.Name == editShip!.Ship!.Name &&
+                                    ship.Quantity == editShip.Quantity &&
+                                    ship.ShipSizeX == editShip.Ship.ShipLength &&
+                                    ship.ShipSizeY == editShip.Ship.ShipHeight))
+                                {
+                                    conf.ShipConfigs.Remove(ship);
+                                    break;
+                                }
+
+                                db.ConfigShips.Remove(db.ConfigShips.Find(Convert.ToInt32(answer)));
+                                db.SaveChanges();
+                            }
+
+                            if (answer == "A")
+                            {
+                                Console.Clear();
+                                Console.WriteLine("C) Create New Ship");
+                                foreach (var ship in db.Ships)
+                                {
+                                    Console.WriteLine(ship.ShipId + ") " + "Name:" + ship.Name + " Length:" +
+                                                      ship.ShipLength +
+                                                      " Height:" + ship.ShipHeight);
+                                }
+
+                                Console.WriteLine("X) Finish adding Ships");
+                                answer = Console.ReadLine()?.Trim().ToUpper();
+                                Console.Write("Option: ");
+                                if (answer == "X")
+                                {
+                                    break;
+                                }
+
+                                if (answer == "C")
+                                {
+                                    var ship = new Ship();
+                                    Console.WriteLine("To exit ship creation - q");
+                                    Console.WriteLine("Enter ship name:");
+                                    var shipInput = Console.ReadLine()?.Trim();
+                                    if (shipInput != null && shipInput.ToUpper() == "Q")
+                                    {
+                                        break;
+                                    }
+
+                                    if (shipInput != null) ship.Name = shipInput;
+                                    Console.WriteLine("Enter Height:");
+                                    if (int.TryParse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty,
+                                        out var input))
+                                    {
+                                        ship.ShipHeight = input;
+                                    }
+
+                                    Console.WriteLine("Enter Length:");
+                                    if (int.TryParse(Console.ReadLine()?.Trim().ToUpper() ?? string.Empty, out input))
+                                    {
+                                        ship.ShipLength = input;
+                                    }
+
+                                    db.Ships.Add(ship);
+                                    db.SaveChanges();
+                                }
+
+                                if (!int.TryParse(answer, out _)) continue;
+                                {
+                                    if (db.Ships.Find(Convert.ToInt32(answer)) == null) continue;
+                                    Console.WriteLine("Enter ship quantity:");
+                                    var input = Convert.ToInt32(Console.ReadLine()?.Trim().ToUpper());
+                                    var ship = db.Ships.Find(Convert.ToInt32(answer));
+                                    conf.ShipConfigs.Add(new ShipConfig
+                                    {
+                                        Name = ship.Name,
+                                        Quantity = input,
+                                        ShipSizeX = ship.ShipLength,
+                                        ShipSizeY = ship.ShipHeight
+                                    });
+                                    var addedShip = new ConfigShip
+                                    {
+                                        ConfigId = config.ConfigId,
+                                        Quantity = input,
+                                        Ship = ship,
+                                        ShipId = ship.ShipId
+                                    };
+                                    db.ConfigShips.Add(addedShip);
+                                    db.SaveChanges();
+                                }
+                            }
+                        }
+
+                        var jsonOptions = new JsonSerializerOptions()
+                        {
+                            WriteIndented = true
+                        };
+                        var confJsonStr = JsonSerializer.Serialize(conf, jsonOptions);
+                        config.ConfigStr = confJsonStr;
+                        db.Attach(config).State = EntityState.Modified;
+                        db.SaveChanges();
+                        Thread.Sleep(3000);
+                        break;
+                    case "R":
+                        return "";
+                    default:
+                        return "";
+                }
+            }
         }
 
         private static string DeleteConfig(string confId)
@@ -898,7 +963,7 @@ namespace BattleShipsConsoleApp
                 var gameLog = ctx.Replays.Find(game.ReplayId);
                 replay = JsonSerializer.Deserialize<List<ReplayTile>>(gameLog.Replays!);
             }
-            
+
             var placementSkip = replay!.Count(play => play.Placing);
 
             var move = 0;
@@ -975,7 +1040,7 @@ namespace BattleShipsConsoleApp
                         }
                         else
                         {
-                            move--;  
+                            move--;
                         }
 
                         break;
@@ -987,8 +1052,9 @@ namespace BattleShipsConsoleApp
                         }
                         else
                         {
-                            move++;  
+                            move++;
                         }
+
                         break;
                     }
                     case ConsoleKey.S:

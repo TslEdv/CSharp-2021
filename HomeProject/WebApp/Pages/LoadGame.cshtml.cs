@@ -6,6 +6,7 @@ using BattleShipBrain;
 using DAL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.Pages
 {
@@ -30,7 +31,7 @@ namespace WebApp.Pages
                                                    Path.DirectorySeparatorChar + "log.json";
 
         private string LocalConfPath { get; set; } = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" + Path.DirectorySeparatorChar +
-                                                     "Configs" + Path.DirectorySeparatorChar + "localgameconf.json";
+                                                     "Configs" + Path.DirectorySeparatorChar + "standard.json";
         public EGameStatus State { get; set; }
         
         public async Task<IActionResult> OnGet()
@@ -42,7 +43,9 @@ namespace WebApp.Pages
                 brain.RestoreLog(await System.IO.File.ReadAllTextAsync(LocalLogPath));
             }
             State = brain.GetGameStatus();
-            Games = _ctx.Games.ToList();
+            Games = _ctx.Games
+                .Include(g => g.Config)
+                .ToList();
             return Page();
         }
         

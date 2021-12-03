@@ -20,7 +20,7 @@
             @Html.DisplayNameFor(model => model.Games[0].Status)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Games[0].ConfigId)
+            @Html.DisplayNameFor(model => model.Games[0].Config!.ConfigName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Games[0].CreationTime)
@@ -71,7 +71,7 @@
                 }
                 else
                 {
-                    @Html.DisplayFor(modelItem => item.ConfigId)
+                    @Html.DisplayFor(modelItem => item.Config!.ConfigName)
                 }
             </td>
             <td>

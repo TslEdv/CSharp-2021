@@ -9,31 +9,41 @@
 <h1>Create</h1>
 
 <h4>Config</h4>
-<hr />
+<h5>Don't forget to add the ships later!</h5>
+<hr/>
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Config.ConfigName" class="control-label"></label>
-                <input asp-for="Config.ConfigName" class="form-control" />
+                <input asp-for="Config.ConfigName" class="form-control"/>
                 <span asp-validation-for="Config.ConfigName" class="text-danger"></span>
             </div>
+            <p>
+                Is the placement of ships randomized?
+            </p>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Config.IsRandom" /> @Html.DisplayNameFor(model => model.Config.IsRandom)
+                    <input class="form-check-input" asp-for="Config.IsRandom"/> @Html.DisplayNameFor(model => model.Config.IsRandom)
                 </label>
             </div>
             <div class="form-group">
                 <label asp-for="Config.BoardSizeX" class="control-label"></label>
-                <input asp-for="Config.BoardSizeX" class="form-control" />
+                <input asp-for="Config.BoardSizeX" class="form-control"/>
                 <span asp-validation-for="Config.BoardSizeX" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Config.BoardSizeY" class="control-label"></label>
-                <input asp-for="Config.BoardSizeY" class="form-control" />
+                <input asp-for="Config.BoardSizeY" class="form-control"/>
                 <span asp-validation-for="Config.BoardSizeY" class="text-danger"></span>
             </div>
+            <p>
+                TouchRule is the main rule for placing the ships:<br>
+                CornerTouch - only the corners of ships are allowed to touch<br>
+                NoTouch - No touching between the ships<br>
+                SideTouch - All touch allowed, even placed next to each other<br>
+            </p>
             <div class="form-group">
                 <label asp-for="Config.TouchRule" class="control-label"></label>
                 <select asp-for="Config.TouchRule" class="form-control">
@@ -47,7 +57,7 @@
                 Add ships in the Edit Tab Later!
             </p>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary"/>
             </div>
         </form>
     </div>
@@ -57,5 +67,5 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
