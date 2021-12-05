@@ -1,39 +1,7 @@
 [
   {
     "Player": 0,
-    "X": 6,
-    "Y": 8,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 0,
     "X": 7,
-    "Y": 8,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 0,
-    "X": 8,
-    "Y": 8,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 0,
-    "X": 4,
-    "Y": 3,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 0,
-    "X": 4,
     "Y": 4,
     "Placing": true,
     "IsShip": true,
@@ -42,31 +10,7 @@
   {
     "Player": 0,
     "X": 4,
-    "Y": 5,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 0,
-    "X": 9,
-    "Y": 5,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 0,
-    "X": 10,
-    "Y": 5,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 0,
-    "X": 11,
-    "Y": 5,
+    "Y": 8,
     "Placing": true,
     "IsShip": true,
     "IsBomb": false
@@ -74,85 +18,61 @@
   {
     "Player": 0,
     "X": 5,
-    "Y": 0,
+    "Y": 8,
     "Placing": true,
     "IsShip": true,
     "IsBomb": false
   },
   {
     "Player": 0,
-    "X": 6,
-    "Y": 0,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 0,
-    "X": 7,
-    "Y": 0,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 0,
-    "X": 12,
-    "Y": 10,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 0,
-    "X": 13,
-    "Y": 10,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 0,
-    "X": 14,
-    "Y": 10,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 1,
-    "X": 0,
+    "X": 5,
     "Y": 2,
     "Placing": true,
     "IsShip": true,
     "IsBomb": false
   },
   {
-    "Player": 1,
-    "X": 0,
+    "Player": 0,
+    "X": 5,
     "Y": 3,
     "Placing": true,
     "IsShip": true,
     "IsBomb": false
   },
   {
-    "Player": 1,
-    "X": 0,
+    "Player": 0,
+    "X": 5,
     "Y": 4,
     "Placing": true,
     "IsShip": true,
     "IsBomb": false
   },
   {
-    "Player": 1,
-    "X": 2,
-    "Y": 6,
+    "Player": 0,
+    "X": 3,
+    "Y": 3,
     "Placing": true,
     "IsShip": true,
     "IsBomb": false
   },
   {
-    "Player": 1,
+    "Player": 0,
+    "X": 3,
+    "Y": 4,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
+    "X": 3,
+    "Y": 5,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
     "X": 3,
     "Y": 6,
     "Placing": true,
@@ -160,49 +80,41 @@
     "IsBomb": false
   },
   {
-    "Player": 1,
+    "Player": 0,
+    "X": 2,
+    "Y": 0,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
+    "X": 3,
+    "Y": 0,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
     "X": 4,
-    "Y": 6,
+    "Y": 0,
     "Placing": true,
     "IsShip": true,
     "IsBomb": false
   },
   {
-    "Player": 1,
-    "X": 7,
-    "Y": 4,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 1,
-    "X": 7,
-    "Y": 5,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 1,
-    "X": 7,
-    "Y": 6,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 1,
-    "X": 4,
-    "Y": 2,
-    "Placing": true,
-    "IsShip": true,
-    "IsBomb": false
-  },
-  {
-    "Player": 1,
+    "Player": 0,
     "X": 5,
-    "Y": 2,
+    "Y": 0,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
+    "X": 6,
+    "Y": 0,
     "Placing": true,
     "IsShip": true,
     "IsBomb": false
@@ -217,24 +129,104 @@
   },
   {
     "Player": 1,
-    "X": 12,
-    "Y": 8,
+    "X": 1,
+    "Y": 0,
     "Placing": true,
     "IsShip": true,
     "IsBomb": false
   },
   {
     "Player": 1,
-    "X": 12,
-    "Y": 9,
+    "X": 1,
+    "Y": 1,
     "Placing": true,
     "IsShip": true,
     "IsBomb": false
   },
   {
     "Player": 1,
-    "X": 12,
-    "Y": 10,
+    "X": 2,
+    "Y": 3,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 1,
+    "X": 3,
+    "Y": 3,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
+    "X": 2,
+    "Y": 0,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
+    "X": 2,
+    "Y": 1,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
+    "X": 2,
+    "Y": 2,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
+    "X": 2,
+    "Y": 3,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
+    "X": 3,
+    "Y": 0,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
+    "X": 3,
+    "Y": 1,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
+    "X": 3,
+    "Y": 2,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
+    "X": 3,
+    "Y": 3,
+    "Placing": true,
+    "IsShip": true,
+    "IsBomb": false
+  },
+  {
+    "Player": 0,
+    "X": 0,
+    "Y": 5,
     "Placing": true,
     "IsShip": true,
     "IsBomb": false

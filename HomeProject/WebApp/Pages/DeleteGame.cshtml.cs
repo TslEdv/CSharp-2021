@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -24,8 +25,18 @@ namespace WebApp.Pages
             {
                 return NotFound();
             }
-
-            Game = await _context.Games.FirstOrDefaultAsync(m => m.GameId== id);
+            if (id == 0)
+            {
+                Game = new Domain.Game
+                {
+                    GameId = 0
+                };
+            }
+            else
+            {
+                Game = await _context.Games.FirstOrDefaultAsync(m => m.GameId== id);
+            }
+            
 
             if (Game == null)
             {
@@ -40,15 +51,26 @@ namespace WebApp.Pages
             {
                 return NotFound();
             }
-
-            Game = await _context.Games.FindAsync(id);
-            GameReplay = await _context.Replays.FindAsync(Game.ReplayId);
-
-            if (Game != null)
+            if (id == 0)
             {
-                _context.Replays.Remove(GameReplay);
-                _context.Games.Remove(Game);
-                await _context.SaveChangesAsync();
+                System.IO.File.Delete(@"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" +
+                            Path.DirectorySeparatorChar + "SavedGames" + Path.DirectorySeparatorChar +
+                            "game.json"!);
+                System.IO.File.Delete(@"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp"+ 
+                            Path.DirectorySeparatorChar + "GameLog" + 
+                            Path.DirectorySeparatorChar + "log.json");
+            }
+            else
+            {
+                Game = await _context.Games.FindAsync(id);
+                GameReplay = await _context.Replays.FindAsync(Game.ReplayId);
+
+                if (Game != null)
+                {
+                    _context.Replays.Remove(GameReplay);
+                    _context.Games.Remove(Game);
+                    await _context.SaveChangesAsync();
+                }
             }
 
             return RedirectToPage("/LoadGame");

@@ -31,14 +31,9 @@ namespace WebApp.Pages
             var replay = new List<ReplayTile>();
             if (id == 0)
             {
-                string localGamePath = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" +
-                                       Path.DirectorySeparatorChar + "SavedGames" + Path.DirectorySeparatorChar +
-                                       "game.json";
-                string localLogPath = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" +
-                                      Path.DirectorySeparatorChar + "GameLog" +
-                                      Path.DirectorySeparatorChar + "log.json";
-                var confFile = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" + Path.DirectorySeparatorChar +
-                               "Configs" + Path.DirectorySeparatorChar + "localgameconf.json";
+                const string localGamePath = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp\SavedGames\game.json";
+                const string localLogPath = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp\GameLog\log.json";
+                const string? confFile = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp\Configs\standard.json";
                 if (!System.IO.File.Exists(localGamePath) || !System.IO.File.Exists(localGamePath) ||
                     !System.IO.File.Exists(confFile))
                 {

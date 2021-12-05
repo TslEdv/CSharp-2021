@@ -34,7 +34,7 @@ namespace WebApp.Pages
             _context.Ships.Add(Ship);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("ConfigShips/Create", new {id = id});
+            return RedirectToPage("/ConfigShips/Create", new {id = id});
         }
     }
 }

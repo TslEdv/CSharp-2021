@@ -1,14 +1,38 @@
 {
-  "Name": "KevinPaks",
-  "BoardSizeX": 15,
-  "BoardSizeY": 15,
+  "Name": null,
+  "BoardSizeX": 10,
+  "BoardSizeY": 10,
   "IsRandom": true,
   "ShipConfigs": [
     {
-      "Name": "SpongeBob",
-      "Quantity": 5,
+      "Name": "Patrol",
+      "Quantity": 1,
+      "ShipSizeY": 1,
+      "ShipSizeX": 1
+    },
+    {
+      "Name": "Cruiser",
+      "Quantity": 1,
+      "ShipSizeY": 1,
+      "ShipSizeX": 2
+    },
+    {
+      "Name": "Submarine",
+      "Quantity": 1,
       "ShipSizeY": 1,
       "ShipSizeX": 3
+    },
+    {
+      "Name": "Battleship",
+      "Quantity": 1,
+      "ShipSizeY": 1,
+      "ShipSizeX": 4
+    },
+    {
+      "Name": "Carrier",
+      "Quantity": 1,
+      "ShipSizeY": 1,
+      "ShipSizeX": 5
     }
   ],
   "EShipTouchRule": 0

@@ -10,6 +10,7 @@ using DAL;
 using Domain;
 using MenuSystem;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Ship = Domain.Ship;
 
 namespace BattleShipsConsoleApp
@@ -185,6 +186,31 @@ namespace BattleShipsConsoleApp
             brain.RestoreBrainFromJson(brainConf);
             Console.WriteLine("Player " + (brain.Move() + 1) + " turn");
             var done = false;
+            if (brain.GetGameStatus() == EGameStatus.Finished)
+            {
+                Console.WriteLine("Player " + brain.Move() + " won!");
+                while (true)
+                {
+                    Console.Write("Would you like to see the replay? (Y/N):");
+                    var answer = Console.ReadLine()?.ToUpper().Trim();
+                    switch (answer)
+                    {
+                        case "Y":
+                            RePlayGame(0);
+                            return "";
+                        case "N":
+                            Console.WriteLine("Thank you for playing!");
+                            Console.WriteLine();
+                            Thread.Sleep(2000);
+                            return "";
+                        default:
+                            Console.WriteLine("Thank you for playing!");
+                            Console.WriteLine();
+                            Thread.Sleep(2000);
+                            return "";
+                    }
+                }
+            }
             while (done != true)
             {
                 Console.Write("Start Game? (Y/N):");
@@ -221,6 +247,7 @@ namespace BattleShipsConsoleApp
 
                 while (true)
                 {
+                    restart1:
                     if (brain.GetGameStatus() == EGameStatus.Placing)
                     {
                         foreach (var ship in brain.ListShips(brain.Move()))
@@ -242,6 +269,8 @@ namespace BattleShipsConsoleApp
                                         continue;
                                     case 2:
                                         break;
+                                    case 3:
+                                        goto restart1;
                                 }
 
                                 break;
@@ -249,6 +278,7 @@ namespace BattleShipsConsoleApp
                         }
 
                         brain.ChangePlayer();
+                        restart2:
                         foreach (var ship in brain.ListShips(brain.Move()).Where(ship => ship.Coordinates.Count == 0))
                         {
                             if (ship.Coordinates.Count != 0) continue;
@@ -258,7 +288,6 @@ namespace BattleShipsConsoleApp
                                 {
                                     case 0:
                                         var jsonStr = brain.GetBrainJson(brain.Move());
-                                        Console.WriteLine(jsonStr);
                                         File.WriteAllText(_saveFileName!, jsonStr);
                                         File.WriteAllTextAsync(_filename!, savedConf.ToString());
                                         File.WriteAllTextAsync(_logFile!, brain.GetLogJson());
@@ -268,6 +297,8 @@ namespace BattleShipsConsoleApp
                                         continue;
                                     case 2:
                                         break;
+                                    case 3:
+                                        goto restart2;
                                 }
 
                                 break;
@@ -281,22 +312,22 @@ namespace BattleShipsConsoleApp
                     var ff1 = BsConsoleUi.Move(brain);
                     if (ff1 == "OVER")
                     {
-                        if (File.Exists(_saveFileName))
-                        {
-                            File.Delete(_saveFileName!);
-                        }
-
+                        brain.GameFinish();
+                        File.WriteAllTextAsync(_saveFileName!, brain.GetBrainJson(brain.Move()));
                         Thread.Sleep(5000);
                         return "";
                     }
 
                     if (ff1 == "FF")
                     {
+                        brain.GameSurrender();
+                        File.WriteAllTextAsync(_saveFileName!, brain.GetBrainJson(brain.Move()));
                         return "";
                     }
 
                     if (ff1 == "MISS")
                     {
+                        File.WriteAllTextAsync(_logFile!, brain.GetLogJson());
                         Console.WriteLine("You Missed!");
                         break;
                     }
@@ -313,7 +344,7 @@ namespace BattleShipsConsoleApp
                         Thread.Sleep(5000);
                         return "";
                     }
-
+                    File.WriteAllTextAsync(_logFile!, brain.GetLogJson());
                     Console.WriteLine("You Hit!");
                 }
 
@@ -376,7 +407,10 @@ namespace BattleShipsConsoleApp
             if (brain.GetGameStatus() == EGameStatus.Placing)
             {
                 var savedConf = JsonSerializer.Deserialize<GameConfig>(db.Configs.Find(currentGame.ConfigId).ConfigStr);
-                foreach (var ship in brain.ListShips(brain.Move()))
+                var list = brain.ListShips(brain.Move());
+                restart1:
+                Replay log;
+                foreach (var ship in list)
                 {
                     if (ship.Coordinates.Count != 0) continue;
                     while (true)
@@ -385,12 +419,13 @@ namespace BattleShipsConsoleApp
                         {
                             case 0:
                                 var jsonStr = brain.GetBrainJson(brain.Move());
-                                Console.WriteLine(jsonStr);
                                 var testFile = _basePath + Path.DirectorySeparatorChar + "SavedGames" +
                                                Path.DirectorySeparatorChar + "game.json";
                                 File.WriteAllText(testFile, jsonStr);
                                 currentGame.GameState = brain.GetBrainJson(brain.Move());
                                 currentGame.Status = brain.GetGameStatus();
+                                log = db.Replays.Find(currentGame.ReplayId);
+                                log.Replays = brain.GetLogJson();
                                 db.SaveChanges();
                                 Console.WriteLine("Your Game ID: " + currentGame.GameId);
                                 Thread.Sleep(5000);
@@ -399,6 +434,8 @@ namespace BattleShipsConsoleApp
                                 continue;
                             case 2:
                                 break;
+                            case 3:
+                                goto restart1;
                         }
 
                         break;
@@ -406,6 +443,7 @@ namespace BattleShipsConsoleApp
                 }
 
                 brain.ChangePlayer();
+                restart2:
                 foreach (var ship in brain.ListShips(brain.Move()).Where(ship => ship.Coordinates.Count == 0))
                 {
                     if (ship.Coordinates.Count != 0) continue;
@@ -415,12 +453,13 @@ namespace BattleShipsConsoleApp
                         {
                             case 0:
                                 var jsonStr = brain.GetBrainJson(brain.Move());
-                                Console.WriteLine(jsonStr);
                                 var testFile = _basePath + Path.DirectorySeparatorChar + "SavedGames" +
                                                Path.DirectorySeparatorChar + "game.json";
                                 File.WriteAllText(testFile, jsonStr);
                                 currentGame.GameState = brain.GetBrainJson(brain.Move());
                                 currentGame.Status = brain.GetGameStatus();
+                                log = db.Replays.Find(currentGame.ReplayId);
+                                log.Replays = brain.GetLogJson();
                                 db.SaveChanges();
                                 Console.WriteLine("Your Game ID: " + currentGame.GameId);
                                 Thread.Sleep(5000);
@@ -429,6 +468,8 @@ namespace BattleShipsConsoleApp
                                 continue;
                             case 2:
                                 break;
+                            case 3:
+                                goto restart2;
                         }
 
                         break;
@@ -539,6 +580,7 @@ namespace BattleShipsConsoleApp
             var id = Convert.ToInt32(gameId);
             var currentGame = db.Games.Find(id);
             brain.RestoreBrainFromJson(db.Games.Find(id).GameState);
+            brain.RestoreLog(db.Replays.Find(db.Games.Find(id).ReplayId).Replays!);
             PlayGame(brain, currentGame);
             return "";
         }

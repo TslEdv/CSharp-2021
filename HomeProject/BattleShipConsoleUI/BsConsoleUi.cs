@@ -235,6 +235,11 @@ namespace BattleShipConsoleUI
 
                         break;
                     }
+                    case ConsoleKey.B:
+                    {
+                        brain.GoBackAStep();
+                        return 3;
+                    }
                     case ConsoleKey.X:
                     {
                         return 0;
@@ -316,6 +321,7 @@ namespace BattleShipConsoleUI
             Console.WriteLine();
             Console.WriteLine("Press X to SAVE and EXIT");
             Console.WriteLine("Press R to rotate the ship");
+            Console.WriteLine("Press B to undo");
             Console.WriteLine("Press ENTER to place the ship");
             Console.WriteLine();
         }

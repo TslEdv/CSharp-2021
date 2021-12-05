@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Xml;
 
 namespace BattleShipBrain
 {
@@ -349,7 +350,6 @@ namespace BattleShipBrain
                     dto.GameBoards[i].Board?.Add(xValues);
                 }
             }
-
             var jsonStr = JsonSerializer.Serialize(dto, jsonOptions);
             return jsonStr;
         }
@@ -383,6 +383,31 @@ namespace BattleShipBrain
 
                 x = 0;
                 y = 0;
+            }
+        }
+
+        public void GoBackAStep()
+        {
+            if (_status != EGameStatus.Placing)
+            {
+                return;
+            }
+
+            if (_gameBoards[Move()].Ships![0].Coordinates.Count == 0)
+            {
+                return;
+            }
+            
+            for (var i = 0; i < _gameBoards[Move()].Ships!.Count; i++)
+            {
+                if (_gameBoards[Move()].Ships![i].Coordinates.Count != 0) continue;
+                var ship = _gameBoards[Move()].Ships![i-1];
+                foreach (var coordinate in ship.Coordinates)
+                {
+                    _gameLog.Remove(_gameLog[^1]);
+                    _gameBoards[Move()].Board[coordinate.X, coordinate.Y].IsShip = false;
+                }
+                _gameBoards[Move()].Ships![i-1].Coordinates = new List<Coordinate>();
             }
         }
 

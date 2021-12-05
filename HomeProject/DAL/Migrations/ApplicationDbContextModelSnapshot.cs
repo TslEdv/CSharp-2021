@@ -33,7 +33,8 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ConfigName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ConfigStr")
                         .IsRequired()
@@ -136,7 +137,8 @@ namespace DAL.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<int>("ShipHeight")
                         .HasColumnType("int");

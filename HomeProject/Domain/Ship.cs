@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain
 {
@@ -6,6 +7,7 @@ namespace Domain
     {
         public int ShipId { get; set; }
         
+        [MaxLength(128)]
         public string Name { get; set; } = default!;
         
         public int ShipLength { get; set; }

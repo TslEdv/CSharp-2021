@@ -22,7 +22,7 @@ namespace WebApp.Pages
         public EGameStatus State;
         public int Rotate;
 
-        public async Task<IActionResult> OnGetAsync(int x, int y, int move, int rotation)
+        public async Task<IActionResult> OnGetAsync(int x, int y, int move, int rotation, int undo)
         {
             string localGamePath = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" +
                                    Path.DirectorySeparatorChar + "SavedGames" + Path.DirectorySeparatorChar +
@@ -49,6 +49,15 @@ namespace WebApp.Pages
                         Player += Brain.Move() + 1 + " wins";
                         return Page();
                     case EGameStatus.Placing:
+                        if (undo == 1)
+                        {
+                            Brain.GoBackAStep();
+                            await System.IO.File.WriteAllTextAsync(localGamePath,
+                                Brain.GetBrainJson(Brain.Move()));
+                            await System.IO.File.WriteAllTextAsync(confFile, savedConf!.ToString());
+                            await System.IO.File.WriteAllTextAsync(localLogPath, Brain.GetLogJson());
+                            return RedirectToPage("/LocalGame");
+                        }
                         Rotate = rotation;
                         switch (move)
                         {
@@ -147,26 +156,23 @@ namespace WebApp.Pages
             }
         }
 
-        public RedirectToPageResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
-            string localGamePath = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" +
-                                   Path.DirectorySeparatorChar + "SavedGames" + Path.DirectorySeparatorChar +
-                                   "game.json";
+            const string localGamePath = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp\SavedGames\game.json";
             string localLogPath = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" +
                                   Path.DirectorySeparatorChar + "GameLog" +
                                   Path.DirectorySeparatorChar + "log.json";
             var confFile = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" + Path.DirectorySeparatorChar +
-                           "Configs" + Path.DirectorySeparatorChar + "localgameconf.json";
-            if (!System.IO.File.Exists(localGamePath) || !System.IO.File.Exists(localGamePath) ||
+                           "Configs" + Path.DirectorySeparatorChar + "standard.json";
+            if (!System.IO.File.Exists(localGamePath) || !System.IO.File.Exists(localLogPath) ||
                 !System.IO.File.Exists(confFile))
             {
                 return RedirectToPage("./LoadGame");
             }
             
-            System.IO.File.Delete(localGamePath);
-            System.IO.File.Delete(localLogPath);
-            System.IO.File.Delete(confFile);
-
+            Brain!.RestoreBrainFromJson(await System.IO.File.ReadAllTextAsync(localGamePath));
+            Brain.GameSurrender();
+            await System.IO.File.WriteAllTextAsync(localGamePath, Brain.GetBrainJson(Brain.Move()));
             return RedirectToPage("./LoadGame");
         }
     }

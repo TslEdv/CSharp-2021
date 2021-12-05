@@ -71,7 +71,11 @@ namespace BattleShipBrain
                 return false;
             }
 
-            if (ShipConfigs.Any(ship => ship.Quantity == 0))
+            if (ShipConfigs.Any(ship => ship.Quantity <= 0))
+            {
+                return false;
+            }
+            if (ShipConfigs.Any(ship => ship.ShipSizeX <= 0 || ship.ShipSizeY <= 0 ))
             {
                 return false;
             }

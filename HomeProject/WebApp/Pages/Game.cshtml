@@ -106,7 +106,7 @@ else if (Model.State == EGameStatus.Placing)
         </table>
     </div>
     
-    <div style="margin-top: 50px">
+    <div style="margin-top: 20px">
         @if (Model.Rotate == 0)
         {
             <text>
@@ -123,9 +123,13 @@ else if (Model.State == EGameStatus.Placing)
                      onclick="window.location.href ='/Game?id=@Model.GameId&rotation=0'"/>
             </text>
         }
+        <text>
+            <img src="https://previews.123rf.com/images/valentint/valentint1704/valentint170400171/75400830-undo-icon-undo-website-button-on-white-background-.jpg" 
+                 alt="" width="60" height="60" onclick="window.location.href ='/Game?id=@Model.GameId&undo=1'"/>
+        </text>
     </div>
-    
-    <div style="margin-top: 50px">
+
+    <div style="margin-top: 20px">
         <form method="post">
             <input type="hidden" asp-for="CurrentGame.GameId"/>
             <input type="submit" value="Surrender" class="btn btn-danger"/> |
@@ -216,7 +220,7 @@ else
         </form>
     </div>
     
-    @if (Model.Pause)
+    @if (Game.Pause)
     {
         <div>
             You Missed!

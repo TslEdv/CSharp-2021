@@ -31,9 +31,9 @@ namespace WebApp.Pages
         public Ship? CurrentShip;
         public EGameStatus State;
         public int Rotate;
-        public bool Pause = false;
+        public const bool Pause = false;
 
-        public async Task<IActionResult> OnGetAsync(int id, int x, int y, int move, int rotation)
+        public async Task<IActionResult> OnGetAsync(int id, int x, int y, int move, int rotation, int undo)
         {
             GameId = id;
             CurrentGame = await _ctx.Games.FindAsync(id);
@@ -59,6 +59,18 @@ namespace WebApp.Pages
                     Player += Brain.Move() + 1 + " wins";
                     return Page();
                 case EGameStatus.Placing:
+                    if (undo == 1)
+                    {
+                        Brain.GoBackAStep();
+                        var log = await _ctx.Replays.FindAsync(CurrentGame.ReplayId);
+                        log.Replays = Brain.GetLogJson();
+                        Brain.StartGame();
+                        CurrentGame.Replay!.Replays = Brain.GetLogJson();
+                        CurrentGame.GameState = Brain.GetBrainJson(Brain.Move());
+                        CurrentGame.Status = Brain.GetGameStatus();
+                        await _ctx.SaveChangesAsync();
+                        return RedirectToPage("./Game", new {id = GameId});
+                    }
                     Rotate = rotation;
                     switch (move)
                     {
@@ -174,15 +186,12 @@ namespace WebApp.Pages
             CurrentGame = await _ctx.Games.FindAsync(id);
             Brain!.RestoreBrainFromJson(CurrentGame.GameState);
 
-            if (CurrentGame != null)
-            {
-                Brain.GameSurrender();
-                CurrentGame.Status = Brain.GetGameStatus();
-                CurrentGame.GameState = Brain.GetBrainJson(Brain.Move());
-                await _ctx.SaveChangesAsync();
-            }
+            Brain.GameSurrender();
+            CurrentGame.Status = Brain.GetGameStatus();
+            CurrentGame.GameState = Brain.GetBrainJson(Brain.Move());
+            await _ctx.SaveChangesAsync();
 
-            return Page();
+            return RedirectToPage("./Game", new {id = id});
         }
     }
 }

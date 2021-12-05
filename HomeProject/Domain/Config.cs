@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using BattleShipBrain;
 
 namespace Domain
@@ -8,6 +9,7 @@ namespace Domain
     {
         public int ConfigId { get; set; }
         
+        [MaxLength(128)]
         public string? ConfigName { get; set; }
         
         public bool IsRandom { get; set; }

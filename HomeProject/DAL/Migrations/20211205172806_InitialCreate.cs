@@ -12,7 +12,7 @@ namespace DAL.Migrations
                 {
                     ConfigId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ConfigName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConfigName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
                     IsRandom = table.Column<bool>(type: "bit", nullable: false),
                     BoardSizeX = table.Column<int>(type: "int", nullable: false),
                     BoardSizeY = table.Column<int>(type: "int", nullable: false),
@@ -44,7 +44,7 @@ namespace DAL.Migrations
                 {
                     ShipId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     ShipLength = table.Column<int>(type: "int", nullable: false),
                     ShipHeight = table.Column<int>(type: "int", nullable: false)
                 },
