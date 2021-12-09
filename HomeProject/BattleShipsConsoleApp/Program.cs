@@ -10,7 +10,6 @@ using DAL;
 using Domain;
 using MenuSystem;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Ship = Domain.Ship;
 
 namespace BattleShipsConsoleApp
@@ -344,8 +343,17 @@ namespace BattleShipsConsoleApp
                         Thread.Sleep(5000);
                         return "";
                     }
-                    File.WriteAllTextAsync(_logFile!, brain.GetLogJson());
-                    Console.WriteLine("You Hit!");
+                    if (ff1 == "SUNK")
+                    {
+                        File.WriteAllTextAsync(_logFile!, brain.GetLogJson());
+                        Console.WriteLine("You Hit!");
+                        Console.WriteLine("The ship sunk!");
+                    }
+                    else
+                    {
+                        File.WriteAllTextAsync(_logFile!, brain.GetLogJson());
+                        Console.WriteLine("You Hit!"); 
+                    }
                 }
 
                 Thread.Sleep(5000);
@@ -358,7 +366,7 @@ namespace BattleShipsConsoleApp
             currentGame = db.Games.Find(currentGame.GameId);
             if (brain.GetGameStatus() == EGameStatus.Finished)
             {
-                Console.WriteLine("Player " + brain.Move() + " won!");
+                Console.WriteLine("Player " + brain.Move()+1 + " won!");
                 while (true)
                 {
                     Console.Write("Would you like to see the replay? (Y/N):");
@@ -560,13 +568,20 @@ namespace BattleShipsConsoleApp
                         Thread.Sleep(5000);
                         return;
                     }
-
-                    Console.WriteLine("You Hit!");
-                    log = db.Replays.Find(currentGame.ReplayId);
-                    log.Replays = brain.GetLogJson();
-                    currentGame.GameState = brain.GetBrainJson(brain.Move());
-                    currentGame.Status = brain.GetGameStatus();
-                    db.SaveChanges();
+                    if (ff1 == "SUNK")
+                    {
+                        Console.WriteLine("You Hit!");
+                        Console.WriteLine("The ship sunk!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("You Hit!");
+                        log = db.Replays.Find(currentGame.ReplayId);
+                        log.Replays = brain.GetLogJson();
+                        currentGame.GameState = brain.GetBrainJson(brain.Move());
+                        currentGame.Status = brain.GetGameStatus();
+                        db.SaveChanges();
+                    }
                 }
 
                 Thread.Sleep(5000);

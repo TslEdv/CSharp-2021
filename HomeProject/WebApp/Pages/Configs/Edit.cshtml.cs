@@ -35,7 +35,7 @@ namespace WebApp.Pages_Configs
                 return NotFound();
             }
 
-            foreach (var ship in _context.ConfigShips)
+            foreach (var ship in _context.ConfigShips.Include(cs => cs.Ship))
             {
                 if (ship.ConfigId == id)
                 {
@@ -58,7 +58,7 @@ namespace WebApp.Pages_Configs
         public async Task<IActionResult> OnPostAsync()
         {
             _context.Attach(Config).State = EntityState.Modified;
-            
+
             List<Game> games = _context.Games.ToList();
             if (games.Any(game => Config.ConfigId == game.ConfigId))
             {
@@ -71,6 +71,17 @@ namespace WebApp.Pages_Configs
             savedConf.BoardSizeX = Config.BoardSizeX;
             savedConf.BoardSizeY = Config.BoardSizeY;
             savedConf.EShipTouchRule = Config.TouchRule;
+            savedConf.ShipConfigs = new List<ShipConfig>();
+            foreach (var ship in _context.ConfigShips.Where(cs=> cs.ConfigId == Config.ConfigId).Include(cs => cs.Ship))
+            {
+                savedConf.ShipConfigs.Add(new ShipConfig
+                {
+                    Name = ship.Ship!.Name,
+                    Quantity = ship.Quantity,
+                    ShipSizeX = ship.Ship.ShipLength,
+                    ShipSizeY = ship.Ship.ShipHeight
+                });
+            }
 
             Config.ConfigStr = savedConf.ToString();
 

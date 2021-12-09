@@ -25,8 +25,8 @@ namespace WebApp.Pages
 
         public async Task<IActionResult> OnGet(int id)
         {
-            var brain = new BsBrain(new GameConfig());
             var saveGameDb = new Domain.Game();
+            BsBrain brain;
             if (id != 0)
             {
                 Config = await _ctx.Configs.FindAsync(id);
@@ -45,8 +45,10 @@ namespace WebApp.Pages
             }
             else
             {
+                brain = new BsBrain(new GameConfig());
                 Config.ConfigStr = new GameConfig().ToString();
             }
+
             var jsonStr = brain.GetBrainJson(brain.Move());
 
             saveGameDb.GameState = jsonStr;

@@ -31,9 +31,11 @@ namespace WebApp.Pages
         public Ship? CurrentShip;
         public EGameStatus State;
         public int Rotate;
-        public const bool Pause = false;
+        public bool Start;
+        public bool Hit = false;
+        public bool Sunk = false;
 
-        public async Task<IActionResult> OnGetAsync(int id, int x, int y, int move, int rotation, int undo)
+        public async Task<IActionResult> OnGetAsync(int id, int x, int y, int move, int rotation, int undo, int start)
         {
             GameId = id;
             CurrentGame = await _ctx.Games.FindAsync(id);
@@ -41,6 +43,8 @@ namespace WebApp.Pages
             Brain!.RestoreLog(replay.Replays!);
             Brain!.RestoreBrainFromJson(CurrentGame.GameState);
             State = Brain.GetGameStatus();
+            var countStart = 0;
+            var countEnd = 0;
             var savedConf = new GameConfig();
             if (CurrentGame.ConfigId != null)
             {
@@ -147,7 +151,9 @@ namespace WebApp.Pages
                             break;
                         case 1:
                             var before = Brain.GetFireBoard(Brain.Move());
+                            countStart = Brain.DidSink();
                             var change = Brain.PlayerMove(x, y);
+                            countEnd = Brain.DidSink();
                             before[x, y].IsBomb = true;
                             var log = await _ctx.Replays.FindAsync(CurrentGame.ReplayId);
                             log.Replays = Brain.GetLogJson();
@@ -166,10 +172,23 @@ namespace WebApp.Pages
                             {
                                 return RedirectToPage("./MissMove", new {id = GameId});
                             }
+                            else
+                            {
+                                Hit = true;
+                                if (countStart < countEnd)
+                                {
+                                    Sunk = true;
+                                }
+                            }
                             break;
                             
                     }
-
+                    if (start == 1)
+                    {
+                        Start = true;
+                        Player = "Player " + (Brain.Move() + 1);
+                        return Page();
+                    }
                     return Page();
                 default:
                     throw new ArgumentOutOfRangeException();

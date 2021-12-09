@@ -33,7 +33,7 @@ namespace WebApp.Pages
         private string LocalConfPath { get; set; } = @"C:\Users\User\Desktop\C#\HomeProject\BattleShipsConsoleApp" + Path.DirectorySeparatorChar +
                                                      "Configs" + Path.DirectorySeparatorChar + "standard.json";
         public EGameStatus State { get; set; }
-        
+
         public async Task<IActionResult> OnGet()
         {
             var brain = new BsBrain(new GameConfig());

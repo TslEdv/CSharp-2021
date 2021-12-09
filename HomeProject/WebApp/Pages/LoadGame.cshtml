@@ -33,7 +33,7 @@
     <tbody>
     @if (System.IO.File.Exists(Model.LocalGamePath) && System.IO.File.Exists(Model.LocalLogPath))
     {
-        <tr onclick="window.location.href = '/LocalGame?' ">
+        <tr onclick="window.location.href = '/LocalGame?start=1' ">
             <td>
                 Local Game
             </td>
@@ -44,21 +44,20 @@
                 Local
             </td>
             <td>
-                
             </td>
             <td>
                 @if (Model.State == (EGameStatus) 2)
                 {
-                <a asp-page="/ReplayGame" asp-route-id="0">Replay | </a>
+                    <a asp-page="/ReplayGame" asp-route-id="0">Replay | </a>
                 }
                 <a asp-page="/DeleteGame" asp-route-id="0">Delete</a>
             </td>
 
-        </tr> 
+        </tr>
     }
     @foreach (var item in Model.Games)
     {
-        <tr onclick="window.location.href = '/Game?id=@item.GameId' ">
+        <tr onclick="window.location.href = '/Game?id=@item.GameId&start=1' ">
             <td>
                 @Html.DisplayFor(modelItem => item.GameId)
             </td>
@@ -91,18 +90,3 @@
     }
     </tbody>
 </table>
-
-
-@*<form method="POST">
-    <select class="form-select" aria-label="Game select">
-        <option selected>Choose a game by ID</option>
-        @foreach (var game in Model.Games)
-        {
-            <option value="@game.GameId">@game.GameId</option>
-        }
-    </select>
-                <div class="form-group">
-                    <input type="submit" value="Start" class="btn btn-primary" />
-                </div>
-</form>
-*@

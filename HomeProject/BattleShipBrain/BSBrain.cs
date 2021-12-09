@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using System.Xml;
 
 namespace BattleShipBrain
 {
@@ -85,11 +84,13 @@ namespace BattleShipBrain
             ChangePlayer();
             _status = EGameStatus.Finished;
         }
+
         public bool GameFinish()
         {
             foreach (var gameBoard in _gameBoards)
             {
-                var sunk = gameBoard.Ships!.Where(ship => ship.Coordinates.Count != 0).Count(ship => ship.IsShipSunk(gameBoard.Board) == "Sunk");
+                var sunk = gameBoard.Ships!.Where(ship => ship.Coordinates.Count != 0)
+                    .Count(ship => ship.IsShipSunk(gameBoard.Board) == "Sunk");
 
                 if (gameBoard.Ships == null || sunk != gameBoard.Ships.Count) continue;
                 _status = EGameStatus.Finished;
@@ -187,7 +188,7 @@ namespace BattleShipBrain
             var turn = _currentPlayerNo;
             return turn;
         }
-        
+
         public void ChangePlayer()
         {
             _currentPlayerNo = _currentPlayerNo switch
@@ -226,6 +227,7 @@ namespace BattleShipBrain
             {
                 return false;
             }
+
             if (_gameBoards[NextMove()].Board[x, y].IsBomb &&
                 _gameBoards[NextMove()].Board[x, y].IsShip)
             {
@@ -247,7 +249,8 @@ namespace BattleShipBrain
             {
                 return "MISS";
             }
-
+            var countEnd = 0;
+            var countStart = _gameBoards[1].Ships!.Count(ship => ship.IsShipSunk(_gameBoards[1].Board) == "Sunk");
             _gameBoards[1].Board[x, y].Bombing();
             _gameLog.Add(new ReplayTile
             {
@@ -261,6 +264,12 @@ namespace BattleShipBrain
             switch (_gameBoards[1].Board[x, y].IsShip, _gameBoards[1].Board[x, y].IsBomb)
             {
                 case (true, true):
+                    countEnd += _gameBoards[1].Ships!.Count(ship => ship.IsShipSunk(_gameBoards[1].Board) == "Sunk");
+
+                    if (countEnd > countStart)
+                    {
+                        return "SUNK";
+                    }
                     break;
                 case (false, true):
                     _currentPlayerNo = 1;
@@ -270,6 +279,17 @@ namespace BattleShipBrain
             return "";
         }
 
+        public int DidSink()
+        {
+            var countStart = _currentPlayerNo switch
+            {
+                0 => _gameBoards[1].Ships!.Count(ship => ship.IsShipSunk(_gameBoards[1].Board) == "Sunk"),
+                1 => _gameBoards[0].Ships!.Count(ship => ship.IsShipSunk(_gameBoards[0].Board) == "Sunk"),
+                _ => 0
+            };
+
+            return countStart;
+        }
         public string Player2Move(int x, int y)
         {
             if (x > _gameBoards[0].Board.GetLength(0) - 1 || y > _gameBoards[0].Board.GetLength(1) - 1)
@@ -277,6 +297,8 @@ namespace BattleShipBrain
                 return "MISS";
             }
 
+            var countEnd = 0;
+            var countStart = _gameBoards[0].Ships!.Count(ship => ship.IsShipSunk(_gameBoards[0].Board) == "Sunk");
             _gameBoards[0].Board[x, y].Bombing();
             _gameLog.Add(new ReplayTile
             {
@@ -290,6 +312,18 @@ namespace BattleShipBrain
             switch (_gameBoards[0].Board[x, y].IsShip, _gameBoards[0].Board[x, y].IsBomb)
             {
                 case (true, true):
+                    foreach (var ship in _gameBoards[0].Ships!)
+                    {
+                        if (ship.IsShipSunk(_gameBoards[0].Board) == "Sunk")
+                        {
+                            countEnd++;
+                        }
+                    }
+
+                    if (countEnd > countStart)
+                    {
+                        return "SUNK";
+                    }
                     break;
                 case (false, true):
                     _currentPlayerNo = 0;
@@ -305,14 +339,15 @@ namespace BattleShipBrain
             {
                 WriteIndented = true
             };
-            
+
             return JsonSerializer.Serialize(_gameLog, jsonOptions);
         }
 
         public void RestoreLog(string log)
         {
-           _gameLog = JsonSerializer.Deserialize<List<ReplayTile>>(log)!;
+            _gameLog = JsonSerializer.Deserialize<List<ReplayTile>>(log)!;
         }
+
         public string GetBrainJson(int playerNum)
         {
             var jsonOptions = new JsonSerializerOptions()
@@ -350,6 +385,7 @@ namespace BattleShipBrain
                     dto.GameBoards[i].Board?.Add(xValues);
                 }
             }
+
             var jsonStr = JsonSerializer.Serialize(dto, jsonOptions);
             return jsonStr;
         }
@@ -397,23 +433,32 @@ namespace BattleShipBrain
             {
                 return;
             }
-            
+
             for (var i = 0; i < _gameBoards[Move()].Ships!.Count; i++)
             {
                 if (_gameBoards[Move()].Ships![i].Coordinates.Count != 0) continue;
-                var ship = _gameBoards[Move()].Ships![i-1];
+                var ship = _gameBoards[Move()].Ships![i - 1];
                 foreach (var coordinate in ship.Coordinates)
                 {
                     _gameLog.Remove(_gameLog[^1]);
                     _gameBoards[Move()].Board[coordinate.X, coordinate.Y].IsShip = false;
                 }
-                _gameBoards[Move()].Ships![i-1].Coordinates = new List<Coordinate>();
+
+                _gameBoards[Move()].Ships![i - 1].Coordinates = new List<Coordinate>();
             }
         }
 
         private void FillBoardRandom(GameConfig config)
         {
-            Random rand = new(Guid.NewGuid().GetHashCode());
+            if (config.BoardSizeY == 1 && config.BoardSizeX == 1)
+            {
+                PlaceShips(0, 0, 0, 0, _gameBoards[0].Ships![0], config.EShipTouchRule);
+                ChangePlayer();
+                PlaceShips(0, 0, 0, 0, _gameBoards[1].Ships![0], config.EShipTouchRule);
+                return;
+            }
+
+            Random rand = new();
             for (var p = 0; p < 2; p++)
             {
                 foreach (var ship in _gameBoards[p].Ships!)
@@ -421,8 +466,8 @@ namespace BattleShipBrain
                     var isOpen = true;
                     while (isOpen)
                     {
-                        var startColumn = rand.Next(0, _gameBoards[0].Board.GetLength(0) - 1);
-                        var startRow = rand.Next(0, _gameBoards[0].Board.GetLength(1) - 1);
+                        var startColumn = rand.Next(0, _gameBoards[0].Board.GetLength(0));
+                        var startRow = rand.Next(0, _gameBoards[0].Board.GetLength(1));
                         int endRow = startRow, endColumn = startColumn;
                         var orientation = rand.Next(1, 101) % 2; //0 for Horizontal
 
@@ -450,8 +495,7 @@ namespace BattleShipBrain
                                 endRow++;
                             }
                         }
-
-                        if (endRow > _gameBoards[0].Board.GetLength(1) - 1 - 1 ||
+                        if (endRow > _gameBoards[0].Board.GetLength(1) - 1 ||
                             endColumn > _gameBoards[0].Board.GetLength(0) - 1)
                         {
                             isOpen = true;
@@ -473,7 +517,8 @@ namespace BattleShipBrain
 
                         if (count == ship.Height * ship.Length)
                         {
-                            if (PlaceShips(startColumn, endColumn, startRow, endRow, ship, config.EShipTouchRule) == false)
+                            if (PlaceShips(startColumn, endColumn, startRow, endRow, ship, config.EShipTouchRule) ==
+                                false)
                             {
                                 continue;
                             }
@@ -488,13 +533,14 @@ namespace BattleShipBrain
                         isOpen = false;
                     }
                 }
+
                 ChangePlayer();
             }
         }
 
         public bool PlaceShips(int x, int xEnd, int y, int yEnd, Ship ship, EShipTouchRule rule)
         {
-            List<Coordinate> testCoordinates = new ();
+            List<Coordinate> testCoordinates = new();
             for (var i = x; i < xEnd + 1; i++)
             {
                 for (var j = y; j < yEnd + 1; j++)
@@ -510,6 +556,7 @@ namespace BattleShipBrain
                         if (i < _gameBoards[0].Board.GetLength(0) && j < _gameBoards[0].Board.GetLength(1))
                         {
                             testCoordinates.Add(new Coordinate(i, j));
+                            break;
                         }
                         else
                         {
@@ -536,7 +583,8 @@ namespace BattleShipBrain
                             for (var j = -1; j < 2; j++)
                             {
                                 if (coordinate.X + i < 0 || coordinate.X + i >= _gameBoards[0].Board.GetLength(0) ||
-                                    coordinate.Y + j < 0 || coordinate.Y + j >= _gameBoards[0].Board.GetLength(1)) continue;
+                                    coordinate.Y + j < 0 ||
+                                    coordinate.Y + j >= _gameBoards[0].Board.GetLength(1)) continue;
                                 if (_gameBoards[_currentPlayerNo].Board[coordinate.X + i, coordinate.Y + j].IsShip)
                                 {
                                     return false;
@@ -544,6 +592,7 @@ namespace BattleShipBrain
                             }
                         }
                     }
+
                     break;
                 case EShipTouchRule.CornerTouch:
                     foreach (var coordinate in testCoordinates)
@@ -553,11 +602,13 @@ namespace BattleShipBrain
                             for (var j = -1; j < 2; j++)
                             {
                                 if (coordinate.X + i < 0 || coordinate.X + i >= _gameBoards[0].Board.GetLength(0) ||
-                                    coordinate.Y + j < 0 || coordinate.Y + j >= _gameBoards[0].Board.GetLength(1)) continue;
+                                    coordinate.Y + j < 0 ||
+                                    coordinate.Y + j >= _gameBoards[0].Board.GetLength(1)) continue;
                                 if (_gameBoards[_currentPlayerNo].Board[coordinate.X, coordinate.Y + j].IsShip)
                                 {
                                     return false;
                                 }
+
                                 if (_gameBoards[_currentPlayerNo].Board[coordinate.X + i, coordinate.Y].IsShip)
                                 {
                                     return false;
@@ -565,6 +616,7 @@ namespace BattleShipBrain
                             }
                         }
                     }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(rule), rule, null);
@@ -594,7 +646,7 @@ namespace BattleShipBrain
             {
                 _gameLog.Add(logTile);
             }
-            
+
             return true;
         }
 
@@ -604,6 +656,7 @@ namespace BattleShipBrain
             {
                 return;
             }
+
             _status = EGameStatus.Started;
         }
     }

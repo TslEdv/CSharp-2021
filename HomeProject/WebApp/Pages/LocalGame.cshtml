@@ -25,7 +25,18 @@
           margin-right: 20px;
       } 
     </style>
-@if (Model.State == EGameStatus.Finished)
+@if (Model.Start)
+{
+    <script>          
+    setTimeout(function(){
+    window.location.href = '/LocalGame?';}
+    ,3000);
+    </script>
+    <div class="text-center">
+        <h1 class="display-4">Game Starting - @Model.Player Turn</h1>
+    </div>
+}
+else if (Model.State == EGameStatus.Finished)
 {
     <div class="text-center">
         <h1 class="display-4">Game Over - @Model.Player !</h1>
@@ -140,6 +151,18 @@ else
     <div class="text-center">
         <h1 class="display-4">@Model.Player</h1>
     </div>
+    if (Model.Hit)
+    {
+        <div class="text-center">
+            <h1 class="display-6">You Hit!</h1>
+        </div>
+    }
+    if (Model.Sunk)
+    {
+        <div class="text-center">
+            <h1 class="display-6">The ship has sunk!</h1>
+        </div>
+    }
 
     <div class="flex-container">
         <div class="flex-child firetable">

@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace BattleShipBrain
+﻿namespace BattleShipBrain
 {
     public struct BoardSquareState
     {

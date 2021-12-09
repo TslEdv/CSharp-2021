@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.Json;
 
@@ -94,10 +93,12 @@ namespace BattleShipBrain
                     countSize = ShipConfigs.Sum(ship => ship.Quantity * ship.ShipSizeX * ship.ShipSizeY);
                     return countSize <= BoardSizeX * BoardSizeY;
                 case EShipTouchRule.NoTouch:
-                    countSize = ShipConfigs.Sum(ship => ship.Quantity * (ship.ShipSizeX * ship.ShipSizeY + 2 * ship.ShipSizeX + 2 * ship.ShipSizeY + 4));
+                    countSize = ShipConfigs.Sum(ship => ship.Quantity * (ship.ShipSizeX * ship.ShipSizeY + 2 * ship.ShipSizeX + 2 * ship.ShipSizeY + 4)) 
+                                - BoardSizeX*2 - BoardSizeY*2;
                     return countSize <= BoardSizeX * BoardSizeY;
                 case EShipTouchRule.CornerTouch:
-                    countSize = ShipConfigs.Sum(ship => ship.Quantity * (ship.ShipSizeX * ship.ShipSizeY + 2 * ship.ShipSizeX + 2 * ship.ShipSizeY));
+                    countSize = ShipConfigs.Sum(ship => ship.Quantity * (ship.ShipSizeX * ship.ShipSizeY + 2 * ship.ShipSizeX + 2 * ship.ShipSizeY))
+                                - BoardSizeX*2 - BoardSizeY*2;
                     return countSize <= BoardSizeX * BoardSizeY;
                 default:
                     throw new ArgumentOutOfRangeException();

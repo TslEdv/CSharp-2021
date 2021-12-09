@@ -1,39 +1,15 @@
 {
-  "Name": null,
+  "Name": "naem",
   "BoardSizeX": 10,
   "BoardSizeY": 10,
   "IsRandom": true,
   "ShipConfigs": [
     {
-      "Name": "Patrol",
-      "Quantity": 1,
-      "ShipSizeY": 1,
+      "Name": "new",
+      "Quantity": 3,
+      "ShipSizeY": 2,
       "ShipSizeX": 1
-    },
-    {
-      "Name": "Cruiser",
-      "Quantity": 1,
-      "ShipSizeY": 1,
-      "ShipSizeX": 2
-    },
-    {
-      "Name": "Submarine",
-      "Quantity": 1,
-      "ShipSizeY": 1,
-      "ShipSizeX": 3
-    },
-    {
-      "Name": "Battleship",
-      "Quantity": 1,
-      "ShipSizeY": 1,
-      "ShipSizeX": 4
-    },
-    {
-      "Name": "Carrier",
-      "Quantity": 1,
-      "ShipSizeY": 1,
-      "ShipSizeX": 5
     }
   ],
-  "EShipTouchRule": 0
+  "EShipTouchRule": 1
 }

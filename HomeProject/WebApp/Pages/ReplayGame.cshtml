@@ -65,10 +65,10 @@
             <caption style="text-align:center">Player 2 Board</caption>
             @for (var y = 0; y < Model.Board2!.GetLength(1); y++)
             {
-                <tr style="height: 30px;">
+                <tr style="height: 30px; width: 30px">
                     @for (var x = 0; x < Model.Board2.GetLength(0); x++)
                     {
-                        <td>
+                        <td style="width: 30px; height: 30px">
                             @switch(Model.Board2[x, y].IsShip, Model.Board2[x, y].IsBomb)
                             {
                                 case (false,false):

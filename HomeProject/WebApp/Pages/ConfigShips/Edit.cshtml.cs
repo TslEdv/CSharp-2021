@@ -68,7 +68,7 @@ namespace WebApp.Pages_ConfigShips
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("/Configs/Edit", new {id = ConfigShip.ConfigId});
         }
 
         private bool ConfigShipExists(int id)

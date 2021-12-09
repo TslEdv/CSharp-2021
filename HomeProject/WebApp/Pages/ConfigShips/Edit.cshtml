@@ -14,6 +14,7 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ConfigShip.ConfigShipId" />
+            <input type="hidden" asp-for="ConfigShip.ConfigId" />
             <div class="form-group">
                 <label asp-for="ConfigShip.Quantity" class="control-label"></label>
                 <input asp-for="ConfigShip.Quantity" class="form-control" />
