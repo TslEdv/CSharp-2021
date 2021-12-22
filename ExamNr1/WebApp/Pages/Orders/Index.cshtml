@@ -1,0 +1,102 @@
+@page
+@model WebApp.Pages_Orders.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<form method="get">
+    <div class="row">
+        <div class="col-4">
+            <div class="mb-3">
+                <label for="searchName" class="form-label">Client Name</label>
+                <input type="text" class="form-control" id="searchName" name="searchName" placeholder="Edvin" value="@Model.SearchName">
+            </div>
+            <div class="mb-3">
+                <label for="searchIngredient" class="form-label">Order Number</label>
+                <input type="text" class="form-control" id="searchCode" name="searchCode" placeholder="0f03adfe-253d-492e-b6c4-a4b1fb463189"  value="@Model.SearchCode">
+            </div>
+            <div class="mb-3">
+                <label for="searchIngredient" class="form-label">Ordering Date</label>
+                <input type="text" class="form-control" id="searchDate" name="searchDate" placeholder="12.22.2021 14:03"  value="@Model.SearchDate">
+            </div>
+
+        </div>
+        <div class="col-2 position-relative">
+            <div class="form-group position-absolute bottom-0 start-0">
+                <input type="submit" value="Search" name="action" class="btn btn-primary"/>
+                @if (Model.SearchCode != null || Model.SearchName != null || Model.SearchDate != null)
+                {
+                    <input type="submit" value="Clear" name="action" class="btn btn-warning"/>
+                }
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Order[0].OrderNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Order[0].ClientName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Order[0].CreationTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Order[0].OrderStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Order[0].Price)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Order)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @if (item.OrderStatus == OrderStatus.Making)
+                {
+                    <a asp-page="./Done" asp-route-id="@item.Id">Delivered! | </a>
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details!</a>
+                }
+                else if (item.OrderStatus == OrderStatus.Ordering)
+                {
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Shopping Cart | </a>
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                }
+                else
+                {
+                    <p>Enjoy!</p>
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

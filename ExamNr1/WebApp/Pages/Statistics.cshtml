@@ -1,0 +1,32 @@
+﻿@page
+@model WebApp.Pages.Statistics
+
+@{
+    ViewData["Title"] = "Statistics";
+}
+
+<h1>Pizzeria Statistics</h1>
+
+<div>
+    We have sold: @Model.SoldPizzas pizzas!
+</div>
+
+<div>
+    Most popular being @Model.MostPopular !
+</div>
+
+<div>
+    Revenue generated: @Model.Revenue !
+</div>
+
+<div>
+    We have had @Model.Satisfied number of satisfied customers !
+</div>
+
+<div>
+    We have @Model.Ordering number of people ordering right now !
+</div>
+
+<div>
+    We have @Model.Waiting number of people waiting for their delicousness right now !
+</div>

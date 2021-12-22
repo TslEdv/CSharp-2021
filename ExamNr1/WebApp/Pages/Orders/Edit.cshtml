@@ -1,0 +1,114 @@
+@page
+@using WebApp.Domain
+@model WebApp.Pages_Orders.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Order</h4>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Order.OrderNumber"/>
+            <input type="hidden" asp-for="Order.CreationTime"/>
+            <input type="hidden" asp-for="Order.OrderStatus"/>
+            <input type="hidden" asp-for="Order.Price"/>
+            <div class="form-group">
+                <label asp-for="Order.ClientName" class="control-label"></label>
+                <input asp-for="Order.ClientName" class="form-control"/>
+                <span asp-validation-for="Order.ClientName" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Order.Id"/>
+            <div class="form-group">
+                <input type="submit" value="Save" name="action" class="btn btn-primary"/>
+                @if (Model.OrderPizzas != new List<OrderPizza>())
+                {
+                    <input type="submit" value="Order" name="action" class="btn btn-warning"/>
+                }
+            </div>
+
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-page="/OrderPizzas/Create" asp-route-id="@Model.Order.Id">Add a Pizza</a>
+</div>
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Spicy
+            </th>
+            <th>
+                Vegan
+            </th>
+            <th>
+                Extra Toppings
+            </th>
+            <th>
+                Price
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.OrderPizzas)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pizza!.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pizza!.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pizza!.Spicy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pizza!.Vegan)
+                </td>
+                <td>
+                    <a asp-page="/ExtraToppings/Create" asp-route-id="@item.Id" asp-route-orderid="@Model.Id">Add topings (1 euro each)</a>
+                    <br/>
+                    @if (item.ExtraToppings != null)
+                    {
+                        string? toppings = null;
+                        foreach (var topping in item.ExtraToppings)
+                        {
+                            toppings += topping.Topping!.Name + ",";
+                        }
+                        @toppings
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <div>
+        <a asp-page="./Index">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

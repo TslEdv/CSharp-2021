@@ -1,0 +1,129 @@
+@page
+@model WebApp.Pages_OrderPizzas.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Choose a pizza to order</h1>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="OrderPizza.Quantity" class="control-label"></label>
+                <input asp-for="OrderPizza.Quantity" class="form-control"/>
+                <span asp-validation-for="OrderPizza.Quantity" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="OrderPizza.OrderId" value="@Model.Id"/>
+            <div class="form-group">
+                <label asp-for="OrderPizza.PizzaId" class="control-label"></label>
+                <select asp-for="OrderPizza.PizzaId" class="form-control" asp-items="@Model.Pizzas"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add to cart" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+<form method="get">
+    <div class="row">
+        <div class="col-4">
+            <input type="hidden" asp-for="Id"/>
+            <div class="mb-3">
+                <label for="searchName" class="form-label">Name and description</label>
+                <input type="text" class="form-control" id="searchName" name="searchName" placeholder="Pepperoni" value="@Model.SearchName">
+            </div>
+            <div class="mb-3">
+                <label for="searchIngredient" class="form-label">Toppings</label>
+                <input type="text" class="form-control" id="searchTop" name="searchTop" placeholder="Jalapeno" value="@Model.SearchTop">
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.Spicy" id="spicy" name="spicy">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Spicy
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="@Model.Vegan" id="vegan" name="vegan">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Vegan
+                </label>
+            </div>
+        </div>
+        <div class="col-2 position-relative">
+            <div class="form-group position-absolute bottom-0 start-0">
+                <input type="submit" value="Search" name="action" class="btn btn-primary"/>
+                @if (Model.SearchTop != null || Model.SearchName != null || Model.Spicy != null || Model.Vegan != null)
+                {
+                    <input type="submit" value="Clear" name="action" class="btn btn-warning"/>
+                }
+            </div>
+        </div>
+    </div>
+
+</form>
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Spicy
+            </th>
+            <th>
+                Vegan
+            </th>
+            <th>
+                Toppings
+            </th>
+            <th>
+                Price
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.ListOfPizzas)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Spicy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vegan)
+                </td>
+                <td>
+                    @if (item.PizzaTopings != null)
+                    {
+                        string? toppings = null;
+                        foreach (var topping in item.PizzaTopings)
+                        {
+                            toppings += topping.Topping!.Name + ",";
+                        }
+                        @toppings
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

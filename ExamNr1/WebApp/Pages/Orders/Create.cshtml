@@ -1,0 +1,38 @@
+@page
+@model WebApp.Pages_Orders.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Order</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Order.OrderNumber"/>
+            <input type="hidden" asp-for="Order.CreationTime"/>
+            <input type="hidden" asp-for="Order.OrderStatus"/>
+            <input type="hidden" asp-for="Order.Price"/>
+            <div class="form-group">
+                <label asp-for="Order.ClientName" class="control-label"></label>
+                <input asp-for="Order.ClientName" class="form-control" />
+                <span asp-validation-for="Order.ClientName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Proceed" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
