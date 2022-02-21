@@ -13,7 +13,7 @@ namespace WebApp.DAL
         public DbSet<PizzaToping> PizzaTopings { get; set; } = default!;
         public DbSet<Topping> Toppings { get; set; } = default!;
         
-        private const string ConnectionString = "Server=barrel.itcollege.ee;User Id=student;Password=Student.Pass.1;Database=student_edvess_exam;MultipleActiveResultSets=true";
+        private const string ConnectionString = "";
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
